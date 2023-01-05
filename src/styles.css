@@ -1,1 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
+.formLabel{
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-family: fuenteparacuerpo;
+
+}
+.p-password-input{
+ -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+ -webkit-transition-delay: 9999s;
+}
+
+
+input {
+   -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+   -webkit-transition-delay: 9999s;
+}
+
+input:-webkit-autofill-strong-password {
+   -webkit-text-security: none !important;
+   -webkit-user-select: none !important;
+   cursor: default !important;
+   font-family: monospace;
+}
+
+input:-webkit-autofill, input:-webkit-autofill-strong-password {
+   background-color: #FAFFBD !important;
+   background-image: none !important;
+   color: #000000 !important;
+}
+
+html{
+  background-color: #F1F1F1;
+}
+
+@media screen and (max-width: 500px) {
+  .p-tabmenuitem {
+    width: 100% !important;
+           text-align: center;
+  }
+
+  .p-menuitem-text{
+    width: 100% !important;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-family: fuenteparacuerpo;
+    color: #000000 !important;
+
+  }
+
+}

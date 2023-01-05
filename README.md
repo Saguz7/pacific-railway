@@ -1,27 +1,55 @@
-# PacificRailway
+# Servicios 2.0
+Sistema de Autentificación de Usuarios, manejo de entidades como aplicaciones, roles, usuarios, módulos y multimedia oficial.
+## Despliegue 🚀
+Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.7.
+### Pre-requisitos 📋
 
-## Development server
+- Node v14.16.0 o superior
+- Angular v11.0.7
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Sistemas Relacionados 🌎
 
-## Code scaffolding
+- *Servicios 2.0*
+* https://oauth.ui.semovioaxaca.gob.mx/
+- *Impresiones/Tramites*
+* https://impresion.dc.semovioaxaca.gob.mx
+- *Constancias RETO*
+* https://consulta.reto.semovioaxaca.gob.mx
+- *Capacitaciones*
+* https://capacitacion.dniv.semovioaxaca.gob.mx
+- *SIAMOV*
+* https://siamov.semovioaxaca.gob.mx/autenticacion
+- *TARIFAS*
+* https://tarifas.dt.semovioaxaca.gob.mx
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+### Instalación 🔧
+###### Para desarrollo
+- npm install
+- npm start
+###### Para producción
+- ng build --prod
+La carpeta para deploy esta en la siguiente ruta
+- /dist/verificacion
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Versionado 📌
 
-## Running unit tests
+v1.0.3
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Licencia 📄
 
-## Running end-to-end tests
+>Frontend
+* Angular v8 (Framework de desarrollo)
+* Materialize v1.0.0 (Framework css)
+* PrimeNG v8 (Framework css).
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Autor ✒️
+* **César Santiago Guzmán**
+* **Contacto:** *cesarsantiagoguzman@gmail.com* / *cesar.santiago@semovioaxaca.gob.mx*
+```
+>(^ ᗜ ^)< ♩♪♫♬
+  (   )_
+```
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Secretaría de Movilidad - Gobierno del Estado de Oaxaca
