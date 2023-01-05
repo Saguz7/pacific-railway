@@ -26,11 +26,11 @@ p-password{
   width: 100% !important;
 
 }
-.imagen-eslogan {
-  width: 100%;
+.imagen-banner {
+  width: 25%;
 }
 
-.tituloSistemaSemovi{
+.titleproject{
   font-size: 30px;
   color: #71797a !important;
     font-family: fuenteparatitulos;
