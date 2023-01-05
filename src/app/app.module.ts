@@ -4,7 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+//Components
 import { LoginComponent } from './auth/login/login.component';
+import { MapComponent } from './modules/map/map.component';
+
+
 
  import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -16,6 +20,7 @@ import { LoginComponent } from './auth/login/login.component';
   declarations: [
     AppComponent,
     LoginComponent,
+    MapComponent
 
   ],
   imports: [

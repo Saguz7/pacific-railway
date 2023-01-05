@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
   get getEmail(): FormGroup {
     return this.form.get('email')  as FormGroup;
   }
-  
+
   get getPassword(): FormGroup {
     return this.form.get('password') as FormGroup;
   }
