@@ -1,0 +1,49 @@
+
+ <nav id="navesconder" *ngIf="loged">
+   <div class="nav-wrapper">
+     <div class="row">
+       <a href="#" data-target="slide-out" class="sidenav-trigger" (click)="mostrarmenuusuario()"><i class="material-icons">menu</i></a>
+       <a>
+         <label class="cssversion">Canadian Pacific Railway</label>
+
+       </a>
+
+       <ul id="nav-mobile" class="right hide-on-med-and-down">
+         <li *ngIf="user!=undefined">
+           <a class="dropdown-trigger" data-target="dropdown1">
+
+             <label class="nameuser">  {{user.name}} {{user.lastname}}</label>
+             <i class="material-icons right">arrow_drop_down</i>
+
+           </a>
+         </li>
+       </ul>
+
+     </div>
+   </div>
+ </nav>
+ <ul id="slide-out" class="sidenav" *ngIf="loged">
+   <li>
+     <div class="user-view" *ngIf="user!=undefined">
+       <a><span class="white-text email"><label class="nameuser"> {{user.name}} {{user.lastname}}</label></span></a>
+     </div>
+   </li>
+   <li><a (click)="goHome()" class="waves-effect">Home</a></li>
+    <li>
+     <div class="divider"></div>
+   </li>
+   <li><a class="waves-effect" (click)="logout()"><i class="material-icons left">exit_to_app</i>Logout</a></li>
+ </ul>
+ <ul id="dropdown1" class="dropdown-content">
+   <li>
+     <div class="divider"></div>
+   </li>
+
+   <li><a (click)="logout()"><i class="material-icons left">exit_to_app</i> Logout</a></li>
+ </ul>
+ <div class="layout-menu-container divmenu hide-on-med-and-down menuprincipal">
+   <div class="menu-scroll-content">
+     <p-tieredMenu [model]="items"></p-tieredMenu>
+
+   </div>
+  </div>
