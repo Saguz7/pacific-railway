@@ -1,10 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { ComponentRef, ComponentFactoryResolver, ChangeDetectorRef, HostListener, ViewContainerRef, ViewChild, Component, OnInit, Input, Output, EventEmitter,ElementRef,AfterViewInit } from "@angular/core";
 import { Subscription } from 'rxjs';
-import {MapCustomService} from '../../core/services/map/map-custom.service'
-import { ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { MapDivComponent } from './mapdiv/mapdiv.component';
 
-import * as mapboxgl from 'mapbox-gl';
-import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
+declare var L: any;
 
 @Component({
   selector: 'app-map',
@@ -12,30 +10,118 @@ import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-  @ViewChild('canvas', { static: true })
-  canvas!: ElementRef<HTMLCanvasElement>;
-  private ctx!: CanvasRenderingContext2D | null;
-  mapbox = (mapboxgl as typeof mapboxgl);
-  map!: mapboxgl.Map;
-  trains: [];
+  lat = 54.6542;
+  lng = -114.8574;
+  viewmap = true;
+  markerpoints = [];
+
+  @ViewChild('viewContainerRef', { read: ViewContainerRef, static: false }) VCR: ViewContainerRef;
+  index: number = 0;
+  componentsReferences = [];
+
   constructor(
-    private mapCustomService: MapCustomService
+    private CFR?: ComponentFactoryResolver,
+    private cdref?: ChangeDetectorRef,
   ) { }
 
+
   ngOnInit() {
-    this.trains = [
 
-    ];
+/*
+    window.onload = function() {
+       L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
 
-    setTimeout(()=>{
-      this.mapCustomService.buildMap()
-      .then(({data}) => {
-        console.log('data:', data);
-      })
-      .catch((err) => {
-      //  console.log('******* ERROR ******', err);
+       var map = L.mapquest.map('map', {
+         center: [54.6542, -114.8574],
+         layers: L.mapquest.tileLayer('map'),
+         zoom: 12
+       });
+
+       L.marker([54.6542, -114.8574], {
+          icon: L.mapquest.icons.marker(),
+          draggable: false
+        }).bindPopup('Point 1').addTo(map).on('click', function(e) {
+           console.log(e.latlng);
+       });
+
+       L.mapquest.control().addTo(map);
+       L.mapquest.geocodingControl().addTo(map);
+     }
+
+     */
+
+
+
+
+  }
+
+  ngAfterViewInit() {
+
+  //  this.cdref.detectChanges();
+
+  }
+
+  buildMap(){
+
+    L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
+
+    var map = L.mapquest.map('map', {
+      center: [54.6542, -114.8574],
+      layers: L.mapquest.tileLayer('map'),
+      zoom: 8
+    });
+
+    let markerpoints = [
+      {
+        coords: [54.6542, -114.8574],
+        train: {
+          name: 'Train 1'
+        }
+      },
+      {
+        coords: [54.9542, -115.8574],
+        train: {
+          name: 'Train 2'
+        }
+      }
+     ]
+    let that = this;
+
+
+    for(var i =0; i < markerpoints.length;i++){
+      let indice = i;
+      L.marker(markerpoints[i].coords, {
+         icon: L.mapquest.icons.marker(),
+         draggable: false
+       }).bindPopup(markerpoints[i].train.name).addTo(map).on('click', function(e) {
+        //  console.log(e.latlng);
+        that.searchInfoTrain(indice);
       });
-    }, 1000);
+
+    }
+
+
+
+    L.mapquest.control().addTo(map);
+    L.mapquest.geocodingControl().addTo(map);
+
+    /*
+    let componentFactory = this.CFR.resolveComponentFactory(MapDivComponent);
+    let componentRef: ComponentRef<any> = this.VCR.createComponent(componentFactory);
+    let currentComponent = componentRef.instance;
+    currentComponent.selfRef = currentComponent;
+    componentRef.instance.IModel = [];
+    componentRef.instance.NameComponet = 'Map';
+    currentComponent.index = 0;
+    currentComponent.compInteraction = this;
+    this.componentsReferences.push(componentRef);
+
+    */
+
+  }
+
+  searchInfoTrain(indice){
+    console.log(indice);
   }
 
 }

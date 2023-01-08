@@ -9,6 +9,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
+import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 
 
 
@@ -21,13 +22,15 @@ import { MapComponent } from './modules/map/map.component';
  import {TieredMenuModule} from 'primeng/tieredmenu';
 
  import * as $ from "jquery";
+import * as L from 'leaflet';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavigationComponent,
-    MapComponent
+    MapComponent,
+    MapDivComponent
 
   ],
   imports: [
