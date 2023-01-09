@@ -24,7 +24,7 @@ input:-webkit-autofill-strong-password {
 }
 
 input:-webkit-autofill, input:-webkit-autofill-strong-password {
-   background-color: #d6d6d4 !important;
+   background-color: #FAFFBD !important;
    background-image: none !important;
    color: #000000 !important;
 }
