@@ -65,13 +65,40 @@ export class MapComponent implements OnInit {
 
     L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
 
+      var map = L.mapquest.map('map', {
+        center: [39.7392, -104.9903],
+        layers: L.mapquest.tileLayer('map'),
+        zoom: 6
+      });
+
+      L.marker([39.7392, -104.9903], {
+        icon: L.mapquest.icons.marker(),
+        draggable: false
+      }).bindPopup('Denver, CO').addTo(map);
+
+      L.circle([38.8339, -104.8214], { radius: 20000 }).addTo(map);
+
+      var denverLatLngs = [
+        [36.99, -102.05],
+        [37, -109.05],
+        [41, -109.05],
+        [41, -102.05]
+      ];
+
+      L.polygon(denverLatLngs, {color: 'red'}).addTo(map);
+
+
+    /*
+
+    L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
+
     var map = L.mapquest.map('map', {
       center: [54.6542, -114.8574],
       layers: L.mapquest.tileLayer('map'),
       zoom: 8
     });
 
-    let markerpoints = [
+    this.markerpoints = [
       {
         coords: [54.6542, -114.8574],
         train: {
@@ -88,12 +115,12 @@ export class MapComponent implements OnInit {
     let that = this;
 
 
-    for(var i =0; i < markerpoints.length;i++){
+    for(var i =0; i < this.markerpoints.length;i++){
       let indice = i;
-      L.marker(markerpoints[i].coords, {
+      L.marker(this.markerpoints[i].coords, {
          icon: L.mapquest.icons.marker(),
          draggable: false
-       }).bindPopup(markerpoints[i].train.name).addTo(map).on('click', function(e) {
+       }).bindPopup(this.markerpoints[i].train.name).addTo(map).on('click', function(e) {
         //  console.log(e.latlng);
         that.searchInfoTrain(indice);
       });
@@ -104,6 +131,8 @@ export class MapComponent implements OnInit {
 
     L.mapquest.control().addTo(map);
     L.mapquest.geocodingControl().addTo(map);
+
+    */
 
     /*
     let componentFactory = this.CFR.resolveComponentFactory(MapDivComponent);
