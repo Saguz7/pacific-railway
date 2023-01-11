@@ -63,32 +63,7 @@ export class MapComponent implements OnInit {
 
   buildMap(){
 
-    L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
 
-      var map = L.mapquest.map('map', {
-        center: [39.7392, -104.9903],
-        layers: L.mapquest.tileLayer('map'),
-        zoom: 6
-      });
-
-      L.marker([39.7392, -104.9903], {
-        icon: L.mapquest.icons.marker(),
-        draggable: false
-      }).bindPopup('Denver, CO').addTo(map);
-
-      L.circle([38.8339, -104.8214], { radius: 20000 }).addTo(map);
-
-      var denverLatLngs = [
-        [36.99, -102.05],
-        [37, -109.05],
-        [41, -109.05],
-        [41, -102.05]
-      ];
-
-      L.polygon(denverLatLngs, {color: 'red'}).addTo(map);
-
-
-    /*
 
     L.mapquest.key = 'FM9hgjXyKly2nJK9eagKmGG6DqGAZrqq';
 
@@ -127,12 +102,14 @@ export class MapComponent implements OnInit {
 
     }
 
+    map.pm.addControls({
+      position: 'topleft',
+      drawCircle: false,
+    });
 
-
+    
     L.mapquest.control().addTo(map);
     L.mapquest.geocodingControl().addTo(map);
-
-    */
 
     /*
     let componentFactory = this.CFR.resolveComponentFactory(MapDivComponent);
