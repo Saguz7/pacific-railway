@@ -105,6 +105,10 @@ export class MapComponent implements OnInit {
     map.pm.addControls({
       position: 'topleft',
       drawCircle: false,
+      drawMarker: false,
+      dragMode: false,
+      drawText: false,
+      drawCircleMarker: false,
     });
 
     
