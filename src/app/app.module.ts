@@ -10,6 +10,7 @@ import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
 import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
+import { ChasisComponent } from './modules/train/chasis/chasis.component';
 
 
 
@@ -30,7 +31,8 @@ import * as L from 'leaflet';
     LoginComponent,
     NavigationComponent,
     MapComponent,
-    MapDivComponent
+    MapDivComponent,
+    ChasisComponent
 
   ],
   imports: [

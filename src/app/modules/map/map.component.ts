@@ -14,6 +14,7 @@ export class MapComponent implements OnInit {
   lng = -114.8574;
   viewmap = true;
   markerpoints = [];
+  train: any;
 
   @ViewChild('viewContainerRef', { read: ViewContainerRef, static: false }) VCR: ViewContainerRef;
   index: number = 0;
@@ -26,6 +27,11 @@ export class MapComponent implements OnInit {
 
 
   ngOnInit() {
+
+    $(document).ready(function(){
+
+      (<any>$(".modal")).modal({dismissible: false});
+      });
 
 /*
     window.onload = function() {
@@ -111,7 +117,7 @@ export class MapComponent implements OnInit {
       drawCircleMarker: false,
     });
 
-    
+
     L.mapquest.control().addTo(map);
     L.mapquest.geocodingControl().addTo(map);
 
@@ -130,8 +136,13 @@ export class MapComponent implements OnInit {
 
   }
 
-  searchInfoTrain(indice){
-    console.log(indice);
+  searchInfoTrain(indice){ 
+    this.train = this.markerpoints[indice];
+    console.log(this.train);
+
+    $(document).ready(function() {
+      (<any>$("#modalchasis")).modal('open');
+    });
   }
 
 }
