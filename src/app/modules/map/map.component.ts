@@ -4,6 +4,12 @@ import { MapDivComponent } from './mapdiv/mapdiv.component';
 
 declare var L: any;
 
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import XYZ from 'ol/source/XYZ';
+import OSM from 'ol/source/osm'
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -19,6 +25,7 @@ export class MapComponent implements OnInit {
   @ViewChild('viewContainerRef', { read: ViewContainerRef, static: false }) VCR: ViewContainerRef;
   index: number = 0;
   componentsReferences = [];
+    map: Map;
 
   constructor(
     private CFR?: ComponentFactoryResolver,
@@ -56,6 +63,19 @@ export class MapComponent implements OnInit {
 
      */
 
+
+     this.map = new Map({
+         view: new View({
+           center: [0, 0],
+           zoom: 1,
+         }),
+         layers: [
+           new TileLayer({
+             source: new OSM(),
+           }),
+         ],
+         target: 'ol-map'
+       });
 
 
 
@@ -136,7 +156,7 @@ export class MapComponent implements OnInit {
 
   }
 
-  searchInfoTrain(indice){ 
+  searchInfoTrain(indice){
     this.train = this.markerpoints[indice];
     console.log(this.train);
 
