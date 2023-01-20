@@ -9,6 +9,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
+import { EsriMapComponent } from './modules/esri-map/esri-map.component';
+
 import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import { ChasisComponent } from './modules/train/chasis/chasis.component';
 
@@ -22,6 +24,9 @@ import { ChasisComponent } from './modules/train/chasis/chasis.component';
  import {MenuModule} from 'primeng/menu';
  import {TieredMenuModule} from 'primeng/tieredmenu';
 
+ import { EsriMapService } from './core/services/esri-map/esri-map.service';
+
+
  import * as $ from "jquery";
 import * as L from 'leaflet';
 
@@ -31,6 +36,7 @@ import * as L from 'leaflet';
     LoginComponent,
     NavigationComponent,
     MapComponent,
+    EsriMapComponent,
     MapDivComponent,
     ChasisComponent
 
@@ -46,7 +52,7 @@ import * as L from 'leaflet';
     AppRoutingModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [EsriMapService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
