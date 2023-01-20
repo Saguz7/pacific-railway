@@ -7,6 +7,8 @@ import { EsriMapComponent } from './modules/esri-map/esri-map.component';
 
 const routes: Routes = [
  { path: 'map', component: EsriMapComponent, pathMatch: 'full' },
+ { path: 'map2', component: MapComponent, pathMatch: 'full' },
+
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login'}
