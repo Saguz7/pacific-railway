@@ -9,10 +9,14 @@ import { LoginComponent } from './auth/login/login.component';
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
+import { TableMapComponent } from './modules/map/table-map/table-map.component';
+import { FilterMapComponent } from './modules/map/filter-map/filter-map.component';
+
 import { EsriMapComponent } from './modules/esri-map/esri-map.component';
 
 import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import { ChasisComponent } from './modules/train/chasis/chasis.component';
+import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.component';
 
 
 
@@ -23,7 +27,9 @@ import { ChasisComponent } from './modules/train/chasis/chasis.component';
  import {ButtonModule} from 'primeng/button';
  import {MenuModule} from 'primeng/menu';
  import {TieredMenuModule} from 'primeng/tieredmenu';
-
+ import {TableModule} from 'primeng/table';
+ import {RadioButtonModule} from 'primeng/radiobutton';
+ import {DropdownModule} from 'primeng/dropdown';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
 
@@ -36,9 +42,12 @@ import * as L from 'leaflet';
     LoginComponent,
     NavigationComponent,
     MapComponent,
+    FilterMapComponent,
     EsriMapComponent,
     MapDivComponent,
-    ChasisComponent
+    ChasisComponent,
+    TableMapComponent,
+    PpsDetailsComponent
 
   ],
   imports: [
@@ -46,6 +55,9 @@ import * as L from 'leaflet';
     PasswordModule,
     ButtonModule,
     MenuModule,
+    TableModule,
+    RadioButtonModule,
+    DropdownModule,
     TieredMenuModule,
     ReactiveFormsModule,
     BrowserModule,

@@ -32,6 +32,8 @@ export class NavigationComponent implements OnInit{
       name: 'name',
       lastname: 'lastname'
     }
+
+    /*
       this.items = [
             {label: 'Map',icon: 'pi pi-fw pi-home',command: (event: any) => {
               this.router.navigateByUrl('/map');
@@ -54,6 +56,8 @@ export class NavigationComponent implements OnInit{
           }
 
         ];
+
+        */
 
 
 

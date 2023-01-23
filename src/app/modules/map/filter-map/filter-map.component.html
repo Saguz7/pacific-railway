@@ -1,0 +1,184 @@
+   <div class="row card">
+    <div class="p-col-12"><br><br>
+      <div class="col s12">
+
+        <form [formGroup]="form" (ngSubmit)="submit($event)" autocomplete="off" class="form-auth">
+
+          <div class="col s12">
+            <div class="col s8">
+              Select All *
+            </div>
+            <div class="col s4 right-align">
+              Manage Report Schedules
+            </div>
+          </div>
+
+
+        <div class="col s12">
+          <div class="col s12">
+            Search By:
+          </div>
+          <div class="col s6">
+            <div class="col s3">
+              <p-radioButton formControlName="selectedOption" value="1" name="groupname"></p-radioButton>
+              <label for="groupname">Equipment ID</label>
+            </div>
+            <div class="col s3">
+              <p-radioButton formControlName="selectedOption" value="2" name="groupname"></p-radioButton>
+              <label for="groupname">Load#</label>
+            </div>
+            <div class="col s3">
+              <p-radioButton formControlName="selectedOption" value="3" name="groupname"></p-radioButton>
+              <label for="groupname">Reference#</label>
+            </div>
+            <div class="col s3">
+              <p-radioButton formControlName="selectedOption" value="4" name="groupname"></p-radioButton>
+              <label for="groupname">RailCar ID</label>
+            </div>
+
+          </div>
+          <div class="col s6">
+          </div>
+
+
+         </div>
+         <div class="col s12">
+
+         <div class="col s4">
+
+           <div class="p-inputgroup">
+              <input formControlName=search type="text" pInputText>
+           </div>
+
+
+         </div>
+         <div class="col s4">
+         </div>
+         <div class="col s4 right-align">
+           <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text"></button>
+           <button pButton pRipple type="button" label="Filters (2)" class="p-button-secondary p-button-text"></button>
+           <button pButton pRipple type="button" label="Go" class="p-button-danger"></button>
+         </div>
+         </div>
+
+
+        <div class="col s12">
+          <div class="col s1">
+            <div>
+              Company:
+            </div>
+            <div>
+              <p-dropdown [options]="companies" formControlName=company optionLabel="name" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+           </div>
+          <div class="col s1">
+             <div>
+               Load/Empty:
+            </div>
+            <div>
+              <p-dropdown [options]="load_emptys" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+          </div>
+          <div class="col s1">
+            <div>
+              Origin:
+           </div>
+           <div>
+             <input formControlName=origin type="text" pInputText>
+           </div>
+
+          </div>
+          <div class="col s1">
+            <div>
+              Stripper:
+           </div>
+           <div>
+             <input formControlName=stripper type="text" pInputText>
+           </div>
+          </div>
+          <div class="col s1">
+            <div>
+              Destination:
+           </div>
+           <div>
+             <input formControlName=destination type="text" pInputText>
+           </div>
+          </div>
+          <div class="col s1">
+            <div>
+              Consignee:
+           </div>
+           <div>
+             <input formControlName=consignee type="text" pInputText>
+           </div>
+          </div>
+          <div class="col s2">
+
+            <div>
+              Last Reported Station:
+           </div>
+           <div>
+             <input formControlName=last_report_station type="text" pInputText>
+           </div>
+          </div>
+          <div class="col s1">
+
+            <div>
+              Equipment Status:
+           </div>
+           <div>
+             <p-dropdown [options]="equipment_status" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+           </div>
+          </div>
+          <div class="col s1">
+
+            <div>
+              Equipment Type:
+           </div>
+           <div>
+             <p-dropdown [options]="equipment_types" formControlName=equipment_type optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+           </div>
+          </div>
+          <div class="col s1">
+          </div>
+          <div class="col s1">
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="col s1">
+
+            <div>
+              Load Status:
+           </div>
+           <div>
+             <p-dropdown [options]="load_status" formControlName=load_status optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+           </div>
+          </div>
+          <div class="col s1">
+
+            <div>
+              Storage Guarantee:
+           </div>
+           <div>
+             <input formControlName=storage_guarantee type="text" pInputText>
+           </div>
+          </div>
+          <div class="col s1">
+
+            <div>
+              Pickup Number:
+           </div>
+           <div>
+             <input formControlName=pickup_number type="text" pInputText>
+           </div>
+          </div>
+        </div>
+      </form>
+
+      </div>
+      <div class="col s12"><br><br>
+      </div>
+
+    </div>
+  </div>

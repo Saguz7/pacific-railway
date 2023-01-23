@@ -1,0 +1,64 @@
+   <div class="row card">
+
+
+    <div class="p-col-12"><br><br>
+      <div class="col s12">
+        <div class="col s2">
+          Equipment ({{data.length}})
+        </div>
+        <div class="col s8">
+        </div>
+        <div class="col s2 right-align">
+          <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text"></button>
+          <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary p-button-text"></button>
+          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"></button>
+        </div>
+      </div>
+      <div class="col s12">
+        <p-table [value]="data" [scrollable]="true"
+      scrollDirection="horizontal">
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 300px">Load #</th>
+              <th style="width: 300px">Equipment</th>
+              <th style="width: 300px">Equipment_Type</th>
+              <th style="width: 300px">Load/Empty</th>
+              <th style="width: 300px">Billed Set Temp</th>
+              <th style="width: 300px">PPS Details</th>
+              <th style="width: 300px">Origin</th>
+              <th style="width: 300px">Destination</th>
+              <th style="width: 300px">Last Reported Station</th>
+              <th style="width: 300px">Holds</th>
+              <th style="width: 300px">Equipment Status</th>
+              <th style="width: 300px">Load Status</th>
+              <th style="width: 300px">Grounded?</th>
+              <th style="width: 300px">ETA</th>
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-object>
+          <tr>
+              <td style="width: 300px">{{object.Load}}</td>
+              <td style="width: 300px">{{object.Equipment}}</td>
+              <td style="width: 300px">{{object.Equipment_Type}}</td>
+              <td style="width: 300px">{{object.Load_Empty}}</td>
+              <td style="width: 300px">{{object.Billed_Set_Temp}}</td>
+              <td style="width: 300px">{{object.PPS_Details}}</td>
+              <td style="width: 300px">{{object.Origin}}</td>
+              <td style="width: 300px">{{object.Destination}}</td>
+              <td style="width: 300px">{{object.Last_Reported_Station}}</td>
+              <td style="width: 300px">{{object.Holds}}</td>
+              <td style="width: 300px">{{object.Equipment_Status}}</td>
+              <td style="width: 300px">{{object.Load_Status}}</td>
+              <td style="width: 300px">{{object.Grounded}}</td>
+              <td style="width: 300px">{{object.Eta}}</td>
+
+          </tr>
+      </ng-template>
+  </p-table>
+      </div>
+
+    </div><br><br>
+
+
+</div>
