@@ -1,1 +1,7 @@
- 
+ .card-content{
+   height: 200px;
+ }
+
+ hr{
+   color: red;
+ }

@@ -9,6 +9,9 @@ import { LoginComponent } from './auth/login/login.component';
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
+import { RouteMapComponent } from './modules/route-map/route-map.component';
+
+
 import { TableMapComponent } from './modules/map/table-map/table-map.component';
 import { FilterMapComponent } from './modules/map/filter-map/filter-map.component';
 
@@ -30,6 +33,7 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
  import {TableModule} from 'primeng/table';
  import {RadioButtonModule} from 'primeng/radiobutton';
  import {DropdownModule} from 'primeng/dropdown';
+ import {CalendarModule} from 'primeng/calendar';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
 
@@ -42,6 +46,7 @@ import * as L from 'leaflet';
     LoginComponent,
     NavigationComponent,
     MapComponent,
+    RouteMapComponent,
     FilterMapComponent,
     EsriMapComponent,
     MapDivComponent,
@@ -58,6 +63,7 @@ import * as L from 'leaflet';
     TableModule,
     RadioButtonModule,
     DropdownModule,
+    CalendarModule,
     TieredMenuModule,
     ReactiveFormsModule,
     BrowserModule,
