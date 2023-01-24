@@ -13,6 +13,7 @@ import { TableMapComponent } from './modules/map/table-map/table-map.component';
 import { FilterMapComponent } from './modules/map/filter-map/filter-map.component';
 
 import { EsriMapComponent } from './modules/esri-map/esri-map.component';
+import { LaunchpadComponent } from './modules/launchpad/launchpad.component';
 
 import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import { ChasisComponent } from './modules/train/chasis/chasis.component';
@@ -46,6 +47,7 @@ import * as L from 'leaflet';
     EsriMapComponent,
     MapDivComponent,
     ChasisComponent,
+    LaunchpadComponent,
     TableMapComponent,
     PpsDetailsComponent
 
