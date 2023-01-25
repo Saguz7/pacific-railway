@@ -7,13 +7,14 @@ import { LoginComponent } from './auth/login/login.component';
  import { RouteMapComponent } from './modules/route-map/route-map.component';
 
  import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.component';
-
+ import { LaunchpadComponent } from './modules/launchpad/launchpad.component';
 
 
 const routes: Routes = [
  { path: 'map', component: MapComponent, pathMatch: 'full' },
- { path: 'ppsDetails', component: PpsDetailsComponent, pathMatch: 'full' },
- { path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
+ { path: 'ppsDetails', component: PpsDetailsComponent, pathMatch: 'full' }, 
+{ path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
+{ path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
 
  //{ path: 'map2', component: MapComponent, pathMatch: 'full' },
 
