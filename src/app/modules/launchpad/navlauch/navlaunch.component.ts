@@ -9,8 +9,14 @@ import { Subscription } from 'rxjs';
   })
 
   export class NavlaunchComponent implements OnInit{
-    
+    @Output() SelectOption = new EventEmitter<any>();
+
     ngOnInit() {
-      
+
+    }
+
+    selectOption(option: any){
+      this.SelectOption.emit(option);
+
     }
   }

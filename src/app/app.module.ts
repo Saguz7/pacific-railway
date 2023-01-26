@@ -17,6 +17,10 @@ import { FilterMapComponent } from './modules/map/filter-map/filter-map.componen
 
 import { EsriMapComponent } from './modules/esri-map/esri-map.component';
 import { LaunchpadComponent } from './modules/launchpad/launchpad.component';
+import { NavlaunchComponent } from './modules/launchpad/navlauch/navlaunch.component';
+import { NotificationComponent } from './modules/launchpad/notification/notification.component';
+import { PRSMComponent } from './modules/launchpad/boards/problem-resolution-shipment-management/problem-resolution-shipment-management.component';
+
 
 import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import { ChasisComponent } from './modules/train/chasis/chasis.component';
@@ -35,12 +39,12 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
  import {RadioButtonModule} from 'primeng/radiobutton';
  import {DropdownModule} from 'primeng/dropdown';
  import {CalendarModule} from 'primeng/calendar';
+ import {ScrollPanelModule} from 'primeng/scrollpanel';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
 
  import * as $ from "jquery";
 import * as L from 'leaflet';
-import { NavlaunchComponent } from './modules/launchpad/navlauch/navlaunch.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,9 @@ import { NavlaunchComponent } from './modules/launchpad/navlauch/navlaunch.compo
     LaunchpadComponent,
     TableMapComponent,
     PpsDetailsComponent,
-    NavlaunchComponent
+    NavlaunchComponent,
+    NotificationComponent,
+    PRSMComponent
 
   ],
   imports: [
@@ -72,6 +78,7 @@ import { NavlaunchComponent } from './modules/launchpad/navlauch/navlaunch.compo
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
+    ScrollPanelModule,
     BrowserAnimationsModule
   ],
   providers: [EsriMapService],

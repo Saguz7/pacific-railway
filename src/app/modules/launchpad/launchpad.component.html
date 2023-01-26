@@ -1,166 +1,21 @@
 <!-- Primera fila de cards-->
-<app-navlaunch></app-navlaunch>
+<app-navlaunch (SelectOption)="changeOption($event)"></app-navlaunch>
 <div class = "row">
-  <div class = "col l9">
-<div class="row">
-  <h4>Problem Resolution & Shipment Management</h4>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Log an Issue</span>
-          <div class="card-content">
-              <p class = "position-icon">
-                <span class="material-icons" style="font-size: 2rem">
-                  report_problem
-              </span>
-              </p>
-          </div>          
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Map View</span>
-          <p class = "position-icon">
-            <span class="material-icons" style="font-size: 2rem">
-            public
-            </span>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Track & Trace - Cardload</span>
-          <p class = "position-icon">
-            <i class="pi pi-map-marker" style="font-size: 2rem"></i>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Track & Trace - Intermodal International</span>
-          <p class = "position-icon">
-            <i class="pi pi-map-marker" style="font-size: 2rem"></i>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Edit or View Pickup Number</span>
-          
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Add Storage Guarante</span>
-          
-        </div>
-      </div>
-    </div>
-  </div> 
+  <div class = "col s9">
+    <div class="col-12 md:col-4">
+    <p-scrollPanel [style]="{width: '100%', height: '800px'}" styleClass="custombar2">
+    <ng-container *ngIf="indexoption==3">
+      <app-problem-resolution-shipment-management></app-problem-resolution-shipment-management>
+    </ng-container>
+  </p-scrollPanel>
+   </div>
 
 
-  <!-- segunda fila de cards-->
-  <div class="row">
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text position-icontext">
-          <p><i class="pi pi-exclamation-circle"></i>  Cannot load tile</p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text position-icontext">
-          <p><i class="pi pi-exclamation-circle"></i>  Cannot load tile</p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content yellow-text">
-          <span class="card-title">Track & Trace - Intermodal International</span>
-          
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      
-    </div>
-    <div class="col l2">
-      
-    </div>
-  </div> 
-  <div class = "row">
-    <h4>Problem Resolution & Shipment Management</h4>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Equipment Summary</span>
-          <div class="card-content">
-            <p class = "position-icon"><span class="material-icons" style="font-size: 2rem">factory</span></p>
-          </div>          
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Marine Booking Create</span>
-          <p class = "position-icon"><span class="material-icons" style="font-size: 2rem">directions_boat</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="col l2">
-      <div class="card format-cards">
-        <div class="card-content white-text">
-          <span class="card-title">Marine Booking View</span>
-          <p class = "position-icon"> <span class="material-icons" style="font-size: 2rem">directions_boat</span></p>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
+</div>
+<div class="col s3">
+  <button pButton type="button" label="Add" class="ui-button-raised ui-button-secondary" (click)="addNotification()"></button>
+  <button pButton type="button" label="Add" class="ui-button-raised ui-button-secondary" (click)="addNotificationCancel()"></button>
 
-  <div class = "col" >
-    <div class = "row">
-      <div class = "col l12">
-        <div class="card grey" >
-          <div class="card-content white-text">
-            <p style = "font-size:17px">You have 4 notificacion(s) requiring your attention</p>
-            <br>
-            <p>28 days ago</p>
-            <br>
-            <p>Collapse Group</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class = "row">
-      <div class = "col l12">
-        <div class="card grey" >
-          <div class="card-content white-text">
-            <p style = "font-size:17px">Marine Booking Create Access Approved <p-button class="black-button"icon="pi pi-times" class = "position-close"></p-button></p>
-            <br>
-            <p>Marine Booking Create Acces Approved. <br>You now have access to Marine Booking...</p>
-            <br>
-            <p>28 Days ago</p>
-            <p>Show more</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ng-template #viewContainerRef></ng-template>
+</div>
 </div>
