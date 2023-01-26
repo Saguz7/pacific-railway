@@ -40,6 +40,7 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
 
  import * as $ from "jquery";
 import * as L from 'leaflet';
+import { NavlaunchComponent } from './modules/launchpad/navlauch/navlaunch.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import * as L from 'leaflet';
     ChasisComponent,
     LaunchpadComponent,
     TableMapComponent,
-    PpsDetailsComponent
+    PpsDetailsComponent,
+    NavlaunchComponent
 
   ],
   imports: [
