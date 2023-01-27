@@ -12,15 +12,15 @@ import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
  { path: 'map', component: MapComponent, pathMatch: 'full' },
- { path: 'ppsDetails', component: PpsDetailsComponent, pathMatch: 'full' }, 
+ { path: 'ppsDetails', component: PpsDetailsComponent, pathMatch: 'full' },
 { path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
 { path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
 
  //{ path: 'map2', component: MapComponent, pathMatch: 'full' },
 
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login'}
+  { path: '', redirectTo: '/launchpad', pathMatch: 'full' },
+  { path: '**', redirectTo: '/launchpad'}
 ];
 
 @NgModule({

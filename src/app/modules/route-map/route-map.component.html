@@ -1,71 +1,96 @@
 <div class="container-principal">
   <div class="row card">
     <div class="col s12"><br><br>
-      <div class="col s2"><br><br>
-        <div class="col s12">
+      <div class="col s2">
+        <p-panel header="Time Range">
+          <div class="col s12">
+            <div class="col s12">
+              From
+            </div>
+          </div>
+          <div class="col s12">
+            <div class="col s12">
+              Date
+            </div>
+            <div class="col s12">
+              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+            </div>
+           </div>
+          <div class="col s12">
+            <div class="col s12">
+              Time
+            </div>
+            <div class="col s12">
+          <p-calendar [(ngModel)]="value2" [showTime]="true" timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+        </div>
+          </div>
+          <div class="col s12"><br>
+          </div>
+          <div class="col s12">
+            <div class="col s12">
+               To:
+            </div>
+          </div>
+          <div class="col s12"><br>
+          </div>
+
 
           <div class="col s12">
-            Time Range
-          </div>
+            <div class="col s12">
+              Date
+            </div>
+            <div class="col s12">
+              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+            </div>
+           </div>
+          <div class="col s12">
+            <div class="col s12">
+              Time
+            </div>
+            <div class="col s12">
+          <p-calendar [(ngModel)]="value2" [showTime]="true"  timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
         </div>
-        <div class="col s12">
-          <div class="col s12">
-            From
           </div>
-        </div>
-        <div class="col s12">
-          <div class="col s12">
-            Date
+          <div class="col s12"><br>
           </div>
-          <div class="col s12">
-            <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}"></p-calendar>
+          <div class="col s12 right-align">
+            <button pButton pRipple type="button" label="Update" class="p-button-danger"></button>
+
           </div>
-         </div>
-        <div class="col s12">
-          <div class="col s12">
-            Time
+          <div class="col s12"><br>
           </div>
-          <div class="col s12">
-        <p-calendar [(ngModel)]="value2" [showTime]="true" [showSeconds]="true" inputId="timeonly" [style]="{'width':'100%'}"></p-calendar>
-      </div>
-        </div>
+        </p-panel>
+        <p-panel header="Display Options">
+          <div class="field-radiobutton">
+                <p-radioButton name="option" value="1" [(ngModel)]="option" inputId="option1"></p-radioButton>
+                <label class="options-labels" for="option1">Points only</label>
+            </div><br>
+            <div class="field-radiobutton">
+                <p-radioButton name="option" value="2" [(ngModel)]="option" inputId="option2"></p-radioButton>
+                <label class="options-labels" for="option2">Alerts</label>
+            </div><br>
+            <div class="field-radiobutton">
+                <p-radioButton name="option" value="3" [(ngModel)]="option" inputId="option3"></p-radioButton>
+                <label class="options-labels" for="option3">Door events</label>
+            </div><br>
+            <div class="field-radiobutton">
+                <p-radioButton name="option" value="4" [(ngModel)]="option" inputId="option4"></p-radioButton>
+                <label class="options-labels" for="option4">Temperature Graph</label>
+            </div>
+          <div class="col s12"><br>
+          </div>
+        </p-panel>
         <div class="col s12"><br>
         </div>
-        <div class="col s12">
-          <div class="col s12">
-             To:
-          </div>
-        </div>
-        <div class="col s12"><br>
-        </div>
 
 
-        <div class="col s12">
-          <div class="col s12">
-            Date
-          </div>
-          <div class="col s12">
-            <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}"></p-calendar>
-          </div>
-         </div>
-        <div class="col s12">
-          <div class="col s12">
-            Time
-          </div>
-          <div class="col s12">
-        <p-calendar [(ngModel)]="value2" [showTime]="true" [showSeconds]="true" inputId="timeonly" [style]="{'width':'100%'}"></p-calendar>
-      </div>
-        </div>
-        <div class="col s12"><br>
-        </div>
-        <div class="col s12 right-align">
-          <button pButton pRipple type="button" label="Update" class="p-button-danger"></button>
 
-        </div>
 
       </div>
-      <div class="col s10"><br><br>
-        Hola 2
+      <div class="col s10"> 
+        <div class="container-map" #mapViewNode></div>
+        <app-temperature-graph></app-temperature-graph>
+
       </div>
     </div>
   </div>

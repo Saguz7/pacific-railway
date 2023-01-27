@@ -16,6 +16,7 @@ export class RouteMapComponent implements OnInit {
   componentsReferences = [];
   value: any;
   value2: any;
+  option: any;
 
   //  map: Map;
 
@@ -34,7 +35,6 @@ export class RouteMapComponent implements OnInit {
 
   ngOnInit() {
 
-    /*
     return loadModules([
       "esri/layers/GeoJSONLayer",
       "esri/widgets/Sketch",
@@ -153,7 +153,6 @@ export class RouteMapComponent implements OnInit {
       .catch(err => {
         console.error(err);
       });
-      */
     }
 
   ngAfterViewInit() {

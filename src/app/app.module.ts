@@ -10,6 +10,8 @@ import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
 import { RouteMapComponent } from './modules/route-map/route-map.component';
+import { TemperatureGraphComponent } from './modules/route-map/temperature-graph/temperature-graph.component';
+
 
 
 import { TableMapComponent } from './modules/map/table-map/table-map.component';
@@ -40,6 +42,8 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
  import {DropdownModule} from 'primeng/dropdown';
  import {CalendarModule} from 'primeng/calendar';
  import {ScrollPanelModule} from 'primeng/scrollpanel';
+ import {ChartModule} from 'primeng/chart';
+ import {PanelModule} from 'primeng/panel';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
 
@@ -62,7 +66,8 @@ import * as L from 'leaflet';
     PpsDetailsComponent,
     NavlaunchComponent,
     NotificationComponent,
-    PRSMComponent
+    PRSMComponent,
+    TemperatureGraphComponent
 
   ],
   imports: [
@@ -79,7 +84,9 @@ import * as L from 'leaflet';
     BrowserModule,
     AppRoutingModule,
     ScrollPanelModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ChartModule,
+    PanelModule
   ],
   providers: [EsriMapService],
   bootstrap: [AppComponent]

@@ -19,7 +19,7 @@
 
 .container-map{
   height:780px;
-  width:1200px;
+  width:100%;
 
   position: relative;
 
@@ -67,6 +67,11 @@
   color: #000 !important;
   font-family: fuenteparatitulos;
 
+}
+
+.options-labels{
+  font-size: 14px;
+  color: #000 !important;
 }
 
 
