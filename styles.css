@@ -30,6 +30,10 @@ html{
   background-repeat:no-repeat;
   background-position: center center;
 }
+.p-scrollpanel .p-scrollpanel-bar {
+  background: #2000ff !important;
+  border: 0 none;
+}
 body {
     font-family: 'Roboto';
     color: var(--text-color);
