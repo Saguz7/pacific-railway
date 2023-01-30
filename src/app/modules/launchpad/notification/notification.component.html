@@ -2,8 +2,14 @@
   <div class = "col l12">
     <div class="card grey" >
       <div class="card-content white-text">
-        <p style = "font-size:17px">You have 4 notificacion(s) requiring your attention {{Index}}</p>
-        <ng-container *ngIf="Delete"><p-button class="black-button"icon="pi pi-times" class = "position-close" (click)="removeComponent()"></p-button> </ng-container>
+        <div class="row">
+        <div class ="col l11">
+          <p style = "font-size:17px">You have 4 notificacion(s) requiring your attention {{Index}}</p>
+        </div>
+        <div class ="col l1">
+         <ng-container *ngIf="Delete"><p-button  class="position-close" icon="pi pi-times"  (click)="removeComponent()"></p-button> </ng-container>
+        </div>
+      </div>
         <br>
         <p>28 days ago</p>
         <br>

@@ -17,14 +17,12 @@
 }
 
 .position-close{
-    background: grey;
-    background-color: grey;
-    color: black;
+    
     position: absolute;
     right: 10px;
     top: 10px;
 }
 
-.ui-button.black-button {
-    background-color: black;
- }
+button{
+    color: white;
+}
