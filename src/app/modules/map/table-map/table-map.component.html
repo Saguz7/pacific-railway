@@ -15,43 +15,32 @@
         </div>
       </div>
       <div class="col s12">
-        <p-table [value]="data" [scrollable]="true"
-      scrollDirection="horizontal">
-      <ng-template pTemplate="header">
-          <tr>
-              <th style="width: 300px">Load #</th>
-              <th style="width: 300px">Equipment</th>
-              <th style="width: 300px">Equipment_Type</th>
-              <th style="width: 300px">Load/Empty</th>
-              <th style="width: 300px">Billed Set Temp</th>
-              <th style="width: 300px">PPS Details</th>
-              <th style="width: 300px">Origin</th>
-              <th style="width: 300px">Destination</th>
-              <th style="width: 300px">Last Reported Station</th>
-              <th style="width: 300px">Holds</th>
-              <th style="width: 300px">Equipment Status</th>
-              <th style="width: 300px">Load Status</th>
-              <th style="width: 300px">Grounded?</th>
-              <th style="width: 300px">ETA</th>
+        <p-table [value]="data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}">
 
-          </tr>
-      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+     <tr>
+         <th *ngFor="let col of columns" pReorderableColumn>
+             {{col.header}}
+         </th>
+     </tr>
+ </ng-template>
+
       <ng-template pTemplate="body" let-object>
           <tr>
-              <td style="width: 300px">{{object.Load}}</td>
-              <td style="width: 300px">{{object.Equipment}}</td>
-              <td style="width: 300px">{{object.Equipment_Type}}</td>
-              <td style="width: 300px">{{object.Load_Empty}}</td>
-              <td style="width: 300px">{{object.Billed_Set_Temp}}</td>
-              <td style="width: 300px">{{object.PPS_Details}}</td>
-              <td style="width: 300px">{{object.Origin}}</td>
-              <td style="width: 300px">{{object.Destination}}</td>
-              <td style="width: 300px">{{object.Last_Reported_Station}}</td>
-              <td style="width: 300px">{{object.Holds}}</td>
-              <td style="width: 300px">{{object.Equipment_Status}}</td>
-              <td style="width: 300px">{{object.Load_Status}}</td>
-              <td style="width: 300px">{{object.Grounded}}</td>
-              <td style="width: 300px">{{object.Eta}}</td>
+              <td>{{object.Load}}</td>
+              <td>{{object.Equipment}}</td>
+              <td>{{object.Equipment_Type}}</td>
+              <td>{{object.Load_Empty}}</td>
+              <td>{{object.Billed_Set_Temp}}</td>
+              <td>{{object.PPS_Details}}</td>
+              <td>{{object.Origin}}</td>
+              <td>{{object.Destination}}</td>
+              <td>{{object.Last_Reported_Station}}</td>
+              <td>{{object.Holds}}</td>
+              <td>{{object.Equipment_Status}}</td>
+              <td>{{object.Load_Status}}</td>
+              <td>{{object.Grounded}}</td>
+              <td>{{object.Eta}}</td>
 
           </tr>
       </ng-template>

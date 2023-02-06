@@ -83,7 +83,7 @@ export class MapComponent implements OnInit {
 
         const geojsonlayer = new GeoJSONLayer({
             url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
-            copyright: "USGS Earthquakes", 
+            copyright: "USGS Earthquakes",
             featureReduction: clusterConfig,
           });
         map.add(geojsonlayer);

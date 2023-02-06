@@ -9,6 +9,7 @@ import { LoginComponent } from './auth/login/login.component';
  import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.component';
  import { LaunchpadComponent } from './modules/launchpad/launchpad.component';
 
+ import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 
 const routes: Routes = [
  { path: 'map', component: MapComponent, pathMatch: 'full' },
@@ -16,7 +17,7 @@ const routes: Routes = [
 { path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
 { path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
 
- //{ path: 'map2', component: MapComponent, pathMatch: 'full' },
+ { path: 'map2', component: MapDivComponent, pathMatch: 'full' },
 
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: '', redirectTo: '/launchpad', pathMatch: 'full' },

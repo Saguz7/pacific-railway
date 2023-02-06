@@ -9,11 +9,13 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 })
 export class FilterMapComponent implements OnInit {
    form: FormGroup;
-   companies: any[];
-   load_emptys: any[];
-   equipment_status: any[];
-   equipment_types: any[];
-   load_status: any[];
+   companies_options: any[];
+   load_emptys_options: any[];
+   equipment_status_options: any[];
+   equipment_types_options: any[];
+   load_status_options: any[];
+   selectedOption: any;
+   search: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,8 +24,6 @@ export class FilterMapComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      search: this.formBuilder.control('',  []),
-      selectedOption: this.formBuilder.control('',  []),
       company: this.formBuilder.control('',  []),
       load_empty: this.formBuilder.control('',  []),
       origin: this.formBuilder.control('',  []),
@@ -38,29 +38,29 @@ export class FilterMapComponent implements OnInit {
       pickup_number: this.formBuilder.control('',  []),
     });
 
-    this.companies= [
+    this.companies_options= [
       {name: 'A', value: 1},
       {name: 'B', value: 2}
     ]
 
-    this.load_emptys = [
+    this.load_emptys_options = [
       {name: 'Load', value: 1},
       {name: 'Empty', value: 2},
     ]
 
-    this.equipment_status = [
+    this.equipment_status_options = [
       {name: 'A', value: 1},
       {name: 'B', value: 2},
       {name: 'C', value: 2},
     ]
 
-    this.equipment_types= [
+    this.equipment_types_options= [
       {name: 'A', value: 1},
       {name: 'B', value: 2},
       {name: 'C', value: 2},
     ]
 
-    this.load_status = [
+    this.load_status_options = [
       {name: 'A', value: 1},
       {name: 'B', value: 2},
       {name: 'C', value: 2},
@@ -73,5 +73,34 @@ export class FilterMapComponent implements OnInit {
   submit(event){
     console.log(event);
   }
+
+  verForms(){
+    let keys_form = Object.keys(this.form['value']);
+    let count = 0;
+    for(var i = 0; i < keys_form.length;i++){
+      if(!this.isEmpty(this.form['value'][keys_form[i]])){
+        count++;
+      }
+    }
+    return count;
+
+  }
+
+  getFormsInitialized(){
+    let keys_form = Object.keys(this.form['value']);
+    let count = 0;
+    for(var i = 0; i < keys_form.length;i++){
+      if(!this.isEmpty(this.form['value'][keys_form[i]])){
+        count++;
+      }
+    }
+    return count;
+
+  }
+
+
+     isEmpty(str) {
+       return (!str || 0 === str.length);
+     }
 
 }

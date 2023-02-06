@@ -1,9 +1,9 @@
 import { ComponentRef, ComponentFactoryResolver, ChangeDetectorRef, HostListener, ViewContainerRef, ViewChild, Component, OnInit, Input, Output, EventEmitter,ElementRef,AfterViewInit } from "@angular/core";
 import { Subscription } from 'rxjs';
-//import {MapCustomService} from '../../core/services/map/map-custom.service'
- 
-//import * as mapboxgl from 'mapbox-gl';
-//import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
+import {MapCustomService} from '../../../core/services/map/map-custom.service'
+
+import * as mapboxgl from 'mapbox-gl';
+import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
 declare var L: any;
 
 @Component({
@@ -12,25 +12,24 @@ declare var L: any;
   styleUrls: ['./mapdiv.component.css']
 })
 export class MapDivComponent implements OnInit {
-  /*
+
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   private ctx!: CanvasRenderingContext2D | null;
   mapbox = (mapboxgl as typeof mapboxgl);
   map!: mapboxgl.Map;
   trains: [];
-  */
 
   lat = 54.6542;
   lng = -114.8574;
   viewmap = true;
   constructor(
-  //  private mapCustomService: MapCustomService
+  private mapCustomService: MapCustomService,
   private CFR?: ComponentFactoryResolver,
   private cdref?: ChangeDetectorRef,
 
   ) { }
-
+/*
   ngOnInit() {
     console.log('Entra aqui');
 
@@ -42,8 +41,11 @@ export class MapDivComponent implements OnInit {
 
 
   }
+  */
 
   ngAfterViewInit() {
+
+    /*
     window.onload = function() {
       console.log('Entra aqui 3');
 
@@ -67,6 +69,8 @@ export class MapDivComponent implements OnInit {
        L.mapquest.geocodingControl().addTo(map);
      }
        this.cdref.detectChanges();
+
+       */
 
   }
 
@@ -108,7 +112,7 @@ export class MapDivComponent implements OnInit {
 
   }
 
-  /*
+
 
   ngOnInit() {
     this.trains = [
@@ -125,6 +129,5 @@ export class MapDivComponent implements OnInit {
       });
     }, 1000);
   }
-  */
 
 }

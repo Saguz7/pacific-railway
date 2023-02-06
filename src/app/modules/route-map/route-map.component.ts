@@ -84,13 +84,15 @@ export class RouteMapComponent implements OnInit {
           labelPlacement: "center-center",
         }]
       };
-
+/*
         const geojsonlayer = new GeoJSONLayer({
             url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
             copyright: "USGS Earthquakes",
             featureReduction: clusterConfig,
           });
         map.add(geojsonlayer);
+
+        */
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
           center: [-118.805, 34.027], // Longitude, latitude
@@ -103,7 +105,7 @@ export class RouteMapComponent implements OnInit {
           layer: graphicsLayer,
           view: this.mapView,
           // graphic will be selected as soon as it is created
-          creationMode: "update"
+        //  creationMode: "update"
         });
 
         this.mapView.ui.add(sketch, "top-right");
@@ -124,7 +126,7 @@ export class RouteMapComponent implements OnInit {
             console.error(err);
           }
         );
-
+/*
         let that = this;
 
         this.mapView.on("click", function (evt) {
@@ -149,6 +151,8 @@ export class RouteMapComponent implements OnInit {
         that.mapView.graphics.removeAll();
         that.mapView.graphics.add(graphic);
         });
+
+        */
       })
       .catch(err => {
         console.error(err);

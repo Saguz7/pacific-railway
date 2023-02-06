@@ -1,18 +1,14 @@
    <div class="row card">
     <div class="p-col-12"><br><br>
       <div class="col s12">
-
-        <form [formGroup]="form" (ngSubmit)="submit($event)" autocomplete="off" class="form-auth">
-
-          <div class="col s12">
-            <div class="col s8">
-              Select All *
-            </div>
-            <div class="col s4 right-align">
-              Manage Report Schedules
-            </div>
+        <div class="col s12">
+          <div class="col s8">
+            Select All *
           </div>
-
+          <div class="col s4 right-align">
+            Manage Report Schedules
+          </div>
+        </div>
 
         <div class="col s12">
           <div class="col s12">
@@ -20,19 +16,19 @@
           </div>
           <div class="col s6">
             <div class="col s3">
-              <p-radioButton formControlName="selectedOption" value="1" name="groupname"></p-radioButton>
+              <p-radioButton [(ngModel)]="selectedOption" value="1" name="groupname"></p-radioButton>
               <label for="groupname">Equipment ID</label>
             </div>
             <div class="col s3">
-              <p-radioButton formControlName="selectedOption" value="2" name="groupname"></p-radioButton>
+              <p-radioButton [(ngModel)]="selectedOption" value="2" name="groupname"></p-radioButton>
               <label for="groupname">Load#</label>
             </div>
             <div class="col s3">
-              <p-radioButton formControlName="selectedOption" value="3" name="groupname"></p-radioButton>
+              <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
               <label for="groupname">Reference#</label>
             </div>
             <div class="col s3">
-              <p-radioButton formControlName="selectedOption" value="4" name="groupname"></p-radioButton>
+              <p-radioButton [(ngModel)]="selectedOption" value="4" name="groupname"></p-radioButton>
               <label for="groupname">RailCar ID</label>
             </div>
 
@@ -42,12 +38,13 @@
 
 
          </div>
+
          <div class="col s12">
 
          <div class="col s4">
 
            <div class="p-inputgroup">
-              <input formControlName=search type="text" pInputText>
+              <input [(ngModel)]="search" type="text" pInputText>
            </div>
 
 
@@ -56,10 +53,18 @@
          </div>
          <div class="col s4 right-align">
            <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text"></button>
-           <button pButton pRipple type="button" label="Filters (2)" class="p-button-secondary p-button-text"></button>
-           <button pButton pRipple type="button" label="Go" class="p-button-danger"></button>
+           <button pButton pRipple type="button" label="Filters {{getFormsInitialized()}}" class="p-button-secondary p-button-text"></button>
+           <button pButton pRipple type="button" label="Go" class="p-button-danger" (click)=verForms()></button>
          </div>
          </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit($event)" autocomplete="off" class="form-auth">
+
+
+
+
+
+
 
 
         <div class="col s12">
@@ -68,7 +73,7 @@
               Company:
             </div>
             <div>
-              <p-dropdown [options]="companies" formControlName=company optionLabel="name" [style]="{'width':'100%'}"></p-dropdown>
+              <p-dropdown [options]="companies_options" formControlName=company optionLabel="name" [style]="{'width':'100%'}"></p-dropdown>
             </div>
            </div>
           <div class="col s1">
@@ -76,7 +81,7 @@
                Load/Empty:
             </div>
             <div>
-              <p-dropdown [options]="load_emptys" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+              <p-dropdown [options]="load_emptys_options" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
             </div>
           </div>
           <div class="col s1">
@@ -127,7 +132,7 @@
               Equipment Status:
            </div>
            <div>
-             <p-dropdown [options]="equipment_status" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+             <p-dropdown [options]="equipment_status_options" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
            </div>
           </div>
           <div class="col s1">
@@ -136,7 +141,7 @@
               Equipment Type:
            </div>
            <div>
-             <p-dropdown [options]="equipment_types" formControlName=equipment_type optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+             <p-dropdown [options]="equipment_types_options" formControlName=equipment_type optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
            </div>
           </div>
           <div class="col s1">
@@ -152,7 +157,7 @@
               Load Status:
            </div>
            <div>
-             <p-dropdown [options]="load_status" formControlName=load_status optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+             <p-dropdown [options]="load_status_options" formControlName=load_status optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
            </div>
           </div>
           <div class="col s1">

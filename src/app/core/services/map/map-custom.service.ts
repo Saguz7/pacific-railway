@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
 import * as mapboxgl from "mapbox-gl";
 import * as MapboxDraw from "@mapbox/mapbox-gl-draw";
+import * as MapboxDrawGeodesic from 'mapbox-gl-draw-geodesic';
+import * as CircleMode from 'mapbox-gl-draw-circle';
+import * as DragCircleMode from 'mapbox-gl-draw-circle';
+import * as DirectMode from 'mapbox-gl-draw-circle';
+import * as SimpleSelectMode from 'mapbox-gl-draw-circle';
+
 import { ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+
+const RadiusMode = MapboxDraw.modes.draw_line_string;
 
 @Injectable({
   providedIn: "root",
@@ -32,6 +40,24 @@ export class MapCustomService {
           zoom: this.zoom,
           center: [this.lng, this.lat],
         });
+
+        const draw = new MapboxDraw({
+        defaultMode: "draw_circle",
+        userProperties: true,
+        modes: {
+          ...MapboxDraw.modes,
+          draw_circle  : CircleMode,
+          drag_circle  : DragCircleMode,
+          direct_select: DirectMode,
+          simple_select: SimpleSelectMode
+        }
+      });
+
+      // Add this draw object to the map when map loads
+      this.map.addControl(draw);
+
+
+        /*
 
 
         this.map.on('load', () => {
@@ -95,6 +121,8 @@ export class MapCustomService {
           }
           );
           });
+
+          */
 
       } catch (e) {
         reject(e);
