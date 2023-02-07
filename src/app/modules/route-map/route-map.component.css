@@ -82,3 +82,32 @@
     max-width: 90%;
   }
 }
+
+:host ::ng-deep .p-calendar{
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 10px;
+}
+
+:host ::ng-deep .p-calendar
+  .p-datepicker table td.p-datepicker-today>span,
+:host ::ng-deep .p-calendar .p-datepicker
+  table td.p-datepicker-today>span:hover {
+  background-color: rgb(128, 0, 0);
+  color: white;
+  font-weight: bold;
+}
+
+:host ::ng-deep .p-button-danger{
+  background: grey;
+  background-color: grey;
+  border: none;
+  
+}
+
+.p-button-danger:hover{
+  background: grey;
+  background-color: grey;
+  border: none;
+  
+}
+

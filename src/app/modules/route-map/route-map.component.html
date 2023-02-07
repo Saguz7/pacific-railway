@@ -3,25 +3,28 @@
     <div class="col s12"><br><br>
       <div class="col s2">
         <p-panel header="Time Range">
+          <div class = "row">
           <div class="col s12">
             <div class="col s12">
-              From
+            
+              From:
             </div>
           </div>
           <div class="col s12">
             <div class="col s12">
-              Date
+              <br>
+              Date:
             </div>
             <div class="col s12">
-              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"> </p-calendar>
             </div>
            </div>
           <div class="col s12">
             <div class="col s12">
-              Time
+              Time:
             </div>
             <div class="col s12">
-          <p-calendar [(ngModel)]="value2" [showTime]="true" timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+          <p-calendar [(ngModel)]="value2" [showTime]="true" timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
         </div>
           </div>
           <div class="col s12"><br>
@@ -37,18 +40,18 @@
 
           <div class="col s12">
             <div class="col s12">
-              Date
+              Date:
             </div>
             <div class="col s12">
-              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
             </div>
            </div>
           <div class="col s12">
             <div class="col s12">
-              Time
+              Time:
             </div>
             <div class="col s12">
-          <p-calendar [(ngModel)]="value2" [showTime]="true"  timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar"></p-calendar>
+          <p-calendar [(ngModel)]="value2" [showTime]="true"  timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
         </div>
           </div>
           <div class="col s12"><br>
@@ -57,25 +60,25 @@
             <button pButton pRipple type="button" label="Update" class="p-button-danger"></button>
 
           </div>
-          <div class="col s12"><br>
+          
           </div>
         </p-panel>
         <p-panel header="Display Options">
           <div class="field-radiobutton">
                 <p-radioButton name="option" value="1" [(ngModel)]="option" inputId="option1"></p-radioButton>
-                <label class="options-labels" for="option1">Points only</label>
+                <label class="options-labels" for="option1"> Points only</label>
             </div><br>
             <div class="field-radiobutton">
                 <p-radioButton name="option" value="2" [(ngModel)]="option" inputId="option2"></p-radioButton>
-                <label class="options-labels" for="option2">Alerts</label>
+                <label class="options-labels" for="option2"> Alerts</label>
             </div><br>
             <div class="field-radiobutton">
                 <p-radioButton name="option" value="3" [(ngModel)]="option" inputId="option3"></p-radioButton>
-                <label class="options-labels" for="option3">Door events</label>
+                <label class="options-labels" for="option3"> Door events</label>
             </div><br>
             <div class="field-radiobutton">
                 <p-radioButton name="option" value="4" [(ngModel)]="option" inputId="option4"></p-radioButton>
-                <label class="options-labels" for="option4">Temperature Graph</label>
+                <label class="options-labels" for="option4"> Temperature Graph</label>
             </div>
           <div class="col s12"><br>
           </div>

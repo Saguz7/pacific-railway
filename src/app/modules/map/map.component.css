@@ -77,3 +77,11 @@
     max-width: 90%;
   }
 }
+
+button{
+  background: rgba(236, 234, 234, 0.712);
+  border: none;
+  border-radius: 12px;
+  
+}
+

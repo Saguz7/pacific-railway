@@ -4,9 +4,17 @@
     <div class="p-col-10 p-offset-1"><br><br>
     </div><br><br>
     -->
+    <div *ngIf="!ocultarFiltro">
     <app-filter-map></app-filter-map>
+    </div>
     <p-divider align="center" type="dashed">
-        <b>Center</b>
+        <button *ngIf="ocultarFiltro" (click)="mostrar()" ><span class="material-icons">
+          expand_more
+          </span></button>
+        <button *ngIf="!ocultarFiltro" (click)="ocultar()"><span class="material-icons">
+          expand_less
+          </span></button>
+        
     </p-divider>
     <div class="p-col-12">
       <div #mapViewNode></div>

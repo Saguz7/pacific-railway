@@ -11,6 +11,9 @@ import { loadModules } from 'esri-loader';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
+
+
+
 export class MapComponent implements OnInit {
   @ViewChild('viewContainerRef', { read: ViewContainerRef, static: false }) VCR: ViewContainerRef;
   index: number = 0;
@@ -29,6 +32,9 @@ export class MapComponent implements OnInit {
     private msService?: MapStateService
    ) { }
 
+   @Output()
+
+    ocultarFiltro:boolean;
 
   ngOnInit() {
     return loadModules([
@@ -39,6 +45,8 @@ export class MapComponent implements OnInit {
       'esri/views/MapView',
       'esri/Graphic'
     ])
+
+    
       .then(([GeoJSONLayer,Sketch,Map,GraphicsLayer, MapView, Graphic]) => {
             //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
         const map: __esri.Map = new Map({
@@ -181,6 +189,14 @@ export class MapComponent implements OnInit {
     }
 
   ngAfterViewInit() {
+  }
+
+  ocultar(){
+    return (this.ocultarFiltro = true);
+  }
+
+  mostrar(){
+    return(this.ocultarFiltro = false);
   }
 
 }

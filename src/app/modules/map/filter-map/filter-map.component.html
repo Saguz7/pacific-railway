@@ -1,15 +1,15 @@
-   <div class="row card">
-    <div class="p-col-12"><br><br>
+   <div  class="row card">
+    <div class="p-col-12">
       <div class="col s12">
         <div class="col s12">
           <div class="col s8">
             Select All *
           </div>
-          <div class="col s4 right-align">
+          <div class="col s4 right-align" style="color: red; font-size: 12px;">
             Manage Report Schedules
           </div>
         </div>
-
+        <br><br>
         <div class="col s12">
           <div class="col s12">
             Search By:
@@ -17,19 +17,19 @@
           <div class="col s6">
             <div class="col s3">
               <p-radioButton [(ngModel)]="selectedOption" value="1" name="groupname"></p-radioButton>
-              <label for="groupname">Equipment ID</label>
+              <label for="groupname"> Equipment ID</label>
             </div>
             <div class="col s3">
               <p-radioButton [(ngModel)]="selectedOption" value="2" name="groupname"></p-radioButton>
-              <label for="groupname">Load#</label>
+              <label for="groupname"> Load#</label>
             </div>
             <div class="col s3">
               <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
-              <label for="groupname">Reference#</label>
+              <label for="groupname"> Reference#</label>
             </div>
             <div class="col s3">
               <p-radioButton [(ngModel)]="selectedOption" value="4" name="groupname"></p-radioButton>
-              <label for="groupname">RailCar ID</label>
+              <label for="groupname"> RailCar ID</label>
             </div>
 
           </div>
@@ -52,7 +52,8 @@
          <div class="col s4">
          </div>
          <div class="col s4 right-align">
-           <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text"></button>
+           <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text" *ngIf="!ocultarBarra" (click)="ocultar()" ></button>
+           <button pButton pRipple type="button" label="Show Filter Bar" class="p-button-secondary p-button-text" *ngIf="ocultarBarra" (click)="mostrar()" ></button>
            <button pButton pRipple type="button" label="Filters {{getFormsInitialized()}}" class="p-button-secondary p-button-text"></button>
            <button pButton pRipple type="button" label="Go" class="p-button-danger" (click)=verForms()></button>
          </div>
@@ -66,7 +67,7 @@
 
 
 
-
+        <div *ngIf="!ocultarBarra">
         <div class="col s12">
           <div class="col s1">
             <div>
@@ -126,7 +127,7 @@
              <input formControlName=last_report_station type="text" pInputText>
            </div>
           </div>
-          <div class="col s1">
+          <div class="col s2">
 
             <div>
               Equipment Status:
@@ -135,7 +136,7 @@
              <p-dropdown [options]="equipment_status_options" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
            </div>
           </div>
-          <div class="col s1">
+          <div class="col s2">
 
             <div>
               Equipment Type:
@@ -160,7 +161,7 @@
              <p-dropdown [options]="load_status_options" formControlName=load_status optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
            </div>
           </div>
-          <div class="col s1">
+          <div class="col s2">
 
             <div>
               Storage Guarantee:
@@ -169,7 +170,7 @@
              <input formControlName=storage_guarantee type="text" pInputText>
            </div>
           </div>
-          <div class="col s1">
+          <div class="col s2">
 
             <div>
               Pickup Number:
@@ -179,10 +180,11 @@
            </div>
           </div>
         </div>
+        </div>
       </form>
 
       </div>
-      <div class="col s12"><br><br>
+      <div class="col s12"><br>
       </div>
 
     </div>

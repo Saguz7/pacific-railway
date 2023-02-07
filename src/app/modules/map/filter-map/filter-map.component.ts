@@ -21,7 +21,10 @@ export class FilterMapComponent implements OnInit {
     private formBuilder: FormBuilder,
    ) { }
 
+   @Output()
 
+   ocultarBarra:boolean;
+   
   ngOnInit() {
     this.form = this.formBuilder.group({
       company: this.formBuilder.control('',  []),
@@ -102,5 +105,13 @@ export class FilterMapComponent implements OnInit {
      isEmpty(str) {
        return (!str || 0 === str.length);
      }
+
+     ocultar(){
+      return (this.ocultarBarra = true);
+    }
+  
+    mostrar(){
+      return(this.ocultarBarra = false);
+    }
 
 }
