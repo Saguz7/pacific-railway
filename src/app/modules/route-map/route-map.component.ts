@@ -151,8 +151,18 @@ export class RouteMapComponent implements OnInit {
            }
          });
 
+         let that = this;
+
+         this.mapView.on("click", (event) => {
+          this.mapView.hitTest(event).then(({ results }) => {
+            //checar para alert
+            console.log(results);
+          });
+        });
 
        })
+
+
        .catch(err => {
          console.error(err);
        });
