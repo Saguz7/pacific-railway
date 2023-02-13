@@ -24,8 +24,7 @@ export class MapStateService extends MapStore<any[]> {
   }
 
   addPoint(point: __esri.Graphic) {
-    const c = this.getValue();
-
+     const c = this.getValue(); 
     if(typeof c !== 'undefined'){
       this.setState([...this.getValue(), point]);
     }

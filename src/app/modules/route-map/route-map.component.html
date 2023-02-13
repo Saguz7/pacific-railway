@@ -6,7 +6,7 @@
           <div class = "row">
           <div class="col s12">
             <div class="col s12">
-            
+
               From:
             </div>
           </div>
@@ -60,7 +60,7 @@
             <button pButton pRipple type="button" label="Update" class="p-button-danger"></button>
 
           </div>
-          
+
           </div>
         </p-panel>
         <p-panel header="Display Options">
@@ -90,8 +90,23 @@
 
 
       </div>
-      <div class="col s10"> 
+      <div class="col s10">
         <div class="container-map" #mapViewNode></div>
+        <div id="select-by-rectangle" class="esri-widget esri-widget--button esri-widget esri-interactive"
+            title="Select features by rectangle">
+          <span class="esri-icon-checkbox-unchecked"></span>
+        </div>
+        <div id="select-by-circle" class="esri-widget esri-widget--button esri-widget esri-interactive"
+            title="Select features by circle">
+          <span class="esri-icon-radio-unchecked"></span>
+        </div>
+        <div id="clear-selection" class="esri-widget esri-widget--button esri-widget esri-interactive"
+            title="Clear selection">
+          <span class="esri-icon-erase"></span>
+        </div>
+        <div class="container">
+          <div id="tableDiv"></div>
+        </div>
         <app-temperature-graph></app-temperature-graph>
 
       </div>

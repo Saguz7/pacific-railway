@@ -101,13 +101,26 @@
   background: grey;
   background-color: grey;
   border: none;
-  
+
 }
 
 .p-button-danger:hover{
   background: grey;
   background-color: grey;
   border: none;
-  
+
 }
 
+#infoDiv {
+  padding: 10px;
+  width: 275px;
+}
+#sliderValue{
+  font-weight: bolder;
+}
+#legendDiv{
+  width: 260px;
+}
+#description{
+  padding: 10px 0 10px 0;
+}
