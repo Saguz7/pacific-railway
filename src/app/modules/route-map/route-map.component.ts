@@ -43,10 +43,11 @@ export class RouteMapComponent implements OnInit {
        "esri/layers/GraphicsLayer",
        'esri/views/MapView',
        'esri/Graphic',
+       "esri/layers/FeatureLayer",
        "esri/geometry/geometryEngineAsync"
 
      ])
-       .then(([GeoJSONLayer,Sketch,SketchViewModel,Map,GraphicsLayer, MapView, Graphic,geometryEngineAsync]) => {
+       .then(([GeoJSONLayer,Sketch,SketchViewModel,Map,GraphicsLayer, MapView, Graphic,FeatureLayer,geometryEngineAsync]) => {
              //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
          const map: __esri.Map = new Map({
            basemap: 'streets'
@@ -105,6 +106,10 @@ export class RouteMapComponent implements OnInit {
          const polygonGraphicsLayer = new GraphicsLayer();
          map.add(polygonGraphicsLayer);
 
+
+         const graphicsLayer = new GraphicsLayer();
+         map.add(graphicsLayer);
+
          this.mapView.ui.add("select-by-rectangle", "top-left");
          const selectButton = document.getElementById("select-by-rectangle");
 
@@ -154,10 +159,51 @@ export class RouteMapComponent implements OnInit {
          let that = this;
 
          this.mapView.on("click", (event) => {
+           console.log(event);
+               event.stopPropagation();
           this.mapView.hitTest(event).then(({ results }) => {
+            var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+              var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+              console.log(results);
+              if(results.length>0){
+
+
+              this.mapView.popup.open({
+                  // Set the popup's title to the coordinates of the clicked location
+                  title: "Reverse geocode: [" + lon + ", " + lat + "]",
+                  location: event.mapPoint // Set the location of the popup to the clicked location
+              });
+
+               }
+            /*
             //checar para alert
-            console.log(results);
-          });
+            if(results.length>0){
+
+              this.mapView.on("click", (event) => {
+                console.log(event);
+               this.mapView.hitTest(event).then(({ results }) => {
+                 //checar para alert
+                 if(results.length>0){
+
+                   console.log(results);
+
+                   const popupTrailheads = {
+                         "title": "Trailhead",
+                         "content": "<b>Trail:</b>"
+                       }
+
+                       const trailheads = new FeatureLayer({
+                               popupTemplate: popupTrailheads
+                             });
+
+                             map.add(trailheads);
+                 }
+                });
+             });
+
+            }
+            */
+           });
         });
 
        })
@@ -169,8 +215,13 @@ export class RouteMapComponent implements OnInit {
      }
 
 
-  ngAfterViewInit() {
-  }
+     ngAfterViewInit() {
+       fetch("https://ylzrxazuug.execute-api.us-west-2.amazonaws.com/dev/apigatewaylambda")
+           .then(res => res.json())
+           .then((out) => {
+             console.log(out.features);
+       }).catch(err => console.error(err));
+     }
 
 }
 
@@ -276,6 +327,101 @@ export class RouteMapComponent implements OnInit {
           layers: [csvLayer]
         });
 
+<<<<<<< HEAD
+        const clusterConfig = {
+        type: "cluster",
+        clusterRadius: "100px",
+        // {cluster_count} is an aggregate field containing
+        // the number of features comprised by the cluster
+
+        popupTemplate: {
+
+          title: "Cluster summary",
+          content: "This cluster represents {cluster_count} chasis.",
+          fieldInfos: [{
+            fieldName: "cluster_count",
+            format: {
+              places: 0,
+              digitSeparator: true
+            }
+          }]
+        },
+        clusterMinSize: "24px",
+        clusterMaxSize: "60px",
+        labelingInfo: [{
+          deconflictionStrategy: "none",
+          labelExpressionInfo: {
+            expression: "Text($feature.cluster_count, '#,###')"
+          },
+          symbol: {
+            type: "text",
+            color: "black",
+            font: {
+              weight: "bold",
+              family: "Noto Sans",
+              size: "12px"
+            }
+          },
+          labelPlacement: "center-center",
+        }]
+      };
+
+        const geojsonlayer = new GeoJSONLayer({
+            url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+            copyright: "USGS Earthquakes",
+            featureReduction: clusterConfig,
+          });
+        map.add(geojsonlayer);
+        console.log(map);
+
+        this.mapView = new MapView({
+          container: this.mapViewEl.nativeElement,
+          center: [-118.805, 34.027], // Longitude, latitude
+          zoom: 13, // Zoom level
+          map: map
+        });
+        const graphicsLayer = new GraphicsLayer();
+        this.mapView.when(() => {
+        const sketch = new Sketch({
+          layer: graphicsLayer,
+          view: this.mapView,
+          // graphic will be selected as soon as it is created
+        //  creationMode: "update"
+        });
+
+        this.mapView.ui.add(sketch, "top-right");
+      });
+      let that = this;
+
+        const evento = this.mapView.when(
+          () => {
+            const points = this.msService.getPoints();
+            console.log('first load', points);
+            this.sub = points.subscribe(value => {
+              console.log(value);
+
+              if(value.length) {
+                console.log(value);
+
+                this.mapView.graphics.addMany(value);
+                this.sub.unsubscribe(); // we only want this once
+              }
+            })
+          },
+          (err) => {
+            console.error(err);
+          }
+        ).then((layerView) => {
+          this.mapView.on("pointer-move", eventHandler);
+          this.mapView.on("pointer-down", eventHandler);
+
+          function eventHandler(event) {
+            console.log(event);
+          }
+
+        });
+
+=======
 
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
@@ -627,9 +773,15 @@ export class RouteMapComponent implements OnInit {
                     }
                 }
 
+>>>>>>> c3308d5cdfe91370d6cbc5fd40dac253505602f5
       })
       .catch(err => {
         console.error(err);
+      });
+
+      this.mapView.on("click", function(event){
+        // event is the event handle returned after the event fires.
+        console.log(event.mapPoint);
       });
     }
 
