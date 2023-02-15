@@ -48,6 +48,7 @@ export class MapComponent implements OnInit {
 
               this.href = this.router.url;
              this.currentURL = window.location.href.replace(this.href,'');
+
       return loadModules([
         "esri/layers/GeoJSONLayer",
         "esri/widgets/Sketch",
@@ -72,8 +73,8 @@ export class MapComponent implements OnInit {
           // {cluster_count} is an aggregate field containing
           // the number of features comprised by the cluster
           popupTemplate: {
-            title: "Cluster summary",
-            content: "This cluster represents {cluster_count} earthquakes.",
+            title: "Information",
+            content: "This cluster represents {cluster_count} chasis.",
             fieldInfos: [{
               fieldName: "cluster_count",
               format: {
@@ -170,22 +171,25 @@ export class MapComponent implements OnInit {
           let that = this;
 
           this.mapView.on("click", (event) => {
-                event.stopPropagation();
-           this.mapView.hitTest(event).then(({ results }) => {
-             var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-               var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
-               if(results.length>0){
+            if(this.mapView.zoom>14){
+              event.stopPropagation();
+         this.mapView.hitTest(event).then(({ results }) => {
+           var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+             var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+             if(results.length>0){
 
-                 let point = this.data.find(element => element.geometry.coordinates[0].toFixed() == lon.toFixed() && element.geometry.coordinates[1].toFixed() == lat.toFixed());
-                 if(point!=undefined){
-                   this.mapView.popup.open({
-                       // Set the popup's title to the coordinates of the clicked location
-                       title: "Device ID: [" + point.properties.device_id + "]",
-                       location: event.mapPoint // Set the location of the popup to the clicked location
-                   });
-                 }
-                }
-            });
+               let point = this.data.find(element => element.geometry.coordinates[0].toFixed() == lon.toFixed() && element.geometry.coordinates[1].toFixed() == lat.toFixed());
+               if(point!=undefined){
+                 this.mapView.popup.open({
+                     // Set the popup's title to the coordinates of the clicked location
+                     title: "Device ID: [" + point.properties.device_id + "]",
+                     location: event.mapPoint // Set the location of the popup to the clicked location
+                 });
+               }
+              }
+          });
+            }
+
          });
 
         })
@@ -194,6 +198,7 @@ export class MapComponent implements OnInit {
         .catch(err => {
           console.error(err);
         });
+
 
       }
 
@@ -208,10 +213,33 @@ export class MapComponent implements OnInit {
                .then((out) => {
                  this.data = out.features;
                  this.loading = false;
+              //   this.rehacerjson();
 
            }).catch(err => console.error(err));
 
            this.cdRef.detectChanges();
+           }
+
+
+           rehacerjson(){
+
+             let features = []
+
+             for(var i = 0; i < this.data.length;i++){
+               let coordinates = [this.data[i].geometry.coordinates[1],this.data[i].geometry.coordinates[0],4]
+               features.push(
+                 {
+                   geometry: {
+                     type: this.data[i].geometry.type,
+                     coordinates: coordinates
+                   },
+                   id: this.data[i].id,
+                   properties: this.data[i].properties,
+​                   type: this.data[i].type
+                 }
+               )
+
+             }
            }
 
   ocultar(){

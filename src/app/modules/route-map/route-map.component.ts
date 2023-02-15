@@ -66,8 +66,8 @@ export class RouteMapComponent implements OnInit {
          // {cluster_count} is an aggregate field containing
          // the number of features comprised by the cluster
          popupTemplate: {
-           title: "Cluster summary",
-           content: "This cluster represents {cluster_count} earthquakes.",
+           title: "Information",
+           content: "This cluster represents {cluster_count} chasis.",
            fieldInfos: [{
              fieldName: "cluster_count",
              format: {
@@ -155,10 +155,8 @@ export class RouteMapComponent implements OnInit {
              const geometries = polygonGraphicsLayer.graphics.map(function(graphic){
                return graphic.geometry
              });
-             console.log(geometries.toArray());
 
              const queryGeometry = await geometryEngineAsync.union(geometries.toArray());
-             console.log(queryGeometry);
             // selectFeatures(queryGeometry);
            }
          });
@@ -166,13 +164,11 @@ export class RouteMapComponent implements OnInit {
          let that = this;
 
          this.mapView.on("click", (event) => {
-           console.log(event);
-               event.stopPropagation();
+                event.stopPropagation();
           this.mapView.hitTest(event).then(({ results }) => {
             var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
               var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
-              console.log(results);
-              if(results.length>0){
+               if(results.length>0){
 
 
               this.mapView.popup.open({
@@ -196,19 +192,6 @@ export class RouteMapComponent implements OnInit {
 
 
      ngAfterViewInit() {
-       fetch(this.currentURL + "/assets/geojson.json")
-           .then(res => res.json())
-           .then((out) => {
-             console.log(out);
-       }).catch(err => console.error(err));
-
-       fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson")
-           .then(res => res.json())
-           .then((out) => {
-             console.log(out);
-       }).catch(err => console.error(err));
-
- 
      }
 
 }
