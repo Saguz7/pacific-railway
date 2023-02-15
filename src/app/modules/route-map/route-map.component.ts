@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
  import { MapStateService } from '../../core/services/map-state/map-state.service';
 
 import { loadModules } from 'esri-loader';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-route-map',
@@ -22,11 +22,13 @@ export class RouteMapComponent implements OnInit {
 
   public mapView: __esri.MapView;
   private sub: Subscription = new Subscription();
-
+  public href: string = "";
+  public currentURL: string = "";
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
   constructor(
+    private router : Router,
     private CFR?: ComponentFactoryResolver,
     private cdref?: ChangeDetectorRef,
     private msService?: MapStateService
@@ -34,6 +36,11 @@ export class RouteMapComponent implements OnInit {
 
 
    ngOnInit() {
+
+             this.href = this.router.url;
+            this.currentURL = window.location.href.replace(this.href,'');
+             console.log(this.href);
+             console.log(this.currentURL);
 
      return loadModules([
        "esri/layers/GeoJSONLayer",
@@ -90,7 +97,7 @@ export class RouteMapComponent implements OnInit {
        };
 
          const geojsonlayer = new GeoJSONLayer({
-             url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+             url: this.currentURL + "/assets/geojson.json",
              featureReduction: clusterConfig,
            });
          map.add(geojsonlayer);
@@ -175,34 +182,6 @@ export class RouteMapComponent implements OnInit {
               });
 
                }
-            /*
-            //checar para alert
-            if(results.length>0){
-
-              this.mapView.on("click", (event) => {
-                console.log(event);
-               this.mapView.hitTest(event).then(({ results }) => {
-                 //checar para alert
-                 if(results.length>0){
-
-                   console.log(results);
-
-                   const popupTrailheads = {
-                         "title": "Trailhead",
-                         "content": "<b>Trail:</b>"
-                       }
-
-                       const trailheads = new FeatureLayer({
-                               popupTemplate: popupTrailheads
-                             });
-
-                             map.add(trailheads);
-                 }
-                });
-             });
-
-            }
-            */
            });
         });
 
@@ -212,15 +191,24 @@ export class RouteMapComponent implements OnInit {
        .catch(err => {
          console.error(err);
        });
+
      }
 
 
      ngAfterViewInit() {
-       fetch("https://ylzrxazuug.execute-api.us-west-2.amazonaws.com/dev/apigatewaylambda")
+       fetch(this.currentURL + "/assets/geojson.json")
            .then(res => res.json())
            .then((out) => {
-             console.log(out.features);
+             console.log(out);
        }).catch(err => console.error(err));
+
+       fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson")
+           .then(res => res.json())
+           .then((out) => {
+             console.log(out);
+       }).catch(err => console.error(err));
+
+ 
      }
 
 }

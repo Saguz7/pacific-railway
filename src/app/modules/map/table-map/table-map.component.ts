@@ -9,13 +9,24 @@ import { Subscription } from 'rxjs';
 export class TableMapComponent implements OnInit {
   data: any[];
       cols: any[];
+      @Input() Data: any;
+
   constructor(
    ) { }
 
 
   ngOnInit() {
 
+    this.cols = [
+        { field: 'device_id', header: 'Device ID' },
+        { field: 'date', header: 'Date' },
+        { field: 'move_type', header: 'Move Type' },
+        { field: 'coordinates', header: 'Coordinates' }
 
+    ];
+
+
+/*
         this.cols = [
             { field: 'load', header: 'Load' },
             { field: 'equipment', header: 'Equipment' },
@@ -34,6 +45,10 @@ export class TableMapComponent implements OnInit {
 
         ];
 
+        */
+
+
+/*
     this.data = [
       {
         Load: "-",
@@ -148,9 +163,16 @@ export class TableMapComponent implements OnInit {
         Eta: "-"
       },
     ];
+
+    */
   }
 
   ngAfterViewInit() {
+  }
+
+  formatdate(date){
+    let dateformat = date.split(' ');
+    return dateformat[0];
   }
 
 }

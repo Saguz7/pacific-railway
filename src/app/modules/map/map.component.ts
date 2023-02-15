@@ -4,6 +4,7 @@ import { MapDivComponent } from './mapdiv/mapdiv.component';
 import { MapStateService } from '../../core/services/map-state/map-state.service';
 
 import { loadModules } from 'esri-loader';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,11 +23,16 @@ export class MapComponent implements OnInit {
 
   public mapView: __esri.MapView;
   private sub: Subscription = new Subscription();
-
+  public href: string = "";
+  public currentURL: string = "";
+  data: any;
+  loading: boolean = false;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
   constructor(
+    private router : Router,
+    private cdRef : ChangeDetectorRef,
     private CFR?: ComponentFactoryResolver,
     private cdref?: ChangeDetectorRef,
     private msService?: MapStateService
@@ -36,160 +42,177 @@ export class MapComponent implements OnInit {
 
     ocultarFiltro:boolean;
 
-  ngOnInit() {
-    return loadModules([
-      "esri/layers/GeoJSONLayer",
-      "esri/widgets/Sketch",
-      'esri/Map',
-      "esri/layers/GraphicsLayer",
-      'esri/views/MapView',
-      'esri/Graphic'
-    ])
+    ngOnInit() {
 
-    
-      .then(([GeoJSONLayer,Sketch,Map,GraphicsLayer, MapView, Graphic]) => {
-            //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
-        const map: __esri.Map = new Map({
-          basemap: 'streets'
-        });
+      this.data = [];
 
-        const clusterConfig = {
-        type: "cluster",
-        clusterRadius: "100px",
-        // {cluster_count} is an aggregate field containing
-        // the number of features comprised by the cluster
-        popupTemplate: {
-          title: "Cluster summary",
-          content: "This cluster represents {cluster_count} earthquakes.",
-          fieldInfos: [{
-            fieldName: "cluster_count",
-            format: {
-              places: 0,
-              digitSeparator: true
-            }
-          }]
-        },
-        clusterMinSize: "24px",
-        clusterMaxSize: "60px",
-        labelingInfo: [{
-          deconflictionStrategy: "none",
-          labelExpressionInfo: {
-            expression: "Text($feature.cluster_count, '#,###')"
-          },
-          symbol: {
-            type: "text",
-            color: "#004a5d",
-            font: {
-              weight: "bold",
-              family: "Noto Sans",
-              size: "12px"
-            }
-          },
-          labelPlacement: "center-center",
-        }]
-      };
+              this.href = this.router.url;
+             this.currentURL = window.location.href.replace(this.href,'');
+      return loadModules([
+        "esri/layers/GeoJSONLayer",
+        "esri/widgets/Sketch",
+        "esri/widgets/Sketch/SketchViewModel",
+        'esri/Map',
+        "esri/layers/GraphicsLayer",
+        'esri/views/MapView',
+        'esri/Graphic',
+        "esri/layers/FeatureLayer",
+        "esri/geometry/geometryEngineAsync"
 
-        const geojsonlayer = new GeoJSONLayer({
-            url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
-            copyright: "USGS Earthquakes",
-            featureReduction: clusterConfig,
+      ])
+        .then(([GeoJSONLayer,Sketch,SketchViewModel,Map,GraphicsLayer, MapView, Graphic,FeatureLayer,geometryEngineAsync]) => {
+              //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
+          const map: __esri.Map = new Map({
+            basemap: 'streets'
           });
-        map.add(geojsonlayer);
-        this.mapView = new MapView({
-          container: this.mapViewEl.nativeElement,
-          center: [-118.805, 34.027], // Longitude, latitude
-          zoom: 13, // Zoom level
-          map: map
-        });
-        const graphicsLayer = new GraphicsLayer();
-        this.mapView.when(() => {
-        const sketch = new Sketch({
-          layer: graphicsLayer,
-          view: this.mapView,
-          // graphic will be selected as soon as it is created
-          creationMode: "update"
-        });
 
-        this.mapView.ui.add(sketch, "top-right");
-      });
-
-        this.mapView.when(
-          () => {
-            const points = this.msService.getPoints();
-            console.log('first load', points);
-            this.sub = points.subscribe(value => {
-              if(value.length) {
-                this.mapView.graphics.addMany(value);
-                this.sub.unsubscribe(); // we only want this once
+          const clusterConfig = {
+          type: "cluster",
+          clusterRadius: "100px",
+          // {cluster_count} is an aggregate field containing
+          // the number of features comprised by the cluster
+          popupTemplate: {
+            title: "Cluster summary",
+            content: "This cluster represents {cluster_count} earthquakes.",
+            fieldInfos: [{
+              fieldName: "cluster_count",
+              format: {
+                places: 0,
+                digitSeparator: true
               }
-            })
+            }]
           },
-          (err) => {
-            console.error(err);
-          }
-        );
-
-        let that = this;
-
-        this.mapView.on("click", function (evt) {
-        // Create a graphic and add the geometry and symbol to it
-        var graphic = new Graphic({
-          geometry: {
-            type: "point",
-            latitude: evt.mapPoint.latitude,
-            longitude: evt.mapPoint.longitude,
-            spatialReference: that.mapView.spatialReference,
-          },
-          symbol: {
-            type: "simple-marker", // autocasts as new SimpleFillSymbol
-            color: [255, 10, 10],
-            outline: {
-              // autocasts as new SimpleLineSymbol()
-              color: [255, 255, 255],
-              width: 2,
-            },
-          },
-        });
-        that.mapView.graphics.removeAll();
-        that.mapView.graphics.add(graphic);
-        });
-        /*
-
-        this.mapView.on('click', (event: __esri.MapViewClickEvent) => {
-          const pointGraphic: that.__esri.Graphic = new Graphic({
-            attributes: {
-              time: new Date().getTime()
-            },
-            geometry: {
-              type: 'point',
-              longitude: event.mapPoint.longitude,
-              latitude: event.mapPoint.latitude,
-              spatialReference: event.mapPoint.spatialReference
+          clusterMinSize: "24px",
+          clusterMaxSize: "60px",
+          labelingInfo: [{
+            deconflictionStrategy: "none",
+            labelExpressionInfo: {
+              expression: "Text($feature.cluster_count, '#,###')"
             },
             symbol: {
-              type: 'simple-marker',
-              color: [119, 40, 119],
-              outline: {
-                color: [255, 255, 255],
-                width: 1
+              type: "text",
+              color: "#004a5d",
+              font: {
+                weight: "bold",
+                family: "Noto Sans",
+                size: "12px"
               }
+            },
+            labelPlacement: "center-center",
+          }]
+        };
+
+          const geojsonlayer = new GeoJSONLayer({
+              url: this.currentURL + "/assets/geojson.json",
+              featureReduction: clusterConfig,
+            });
+          map.add(geojsonlayer);
+
+          this.mapView = new MapView({
+            container: this.mapViewEl.nativeElement,
+            center: [-114.8574, 54.6542], // Longitude, latitude
+            zoom: 4, // Zoom level
+            map: map
+          });
+
+
+          const polygonGraphicsLayer = new GraphicsLayer();
+          map.add(polygonGraphicsLayer);
+
+
+          const graphicsLayer = new GraphicsLayer();
+          map.add(graphicsLayer);
+
+          this.mapView.ui.add("select-by-rectangle", "top-left");
+          const selectButton = document.getElementById("select-by-rectangle");
+
+
+          // click event for the select by rectangle button
+          selectButton.addEventListener("click", () => {
+            this.mapView.popup.close();
+            sketchViewModel.create("rectangle");
+          });
+
+
+          this.mapView.ui.add("select-by-circle", "top-left");
+          const selectButtonCCircle = document.getElementById("select-by-circle");
+
+
+          // click event for the select by rectangle button
+          selectButtonCCircle.addEventListener("click", () => {
+            this.mapView.popup.close();
+            sketchViewModel.create("circle");
+          });
+
+          this.mapView.ui.add("clear-selection", "top-left");
+          document.getElementById("clear-selection").addEventListener("click", () => {
+            polygonGraphicsLayer.removeAll();
+
+           });
+
+          const sketchViewModel = new SketchViewModel({
+            view: this.mapView,
+            layer: polygonGraphicsLayer
+          });
+
+          sketchViewModel.on("create", async (event) => {
+            if (event.state === "complete") {
+              // this polygon will be used to query features that intersect it
+              const geometries = polygonGraphicsLayer.graphics.map(function(graphic){
+                return graphic.geometry
+              });
+
+              const queryGeometry = await geometryEngineAsync.union(geometries.toArray());
+             // selectFeatures(queryGeometry);
             }
           });
 
-          this.mapView.graphics.add(pointGraphic);
-          this.msService.addPoint(pointGraphic);
+          let that = this;
+
+          this.mapView.on("click", (event) => {
+                event.stopPropagation();
+           this.mapView.hitTest(event).then(({ results }) => {
+             var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+               var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+               if(results.length>0){
+
+                 let point = this.data.find(element => element.geometry.coordinates[0].toFixed() == lon.toFixed() && element.geometry.coordinates[1].toFixed() == lat.toFixed());
+                 if(point!=undefined){
+                   this.mapView.popup.open({
+                       // Set the popup's title to the coordinates of the clicked location
+                       title: "Device ID: [" + point.properties.device_id + "]",
+                       location: event.mapPoint // Set the location of the popup to the clicked location
+                   });
+                 }
+                }
+            });
+         });
+
+        })
+
+
+        .catch(err => {
+          console.error(err);
         });
 
-        */
+      }
 
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    }
 
-  ngAfterViewInit() {
-  }
+         ngAfterViewInit() {
+
+           this.loading = true;
+
+
+           fetch(this.currentURL + "/assets/geojson.json")
+               .then(res => res.json())
+               .then((out) => {
+                 this.data = out.features;
+                 this.loading = false;
+
+           }).catch(err => console.error(err));
+
+           this.cdRef.detectChanges();
+           }
 
   ocultar(){
     return (this.ocultarFiltro = true);

@@ -15,14 +15,31 @@
           </span></button>
         <button *ngIf="!ocultarFiltro" (click)="ocultar()"><span class="material-icons">
           expand_less
-          </span></button> 
+          </span></button>
     </p-divider>
     <div class="p-col-12">
       <div #mapViewNode></div>
-
+      <div id="select-by-rectangle" class="esri-widget esri-widget--button esri-widget esri-interactive"
+          title="Select features by rectangle">
+        <span class="esri-icon-checkbox-unchecked"></span>
+      </div>
+      <div id="select-by-circle" class="esri-widget esri-widget--button esri-widget esri-interactive"
+          title="Select features by circle">
+        <span class="esri-icon-radio-unchecked"></span>
+      </div>
+      <div id="clear-selection" class="esri-widget esri-widget--button esri-widget esri-interactive"
+          title="Clear selection">
+        <span class="esri-icon-erase"></span>
+      </div>
+      <div class="container">
+        <div id="tableDiv"></div>
+      </div>
     </div>
-    <app-table-map></app-table-map>
-  </div>
+    <app-table-map [Data]='data'></app-table-map>
+    <ng-container *ngIf="loading">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </ng-container>
+   </div>
 
 
 

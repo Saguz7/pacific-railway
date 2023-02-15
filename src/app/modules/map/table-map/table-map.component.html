@@ -1,51 +1,85 @@
    <div class="row card">
 
 
-    <div class="p-col-12"><br><br>
-      <div class="col s12">
-        <div class="col s2">
-          Equipment ({{data.length}})
+    <div class="p-col-12" *ngIf="Data!=undefined"><br><br>
+      <ng-container *ngIf="Data.length>0">
+        <div class="col s12">
+          <div class="col s2">
+            Equipment ({{Data.length}})
+          </div>
+          <div class="col s8">
+          </div>
+          <div class="col s2 right-align">
+            <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text"></button>
+            <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary p-button-text"></button>
+            <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"></button>
+          </div>
         </div>
-        <div class="col s8">
+        <div class="col s12">
+          <p-table [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}">
+
+        <ng-template pTemplate="header" let-columns>
+       <tr>
+           <th *ngFor="let col of columns" pReorderableColumn>
+               {{col.header}}
+           </th>
+       </tr>
+   </ng-template>
+
+        <ng-template pTemplate="body" let-object>
+            <tr>
+              <td>
+                <ng-container *ngIf="object.properties!=undefined">
+                  {{object.properties.device_id}}
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="object.properties!=undefined">
+                  {{formatdate(object.properties.date)}}
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="object.properties!=undefined">
+                  {{object.properties.move_type}}
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="object.geometry!=undefined">
+                  <ng-container *ngIf="object.geometry.coordinates!=undefined">
+                    {{object.geometry.coordinates[0]}},{{object.geometry.coordinates[1]}}
+                  </ng-container>
+                </ng-container>
+              </td>
+               <!--
+                <td>{{object.Load}}</td>
+                <td>{{object.Equipment}}</td>
+                <td>{{object.Equipment_Type}}</td>
+                <td>{{object.Load_Empty}}</td>
+                <td>{{object.Billed_Set_Temp}}</td>
+                <td>{{object.PPS_Details}}</td>
+                <td>{{object.Origin}}</td>
+                <td>{{object.Destination}}</td>
+                <td>{{object.Last_Reported_Station}}</td>
+                <td>{{object.Holds}}</td>
+                <td>{{object.Equipment_Status}}</td>
+                <td>{{object.Load_Status}}</td>
+                <td>{{object.Grounded}}</td>
+                <td>{{object.Eta}}</td>
+
+                -->
+
+            </tr>
+        </ng-template>
+    </p-table>
         </div>
-        <div class="col s2 right-align">
-          <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text"></button>
-          <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary p-button-text"></button>
-          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"></button>
+      </ng-container>
+      <ng-container *ngIf="Data.length==0">
+        <div class="col s12">
+          Equipment ({{Data.length}})
         </div>
-      </div>
-      <div class="col s12">
-        <p-table [value]="data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}">
+      </ng-container>
 
-      <ng-template pTemplate="header" let-columns>
-     <tr>
-         <th *ngFor="let col of columns" pReorderableColumn>
-             {{col.header}}
-         </th>
-     </tr>
- </ng-template>
 
-      <ng-template pTemplate="body" let-object>
-          <tr>
-              <td>{{object.Load}}</td>
-              <td>{{object.Equipment}}</td>
-              <td>{{object.Equipment_Type}}</td>
-              <td>{{object.Load_Empty}}</td>
-              <td>{{object.Billed_Set_Temp}}</td>
-              <td>{{object.PPS_Details}}</td>
-              <td>{{object.Origin}}</td>
-              <td>{{object.Destination}}</td>
-              <td>{{object.Last_Reported_Station}}</td>
-              <td>{{object.Holds}}</td>
-              <td>{{object.Equipment_Status}}</td>
-              <td>{{object.Load_Status}}</td>
-              <td>{{object.Grounded}}</td>
-              <td>{{object.Eta}}</td>
-
-          </tr>
-      </ng-template>
-  </p-table>
-      </div>
 
     </div><br><br>
 

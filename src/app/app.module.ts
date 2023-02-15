@@ -44,7 +44,7 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
  import {ScrollPanelModule} from 'primeng/scrollpanel';
  import {ChartModule} from 'primeng/chart';
  import {PanelModule} from 'primeng/panel';
-
+import {ProgressBarModule} from 'primeng/progressbar';
  import {DividerModule} from 'primeng/divider';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
@@ -89,7 +89,8 @@ import * as L from 'leaflet';
     BrowserAnimationsModule,
     ChartModule,
     DividerModule,
-    PanelModule
+    PanelModule,
+    ProgressBarModule
   ],
   providers: [EsriMapService],
   bootstrap: [AppComponent]
