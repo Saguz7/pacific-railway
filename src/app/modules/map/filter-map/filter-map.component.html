@@ -27,11 +27,6 @@
               <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
               <label for="groupname"> Reference#</label>
             </div>
-            <div class="col s3">
-              <p-radioButton [(ngModel)]="selectedOption" value="4" name="groupname"></p-radioButton>
-              <label for="groupname"> RailCar ID</label>
-            </div>
-
           </div>
           <div class="col s6">
           </div>
@@ -41,24 +36,38 @@
 
          <div class="col s12">
 
-         <div class="col s4">
+           <div class="col s6">
+             <div class="col s3">
+               <div class="p-inputgroup">
+                  <input [(ngModel)]="search" type="text" pInputText>
+               </div>
+             </div>
+             <div class="col s3">
+               <div class="p-inputgroup">
+                  <input [(ngModel)]="search" type="text" pInputText>
+               </div>
+             </div>
+             <div class="col s3">
+               <div class="p-inputgroup">
+                  <input [(ngModel)]="search" type="text" pInputText>
+               </div>
+             </div>
 
-           <div class="p-inputgroup">
-              <input [(ngModel)]="search" type="text" pInputText>
-           </div>
 
 
          </div>
          <div class="col s4">
          </div>
+         <!--
          <div class="col s4 right-align">
            <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text" *ngIf="!ocultarBarra" (click)="ocultar()" ></button>
            <button pButton pRipple type="button" label="Show Filter Bar" class="p-button-secondary p-button-text" *ngIf="ocultarBarra" (click)="mostrar()" ></button>
            <button pButton pRipple type="button" label="Filters {{getFormsInitialized()}}" class="p-button-secondary p-button-text"></button>
            <button pButton pRipple type="button" label="Go" class="p-button-danger" (click)=verForms()></button>
          </div>
+         -->
          </div>
-
+<!--
         <form [formGroup]="form" (ngSubmit)="submit($event)" autocomplete="off" class="form-auth">
 
 
@@ -182,6 +191,7 @@
         </div>
         </div>
       </form>
+    -->
 
       </div>
       <div class="col s12"><br>

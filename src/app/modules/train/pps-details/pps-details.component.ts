@@ -24,11 +24,9 @@ export class PpsDetailsComponent implements OnInit {
 
   ngOnInit() {
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
-    let train = this.activatedRoute.snapshot.paramMap.get("train");
 
     console.log(chasis);
-    console.log(train);
-
+ 
     return loadModules([
       "esri/layers/GeoJSONLayer",
       "esri/widgets/Sketch",

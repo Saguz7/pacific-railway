@@ -18,7 +18,7 @@ export class TableMapComponent implements OnInit {
   ngOnInit() {
 
     this.cols = [
-        { field: 'device_id', header: 'Device ID' },
+        { field: 'reference', header: 'Reference' },
         { field: 'date', header: 'Date' },
         { field: 'move_type', header: 'Move Type' },
         { field: 'coordinates', header: 'Coordinates' }
@@ -173,6 +173,10 @@ export class TableMapComponent implements OnInit {
   formatdate(date){
     let dateformat = date.split(' ');
     return dateformat[0];
+  }
+
+  gotoppsdetails(reference){
+    console.log(reference);
   }
 
 }

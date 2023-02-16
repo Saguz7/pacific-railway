@@ -13,7 +13,7 @@ import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
  { path: 'map', component: MapComponent, pathMatch: 'full' },
- { path: 'ppsdetails/:chasis/:train', component: PpsDetailsComponent, pathMatch: 'full' },
+ { path: 'ppsdetails/:chasis', component: PpsDetailsComponent, pathMatch: 'full' },
 
 { path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
 { path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },

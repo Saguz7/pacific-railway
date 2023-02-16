@@ -10,14 +10,24 @@
           <div class="col s8">
           </div>
           <div class="col s2 right-align">
+            <!--
             <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text"></button>
             <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary p-button-text"></button>
+             
             <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"></button>
+
+            -->
           </div>
         </div>
         <div class="col s12">
-          <p-table [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}">
-
+          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['reference','date','move_type','coordinates']">
+            <ng-template pTemplate="caption">
+                        <div class="flex">
+                             <span class="p-input-icon-left ml-auto">
+                                 <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder=" " />
+                            </span>
+                        </div>
+                    </ng-template>
         <ng-template pTemplate="header" let-columns>
        <tr>
            <th *ngFor="let col of columns" pReorderableColumn>
@@ -28,44 +38,40 @@
 
         <ng-template pTemplate="body" let-object>
             <tr>
-              <td>
-                <ng-container *ngIf="object.properties!=undefined">
-                  {{object.properties.device_id}}
+              <td *ngFor="let col of cols">
+                <ng-container *ngIf="col.field=='reference'">
+                  <a href="javascript:void(0);" (click)="gotoppsdetails(object[col.field])" > {{object[col.field]}}</a>
+
                 </ng-container>
-              </td>
-              <td>
-                <ng-container *ngIf="object.properties!=undefined">
-                  {{formatdate(object.properties.date)}}
-                </ng-container>
-              </td>
-              <td>
-                <ng-container *ngIf="object.properties!=undefined">
-                  {{object.properties.move_type}}
-                </ng-container>
-              </td>
-              <td>
-                <ng-container *ngIf="object.geometry!=undefined">
-                  <ng-container *ngIf="object.geometry.coordinates!=undefined">
-                    {{object.geometry.coordinates[0]}},{{object.geometry.coordinates[1]}}
-                  </ng-container>
+                <ng-container *ngIf="col.field!='reference'">
+                  {{object[col.field]}}
+
                 </ng-container>
               </td>
                <!--
-                <td>{{object.Load}}</td>
-                <td>{{object.Equipment}}</td>
-                <td>{{object.Equipment_Type}}</td>
-                <td>{{object.Load_Empty}}</td>
-                <td>{{object.Billed_Set_Temp}}</td>
-                <td>{{object.PPS_Details}}</td>
-                <td>{{object.Origin}}</td>
-                <td>{{object.Destination}}</td>
-                <td>{{object.Last_Reported_Station}}</td>
-                <td>{{object.Holds}}</td>
-                <td>{{object.Equipment_Status}}</td>
-                <td>{{object.Load_Status}}</td>
-                <td>{{object.Grounded}}</td>
-                <td>{{object.Eta}}</td>
 
+               <td>
+                 <ng-container *ngIf="object.properties!=undefined">
+                   {{object.properties.device_id}}
+                 </ng-container>
+               </td>
+               <td>
+                 <ng-container *ngIf="object.properties!=undefined">
+                   {{formatdate(object.properties.date)}}
+                 </ng-container>
+               </td>
+               <td>
+                 <ng-container *ngIf="object.properties!=undefined">
+                   {{object.properties.move_type}}
+                 </ng-container>
+               </td>
+               <td>
+                 <ng-container *ngIf="object.geometry!=undefined">
+                   <ng-container *ngIf="object.geometry.coordinates!=undefined">
+                     {{object.geometry.coordinates[0]}},{{object.geometry.coordinates[1]}}
+                   </ng-container>
+                 </ng-container>
+               </td>
                 -->
 
             </tr>

@@ -84,7 +84,7 @@ export class MapComponent implements OnInit {
             }]
           },
           clusterMinSize: "24px",
-          clusterMaxSize: "60px",
+          clusterMaxSize: "30px",
           labelingInfo: [{
             deconflictionStrategy: "none",
             labelExpressionInfo: {
@@ -171,12 +171,22 @@ export class MapComponent implements OnInit {
           let that = this;
 
           this.mapView.on("click", (event) => {
-            if(this.mapView.zoom>14){
+            console.log(this.mapView.zoom);
+            if(this.mapView.zoom>8){
               event.stopPropagation();
          this.mapView.hitTest(event).then(({ results }) => {
            var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
              var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+             console.log(lat);
+             console.log(lon);
+
              if(results.length>0){
+               this.mapView.popup.open({
+                   // Set the popup's title to the coordinates of the clicked location
+                   title: "Device ID: [" +lat + ',' + lon + "]",
+                   location: event.mapPoint // Set the location of the popup to the clicked location
+               });
+               /*
 
                let point = this.data.find(element => element.geometry.coordinates[0].toFixed() == lon.toFixed() && element.geometry.coordinates[1].toFixed() == lat.toFixed());
                if(point!=undefined){
@@ -186,6 +196,7 @@ export class MapComponent implements OnInit {
                      location: event.mapPoint // Set the location of the popup to the clicked location
                  });
                }
+               */
               }
           });
             }
@@ -211,9 +222,9 @@ export class MapComponent implements OnInit {
            fetch(this.currentURL + "/assets/geojson.json")
                .then(res => res.json())
                .then((out) => {
-                 this.data = out.features;
+                // this.data = out.features;
                  this.loading = false;
-              //   this.rehacerjson();
+                this.rehacerjson(out.features);
 
            }).catch(err => console.error(err));
 
@@ -221,32 +232,38 @@ export class MapComponent implements OnInit {
            }
 
 
-           rehacerjson(){
+           rehacerjson(features){
+             this.data = []
 
-             let features = []
 
-             for(var i = 0; i < this.data.length;i++){
-               let coordinates = [this.data[i].geometry.coordinates[1],this.data[i].geometry.coordinates[0],4]
-               features.push(
+             for(var i = 0; i < features.length;i++){
+               this.data.push(
                  {
-                   geometry: {
-                     type: this.data[i].geometry.type,
-                     coordinates: coordinates
-                   },
-                   id: this.data[i].id,
-                   properties: this.data[i].properties,
-​                   type: this.data[i].type
+                   reference: features[i].id,
+                    device_id:  features[i].properties.device_id,
+                     date: this.formatdate(features[i].properties.date),
+                     move_type: features[i].properties.move_type,
+                     coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
                  }
-               )
-
+               );
              }
            }
 
+           formatdate(date){
+             let dateformat = date.split(' ');
+             return dateformat[0];
+           }
+
   ocultar(){
+
+    const map = document.querySelector('.esri-view');
+    map.setAttribute('style', 'height: 600px');
     return (this.ocultarFiltro = true);
   }
 
   mostrar(){
+    const map = document.querySelector('.esri-view');
+    map.setAttribute('style', 'height: 300px');
     return(this.ocultarFiltro = false);
   }
 
