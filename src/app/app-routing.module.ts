@@ -21,8 +21,8 @@ const routes: Routes = [
  { path: 'map2', component: MapDivComponent, pathMatch: 'full' },
 
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
-  { path: '', redirectTo: '/launchpad', pathMatch: 'full' },
-  { path: '**', redirectTo: '/launchpad'}
+//  { path: '', redirectTo: '/launchpad', pathMatch: 'full' },
+//  { path: '**', redirectTo: '/launchpad'}
 ];
 
 @NgModule({
