@@ -31,10 +31,24 @@
           title="Clear selection">
         <span class="esri-icon-erase"></span>
       </div>
+      
+    
       <div class="container">
         <div id="tableDiv"></div>
-      </div>
+      </div>      
     </div>
+    </div>
+
+    <p-divider align="center" type="dashed">
+
+      <button *ngIf="ocultarTabla" (click)="mostrarTabla()" ><span class="material-icons">
+        expand_less
+        </span></button>
+      <button *ngIf="!ocultarTabla" (click)="ocultarTab()"><span class="material-icons">
+        expand_more
+        </span></button>
+  </p-divider>
+    <div *ngIf="!ocultarTabla">
     <app-table-map [Data]='data'></app-table-map>
     <ng-container *ngIf="loading">
       <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>

@@ -41,6 +41,7 @@ export class MapComponent implements OnInit {
    @Output()
 
     ocultarFiltro:boolean;
+    ocultarTabla:boolean;
 
     ngOnInit() {
 
@@ -265,6 +266,18 @@ export class MapComponent implements OnInit {
     const map = document.querySelector('.esri-view');
     map.setAttribute('style', 'height: 300px');
     return(this.ocultarFiltro = false);
+  }
+
+  ocultarTab(){
+    const map = document.querySelector('.esri-view');
+    map.setAttribute('style', 'height: 600px');
+    return (this.ocultarTabla = true);
+  }
+
+  mostrarTabla(){
+    const map = document.querySelector('.esri-view');
+    map.setAttribute('style', 'height: 300px');
+    return(this.ocultarTabla = false);
   }
 
 }
