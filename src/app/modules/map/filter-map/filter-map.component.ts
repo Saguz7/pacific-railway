@@ -16,14 +16,19 @@ export class FilterMapComponent implements OnInit {
    load_status_options: any[];
    selectedOption: any;
    search: any;
+   event_select: any;
+   georeference_select: any;
+   chasis: any;
+
+   @Input() Events: any;
+   @Input() Georeferences: any;
 
   constructor(
     private formBuilder: FormBuilder,
    ) { }
 
-   @Output()
-
-   ocultarBarra:boolean;
+   @Output() ocultarBarra:boolean;
+   @Output() SendFilters = new EventEmitter<any>();
 
   ngOnInit() {
 
@@ -116,6 +121,28 @@ export class FilterMapComponent implements OnInit {
 
     mostrar(){
       return(this.ocultarBarra = false);
+    }
+
+ 
+    send_filter(){
+       let objsend = {};
+       console.log(this.event_select);
+       console.log(this.georeference_select);
+       console.log(this.chasis);
+
+      if(this.event_select!=null){
+        objsend['event'] =  this.event_select;
+      }
+      if(this.georeference_select!=null){
+        objsend['georeference'] =  this.georeference_select;
+      }
+      if(this.chasis!=null && !this.isEmpty(this.chasis)){
+        objsend['chasis'] = this.chasis
+      }
+      console.log(objsend);
+
+      this.SendFilters.emit(objsend);
+
     }
 
 }

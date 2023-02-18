@@ -5,7 +5,7 @@
     </div><br><br>
     -->
     <div *ngIf="!ocultarFiltro">
-    <app-filter-map></app-filter-map>
+    <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filter-map>
     </div>
 
      <p-divider align="center" type="dashed">
@@ -31,11 +31,13 @@
           title="Clear selection">
         <span class="esri-icon-erase"></span>
       </div>
-      
-    
+      <div id="infoDiv" class="esri-widget">
+       <button id="cluster" class="esri-button">Disable Clustering</button>
+      </div> 
+
       <div class="container">
         <div id="tableDiv"></div>
-      </div>      
+      </div>
     </div>
     </div>
 

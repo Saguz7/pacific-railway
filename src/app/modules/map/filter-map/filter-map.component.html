@@ -16,16 +16,26 @@
           </div>
           <div class="col s6">
             <div class="col s3">
+              <!--
               <p-radioButton [(ngModel)]="selectedOption" value="1" name="groupname"></p-radioButton>
-              <label for="groupname"> Equipment ID</label>
+            -->
+
+              <label for="groupname"> Chasis ID</label>
             </div>
             <div class="col s3">
+              <!--
+
               <p-radioButton [(ngModel)]="selectedOption" value="2" name="groupname"></p-radioButton>
-              <label for="groupname"> Load#</label>
+            -->
+
+              <label for="groupname"> Events</label>
             </div>
             <div class="col s3">
+              <!--
               <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
-              <label for="groupname"> Reference#</label>
+            -->
+
+              <label for="groupname"> GeoReference</label>
             </div>
           </div>
           <div class="col s6">
@@ -39,17 +49,17 @@
            <div class="col s6">
              <div class="col s3">
                <div class="p-inputgroup">
-                  <input [(ngModel)]="search" type="text" pInputText>
+                  <input [(ngModel)]="chasis" (focusout)="send_filter()" type="text" pInputText>
                </div>
              </div>
              <div class="col s3">
-               <div class="p-inputgroup">
-                  <input [(ngModel)]="search" type="text" pInputText>
+               <div class="p-inputgroup" *ngIf="Events.length>0">
+                 <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="send_filter()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
                </div>
              </div>
              <div class="col s3">
-               <div class="p-inputgroup">
-                  <input [(ngModel)]="search" type="text" pInputText>
+               <div class="p-inputgroup" *ngIf="Georeferences.length>0">
+                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="send_filter()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
                </div>
              </div>
 

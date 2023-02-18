@@ -760,4 +760,229 @@ export class RouteMapComponent implements OnInit {
   }
 
 }
+
+
+return loadModules([
+  "esri/Map",
+      "esri/layers/FeatureLayer",
+      "esri/layers/GeoJSONLayer",
+      "esri/views/MapView",
+      "esri/widgets/Legend",
+      "esri/widgets/Expand",
+      "esri/widgets/Home",
+      "esri/popup/content/CustomContent",
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/Sketch",
+      "esri/widgets/Sketch/SketchViewModel",
+      "esri/geometry/geometryEngineAsync"
+
+
+
+])
+  .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync]) => {
+        //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
+        const map: __esri.Map = new Map({
+          basemap: 'streets'
+        });
+
+        const layer = new GeoJSONLayer({
+             title: "Chasis",
+             url: urljson,
+             outFields: ["*"],
+             popupTemplate: {
+               title: "Chasis <a href='http://localhost:4200/ppsdetails/{id}'>{id}</a>",
+               content: "{id} - {move_type}",
+             }
+         });
+
+
+
+         const baseLayer = new FeatureLayer({
+             portalItem: {
+                 id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
+             },
+             legendEnabled: false,
+             popupEnabled: false,
+             renderer: {
+                 type: "simple",
+                 symbol: {
+                     type: "simple-fill",
+                     color: [65, 65, 65, 1],
+                     outline: {
+                         color: [50, 50, 50, 0.75],
+                         width: 0.5
+                     }
+                 }
+             },
+             spatialReference: {
+                 wkid: 5936
+             }
+         });
+
+
+
+         this.mapView = new MapView({
+           container: this.mapViewEl.nativeElement,
+           center: [-114.8574, 54.6542], // Longitude, latitude
+           zoom: 4, // Zoom level
+           map: map
+         });
+         map.add(layer);
+
+         this.mapView.popup.viewModel.includeDefaultActions = false;
+
+        // this.mapView.whenLayerView(layer).then(lv => {
+         this.mapView.whenLayerView(layer).then(lv => {
+           console.log(lv);
+             const layerView = lv;
+             console.log(layerView);
+
+             const customContentPromise = new CustomContent({
+                 outFields: ["*"],
+                 creator: (event) => {
+                   console.log(event);
+                   console.log(event.graphic.getObjectId());
+                   console.log('Hola');
+
+                   const query = layer.createQuery();
+                   query.aggregateIds = [event.graphic.getObjectId()];
+                   console.log(query);
+                   return layer.queryFeatures(query).then(result => {
+                       console.log(result.features);
+                       const contentDiv = document.createElement("div");
+                       const featuresUl = document.createElement("ul");
+                       let featureLi;
+                       for (const feature of result.features) {
+                           featureLi = document.createElement("li");
+                           featureLi.innerText = `Chasis ${feature.attributes.id}`;
+                           featuresUl.appendChild(featureLi);
+                       }
+                       contentDiv.appendChild(featuresUl);
+                       return contentDiv
+                   });
+                 }
+             });
+
+             const clusterConfig = {
+                 type: "cluster",
+                 clusterRadius: "100px",
+                 popupTemplate: {
+                     title: "Cluster summary",
+                     outFields: ["*"],
+                     content: [customContentPromise],
+                     actions: []
+                 },
+                 clusterMinSize: "24px",
+                 clusterMaxSize: "60px",
+                 labelingInfo: [
+                     {
+                         deconflictionStrategy: "none",
+                         labelExpressionInfo: {
+                             expression: "Text($feature.cluster_count, '#,###')"
+                         },
+                         symbol: {
+                             type: "text",
+                             color: "#004a5d",
+                             font: {
+                                 weight: "bold",
+                                 family: "Noto Sans",
+                                 size: "12px"
+                             }
+                         },
+                         labelPlacement: "center-center"
+                     }
+                 ]
+             };
+
+             layer.featureReduction = clusterConfig;
+
+             const toggleButton = document.getElementById("cluster");
+
+             toggleButton.addEventListener("click", () => {
+                 let fr = layer.featureReduction;
+                 layer.featureReduction =
+                     fr && fr.type === "cluster" ? null : clusterConfig;
+                 toggleButton.innerText =
+                     toggleButton.innerText === "Enable Clustering"
+                         ? "Disable Clustering"
+                         : "Enable Clustering";
+             });
+         });
+
+
+         const legend = new Legend({
+             view: this.mapView,
+             container: "legendDiv"
+         });
+
+         const infoDiv = document.getElementById("infoDiv");
+         this.mapView.ui.add(
+             new Expand({
+                 view: this.mapView,
+                 content: infoDiv,
+                 expandIconClass: "esri-icon-layer-list",
+                 expanded: false
+             }),
+             "top-left"
+         );
+
+
+         const polygonGraphicsLayer = new GraphicsLayer();
+         map.add(polygonGraphicsLayer);
+
+
+         const graphicsLayer = new GraphicsLayer();
+         map.add(graphicsLayer);
+
+         this.mapView.ui.add("select-by-rectangle", "top-left");
+         const selectButton = document.getElementById("select-by-rectangle");
+
+
+         // click event for the select by rectangle button
+         selectButton.addEventListener("click", () => {
+           this.mapView.popup.close();
+           sketchViewModel.create("rectangle");
+         });
+
+
+         this.mapView.ui.add("select-by-circle", "top-left");
+         const selectButtonCCircle = document.getElementById("select-by-circle");
+
+
+         // click event for the select by rectangle button
+         selectButtonCCircle.addEventListener("click", () => {
+           this.mapView.popup.close();
+           sketchViewModel.create("circle");
+         });
+
+         this.mapView.ui.add("clear-selection", "top-left");
+         document.getElementById("clear-selection").addEventListener("click", () => {
+           polygonGraphicsLayer.removeAll();
+
+          });
+
+         const sketchViewModel = new SketchViewModel({
+           view: this.mapView,
+           layer: polygonGraphicsLayer
+         });
+
+         sketchViewModel.on("create", async (event) => {
+           if (event.state === "complete") {
+             // this polygon will be used to query features that intersect it
+             const geometries = polygonGraphicsLayer.graphics.map(function(graphic){
+               return graphic.geometry
+             });
+
+             const queryGeometry = await geometryEngineAsync.union(geometries.toArray());
+            // selectFeatures(queryGeometry);
+           }
+         });
+
+  })
+
+
+  .catch(err => {
+    console.error(err);
+  });
+
 */
