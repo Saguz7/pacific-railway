@@ -56,9 +56,202 @@ export class MapComponent implements OnInit {
       this.dataGeneral = [];
 
               this.href = this.router.url;
+              console.log(this.href);
              this.currentURL = window.location.href.replace(this.href,'');
 
              /*
+
+                   return loadModules([
+                      "esri/Map",
+                      "esri/layers/FeatureLayer",
+                      "esri/layers/GeoJSONLayer",
+                      "esri/views/MapView",
+                      "esri/widgets/Legend",
+                      "esri/widgets/Expand",
+                      "esri/widgets/Home",
+                      "esri/popup/content/CustomContent"
+
+                   ])
+                     .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent]) => {
+                           //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
+
+                           const layer = new GeoJSONLayer({
+                                          title: "Earthquakes from the last month",
+                                          url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+                                          copyright: "USGS Earthquakes",
+                                          outFields: ["*"],
+                                          popupTemplate: {
+                                              title: "Magnitude {mag} {type}",
+                                              content: "Magnitude {mag} {type} hit {place} on {time}"
+                                          },
+                                          renderer: {
+                                              type: "simple",
+                                              field: "mag",
+                                              symbol: {
+                                                  type: "simple-marker",
+                                                  size: 4,
+                                                  color: "#69dcff",
+                                                  outline: {
+                                                      color: "rgba(0, 139, 174, 0.5)",
+                                                      width: 5
+                                                  }
+                                              }
+                                          }
+                                      });
+
+                                      const baseLayer = new FeatureLayer({
+                                          portalItem: {
+                                              id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
+                                          },
+                                          legendEnabled: false,
+                                          popupEnabled: false,
+                                          renderer: {
+                                              type: "simple",
+                                              symbol: {
+                                                  type: "simple-fill",
+                                                  color: [65, 65, 65, 1],
+                                                  outline: {
+                                                      color: [50, 50, 50, 0.75],
+                                                      width: 0.5
+                                                  }
+                                              }
+                                          },
+                                          spatialReference: {
+                                              wkid: 5936
+                                          }
+                                      });
+
+                                      const map = new Map({
+                                          layers: [baseLayer, layer]
+                                      });
+
+                                      const view = new MapView({
+                                          container: "viewDiv",
+                                          extent: {
+                                              spatialReference: {
+                                                  wkid: 5936
+                                              },
+                                              xmin: 1270382,
+                                              ymin: -1729511,
+                                              xmax: 2461436,
+                                              ymax: -953893
+                                          },
+                                          spatialReference: {
+                                              // WGS_1984_EPSG_Alaska_Polar_Stereographic
+                                              wkid: 5936
+                                          },
+                                          constraints: {
+                                              minScale: 15469455
+                                          },
+                                          map: map
+                                      });
+
+                                      view.popup.viewModel.includeDefaultActions = false;
+
+                                      view.whenLayerView(layer).then(lv => {
+                                          const layerView = lv;
+                                          const customContentPromise = new CustomContent({
+                                              outFields: ["*"],
+                                              creator: (event) => {
+                                                  const query = layerView.createQuery();
+                                                  query.aggregateIds = [event.graphic.getObjectId()];
+                                                  console.log(query);
+                                                  return layerView.queryFeatures(query).then(result => {
+                                                      console.log(result.features);
+                                                      const contentDiv = document.createElement("div");
+                                                      const featuresUl = document.createElement("ul");
+                                                      let featureLi;
+                                                      for (const feature of result.features) {
+                                                          featureLi = document.createElement("li");
+                                                          featureLi.innerText = `Magnitude ${feature.attributes.mag} ${feature.attributes.type} hit ${feature.attributes.place} on ${feature.attributes.time}`;
+                                                          featuresUl.appendChild(featureLi);
+                                                      }
+                                                      contentDiv.appendChild(featuresUl);
+                                                      return contentDiv
+                                                  });
+                                              }
+                                          });
+
+                                          const clusterConfig = {
+                                              type: "cluster",
+                                              clusterRadius: "100px",
+                                              popupTemplate: {
+                                                  title: "Cluster summary",
+                                                  outFields: ["*"],
+                                                  content: [customContentPromise],
+                                                  actions: []
+                                              },
+                                              clusterMinSize: "24px",
+                                              clusterMaxSize: "60px",
+                                              labelingInfo: [
+                                                  {
+                                                      deconflictionStrategy: "none",
+                                                      labelExpressionInfo: {
+                                                          expression: "Text($feature.cluster_count, '#,###')"
+                                                      },
+                                                      symbol: {
+                                                          type: "text",
+                                                          color: "#004a5d",
+                                                          font: {
+                                                              weight: "bold",
+                                                              family: "Noto Sans",
+                                                              size: "12px"
+                                                          }
+                                                      },
+                                                      labelPlacement: "center-center"
+                                                  }
+                                              ]
+                                          };
+
+                                          layer.featureReduction = clusterConfig;
+
+                                          const toggleButton = document.getElementById("cluster");
+
+                                          toggleButton.addEventListener("click", () => {
+                                              let fr = layer.featureReduction;
+                                              layer.featureReduction =
+                                                  fr && fr.type === "cluster" ? null : clusterConfig;
+                                              toggleButton.innerText =
+                                                  toggleButton.innerText === "Enable Clustering"
+                                                      ? "Disable Clustering"
+                                                      : "Enable Clustering";
+                                          });
+                                      });
+
+                                      view.ui.add(
+                                          new Home({
+                                              view: view
+                                          }),
+                                          "top-left"
+                                      );
+
+                                      const legend = new Legend({
+                                          view: view,
+                                          container: "legendDiv"
+                                      });
+
+                                      const infoDiv = document.getElementById("infoDiv");
+                                      view.ui.add(
+                                          new Expand({
+                                              view: view,
+                                              content: infoDiv,
+                                              expandIconClass: "esri-icon-layer-list",
+                                              expanded: false
+                                          }),
+                                          "top-left"
+                                      );
+
+                         })
+
+
+                         .catch(err => {
+                           console.error(err);
+                         });
+
+                         */
+
+
+/*
 
       return loadModules([
         "esri/layers/GeoJSONLayer",
@@ -227,8 +420,7 @@ export class MapComponent implements OnInit {
           console.error(err);
         });
 
-        */
-
+*/
 
       }
 
@@ -251,6 +443,8 @@ export class MapComponent implements OnInit {
                 this.rehacerjson(out.features);
 
            }).catch(err => console.error(err));
+
+
 
            this.cdRef.detectChanges();
            }
@@ -301,28 +495,6 @@ export class MapComponent implements OnInit {
 
 
 
-                       const baseLayer = new FeatureLayer({
-                           portalItem: {
-                               id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
-                           },
-                           legendEnabled: false,
-                           popupEnabled: false,
-                           renderer: {
-                               type: "simple",
-                               symbol: {
-                                   type: "simple-fill",
-                                   color: [65, 65, 65, 1],
-                                   outline: {
-                                       color: [50, 50, 50, 0.75],
-                                       width: 0.5
-                                   }
-                               }
-                           },
-                           spatialReference: {
-                               wkid: 5936
-                           }
-                       });
-
 
 
                        this.mapView = new MapView({
@@ -348,11 +520,70 @@ export class MapComponent implements OnInit {
                                  console.log(event.graphic.getObjectId());
 
                                  const query = layer.createQuery();
+                                 console.log(event);
                                  query.aggregateIds = [event.graphic.getObjectId()];
                                  console.log(query);
                                  return layer.queryFeatures(query).then(result => {
-                                     console.log(result.features);
                                      const contentDiv = document.createElement("div");
+                                     const tbl = document.createElement("table");
+                                     let headers = ['Chasis ID','Events','Georeference','PPS Details'];
+                                     let headerslabel = ['id','move_type','date','url'];
+
+                                     const tblHeader = document.createElement("thead");
+                                     const rowheaders = document.createElement("tr");
+
+                                       for (let i = 0; i < headers.length; i++) {
+                                         const cellheader = document.createElement("th");
+                                         const cellTextHeader = document.createTextNode(headers[i]);
+                                         cellheader.appendChild(cellTextHeader);
+                                         rowheaders.appendChild(cellheader);
+                                       }
+
+                                       // add the row to the end of the table body
+                                       tblHeader.appendChild(rowheaders);
+
+
+                                      const tblBody = document.createElement("tbody");
+
+                                      // creating all cells
+                                      for (const feature of result.features) {
+                                        // creates a table row
+                                        const row = document.createElement("tr");
+
+                                        for (let j = 0; j < headerslabel.length; j++) {
+                                          // Create a <td> element and a text node, make the text
+                                          // node the contents of the <td>, and put the <td> at
+                                          // the end of the table row
+                                           let data = "";
+                                           const cell = document.createElement("td");
+
+                                          if(headerslabel[j]=='id' || headerslabel[j]=='move_type' || headerslabel[j]=='date'){
+                                            data = feature.attributes[headerslabel[j]];
+                                            const cellText = document.createTextNode(data);
+                                            cell.appendChild(cellText);
+
+                                          }
+                                          if(headerslabel[j]=='url'){
+                                            var createA = document.createElement('a');
+                                            var createAText = document.createTextNode(`ppsdetails`);
+                                            createA.setAttribute('href',  "http://localhost:4200/ppsdetails/404523");
+                                            createA.appendChild(createAText);
+                                            cell.appendChild(createA);
+                                          }
+                                           row.appendChild(cell);
+                                        }
+
+                                        // add the row to the end of the table body
+                                        tblBody.appendChild(row);
+                                      }
+
+                                      // put the <tbody> in the <table>
+                                      tbl.appendChild(tblHeader);
+
+                                      tbl.appendChild(tblBody);
+                                      // appends <table> into <body>
+                                      document.body.appendChild(tbl);
+                                     /*
                                      const featuresUl = document.createElement("ul");
                                      let featureLi;
                                      for (const feature of result.features) {
@@ -361,6 +592,10 @@ export class MapComponent implements OnInit {
                                          featuresUl.appendChild(featureLi);
                                      }
                                      contentDiv.appendChild(featuresUl);
+
+                                     */
+                                     contentDiv.appendChild(tbl);
+
                                      return contentDiv
                                  });
 
@@ -641,6 +876,7 @@ export class MapComponent implements OnInit {
 
 
     json.features = arrayfeacturesfilter;
+    console.log(json);
     setTimeout(() => {
       this.buildmap(json);
     }, 100);
