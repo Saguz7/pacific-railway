@@ -13,7 +13,7 @@
             <!--
             <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text"></button>
             <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary p-button-text"></button>
-             
+
             <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"></button>
 
             -->
@@ -43,7 +43,11 @@
                   <a href="javascript:void(0);" (click)="gotoppsdetails(object[col.field])" > {{object[col.field]}}</a>
 
                 </ng-container>
-                <ng-container *ngIf="col.field!='reference'">
+                <ng-container *ngIf="col.field=='coordinates'">
+                  <a href="javascript:void(0);" (click)="gotocentermap(object)" > {{object[col.field]}}</a>
+
+                </ng-container>
+                <ng-container *ngIf="col.field!='reference' && col.field!='coordinates'">
                   {{object[col.field]}}
 
                 </ng-container>

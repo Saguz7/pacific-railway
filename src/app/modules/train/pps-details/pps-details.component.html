@@ -1,6 +1,8 @@
 <div class="container-principal">
 
-
+  <ng-container *ngIf="loading">
+    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+  </ng-container>
   <div class="row card">
     <div class="row center-align">
       <div class="col s12">
@@ -14,14 +16,40 @@
     <div class="col s12">
       <div class="col s12">
 
-      Parties
+      Information
     <hr>
   </div>
 
     </div>
-    <div class="col s12">
+    <div class="col s12 card-general">
       <div class="col s6">
+        <div class="col s12 card-content">
+          <div class="col s12">
+            <div class="col s12">
 
+            Current Location
+            </div>
+           </div>
+           <div class="col s12">
+             <hr>
+
+            </div>
+        <div class="col s4">
+
+          <div class="col s12">
+
+            Lat: {{lat}} <br>
+            Lon: {{lon}} <br>
+          </div>
+
+        </div>
+        <div class="col s8">
+          <div class="row">
+            <div class="container-map" #mapViewNode></div>
+          </div>
+
+        </div>
+        </div>
         <!--
         <div class="col s12 card-content">
         <div class="col s6">
@@ -81,6 +109,37 @@
 
       </div>
       <div class="col s6">
+
+        <div class="col s12 card-content">
+          <div class="col s12">
+            <div class="col s12">
+
+            Details
+            </div>
+           </div>
+           <div class="col s12">
+             <hr>
+
+            </div>
+        <div class="col s4">
+
+          <div class="col s12"  *ngIf="date && event">
+
+            Date: {{date}} <br>
+            Last Event: {{event}} <br>
+          </div>
+
+        </div>
+        <div class="col s8">
+          <div class="row">
+            <div class="container-map" #mapViewNode></div>
+          </div>
+
+        </div>
+        </div>
+
+        <!--
+
         <div class="col s12 card-content">
           <div class="col s12">
             <div class="col s12">
@@ -123,37 +182,9 @@
 
         </div>
         </div>
+-->
 
 
-        <div class="col s12 card-content">
-          <div class="col s12">
-            <div class="col s12">
-
-            PPS DETAILS
-            </div>
-           </div>
-           <div class="col s12">
-             <hr>
-
-            </div>
-        <div class="col s4">
-
-          <div class="col s12">
-
-            Current Location: <br>
-            Winnipeg, MB <br>
-            Lat: {{lat}} <br>
-            Lon: {{lon}} <br>
-          </div>
-
-        </div>
-        <div class="col s8">
-          <div class="row">
-            <div class="container-map" #mapViewNode></div>
-          </div>
-
-        </div>
-        </div>
 
       </div>
     </div>

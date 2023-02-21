@@ -14,7 +14,7 @@
  }
 
  .container-map{
-   height:180px;
+   height:380px;
    width:100%;
 
    position: relative;
@@ -22,9 +22,14 @@
 
  }
 
+ .card-general{
+   height:480px !important;
+
+ }
+
  .map{
 
      width: 100%;
-     height: 100%;
+     height: 300%;
 
  }

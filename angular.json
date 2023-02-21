@@ -35,7 +35,7 @@
                 "node_modules/ol/ol.css"
 
             ],
-            "scripts": [ 
+            "scripts": [
               "./node_modules/chart.js/dist/chart.js",
             ]
           },
@@ -57,12 +57,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "10kb",
                   "maximumError": "10kb"
                 }
               ]

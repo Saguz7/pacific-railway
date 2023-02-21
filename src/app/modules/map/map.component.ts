@@ -32,6 +32,7 @@ export class MapComponent implements OnInit {
   dataGeneral: any;
   jsonmap: any;
   loading: boolean = false;
+  counterror: any;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
@@ -51,12 +52,13 @@ export class MapComponent implements OnInit {
     ngOnInit() {
 
       this.events = [];
+      this.counterror = 0;
 
       this.data = [];
       this.dataGeneral = [];
 
               this.href = this.router.url;
-              console.log(this.href);
+              console.log(window.location.href.replace('/map',''));
              this.currentURL = window.location.href.replace(this.href,'');
 
              /*
@@ -428,25 +430,43 @@ export class MapComponent implements OnInit {
          ngAfterViewInit() {
 
            this.loading = true;
-
-
-           fetch("https://d2gv90pkqj.execute-api.us-west-2.amazonaws.com/dev/get-locations")
-               .then(res => res.json())
-               .then((out) => {
-                // this.data = out.features;
-                this.buildmap(out);
-                  this.loading = false;
-                   console.log('...................................');
-                  console.log(out);
-                  console.log('...................................');
-
-                this.rehacerjson(out.features);
-
-           }).catch(err => console.error(err));
+           this.getDatafromGeoJson();
 
 
 
            this.cdRef.detectChanges();
+           }
+
+
+           getDatafromGeoJson(){
+
+                        fetch("https://d2gv90pkqj.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+                            .then(res => res.json())
+                            .then((out) => {
+                              if(out.errorMessage==undefined){
+                                this.loading = false;
+                                this.buildmap(out);
+                                this.rehacerjson(out.features);
+                              }else{
+                                setTimeout(() => {
+                                   this.counterror = this.counterror + 1;
+                                   console.log(this.counterror);
+
+                                  if(this.counterror < 10){
+                                    this.getDatafromGeoJson();
+                                  }else{
+                                    console.log('Entra aqui');
+
+                                  }
+
+                                 }, 100);
+                              }
+                             // this.data = out.features;
+
+
+                        }).catch(err => console.error(err));
+
+
            }
 
            buildmap(json){
@@ -483,12 +503,14 @@ export class MapComponent implements OnInit {
                         basemap: 'streets'
                       });
 
+                      let urldirect = "Chasis <a href='http://localhost:4200/ppsdetails/{id}'>{id}</a>"
+
                       const layer = new GeoJSONLayer({
                            title: "Chasis",
                            url: urljson,
                            outFields: ["*"],
                            popupTemplate: {
-                             title: "Chasis <a href='http://localhost:4200/ppsdetails/{id}'>{id}</a>",
+                             title: "Chasis <a href=" + window.location.href.replace('/map','')  + '/ppsdetails/{id}' + ">{id}</a>",
                              content: "{id} - {move_type}",
                            }
                        });
@@ -501,9 +523,13 @@ export class MapComponent implements OnInit {
                          container: this.mapViewEl.nativeElement,
                          center: [-114.8574, 54.6542], // Longitude, latitude
                          zoom: 4, // Zoom level
-                         map: map
+                         map: map,
+                         constraints: {
+                           minZoom : 3,
+                          },
                        });
                        map.add(layer);
+
 
                        this.mapView.popup.viewModel.includeDefaultActions = false;
 
@@ -566,7 +592,7 @@ export class MapComponent implements OnInit {
                                           if(headerslabel[j]=='url'){
                                             var createA = document.createElement('a');
                                             var createAText = document.createTextNode(`ppsdetails`);
-                                            createA.setAttribute('href',  "http://localhost:4200/ppsdetails/404523");
+                                            createA.setAttribute('href',  window.location.href.replace('/map','')  + "/ppsdetails/" + feature.attributes['id']);
                                             createA.appendChild(createAText);
                                             cell.appendChild(createA);
                                           }
@@ -824,20 +850,24 @@ export class MapComponent implements OnInit {
   }
 
   getFilters($event){
+    this.loading = true;
     console.log($event.event);
     this.data = this.dataGeneral;
-     if($event.event!=null){
-       this.data = this.data.filter(element => element.move_type == $event.event.value);
-     }
+
      console.log($event.chasis);
 
      if($event.chasis!=null){
        this.data = this.data.filter(element => element.reference == $event.chasis);
+     }else{
+       if($event.event!=null){
+         this.data = this.data.filter(element => element.move_type == $event.event.value);
+       }
+       if($event.georeference!=null){
+        // this.data = this.data.filter(element => element.georeference == $event.georeference.value);
+       }
      }
 
-     if($event.georeference!=null){
-       this.data = this.data.filter(element => element.georeference == $event.georeference.value);
-     }
+
      setTimeout(() => {
        this.rebuildmap($event);
      }, 100);
@@ -878,9 +908,28 @@ export class MapComponent implements OnInit {
     json.features = arrayfeacturesfilter;
     console.log(json);
     setTimeout(() => {
+      this.loading = false;
+
       this.buildmap(json);
     }, 100);
 
+   }
+
+   getCenter(event){
+     console.log(event);
+     console.log(event.coordinates);
+
+     let coordinates = event.coordinates.split(',');
+     console.log(coordinates);
+     document.getElementById("esri-view").focus();
+     this.mapView.goTo({
+      center: [parseInt(coordinates[0]), parseInt(coordinates[1])]
+    })
+    .catch(function(error) {
+      if (error.name != "AbortError") {
+         console.error(error);
+      }
+    });
    }
 
 }

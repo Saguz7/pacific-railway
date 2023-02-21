@@ -49,24 +49,36 @@
            <div class="col s6">
              <div class="col s3">
                <div class="p-inputgroup">
-                  <input [(ngModel)]="chasis" (focusout)="send_filter()" type="text" pInputText>
+                  <input [(ngModel)]="chasis" (onChange)="deleteoptions()" type="text" pInputText>
                </div>
              </div>
              <div class="col s3">
                <div class="p-inputgroup" *ngIf="Events.length>0">
-                 <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="send_filter()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+                 <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
                </div>
              </div>
              <div class="col s3">
                <div class="p-inputgroup" *ngIf="Georeferences.length>0">
-                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="send_filter()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
                </div>
              </div>
+             <div class="col s3">
+               <div class="col s6">
+                 <button pButton pRipple type="button" label="Go" class="p-button-success" (click)=send_filter()></button>
+               </div>
+               <div class="col s6">
+                 <button pButton pRipple type="button" label="Reset" class="p-button-danger" (click)=resetFilters()></button>
+
+               </div>
+
+             </div>
+
 
 
 
          </div>
          <div class="col s4">
+
          </div>
          <!--
          <div class="col s4 right-align">

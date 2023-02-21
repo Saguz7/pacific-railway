@@ -123,7 +123,7 @@ export class FilterMapComponent implements OnInit {
       return(this.ocultarBarra = false);
     }
 
- 
+
     send_filter(){
        let objsend = {};
        console.log(this.event_select);
@@ -143,6 +143,21 @@ export class FilterMapComponent implements OnInit {
 
       this.SendFilters.emit(objsend);
 
+    }
+
+    deleteoptions(){
+      this.event_select = null;
+      this.georeference_select = null;
+    }
+
+    deletechasis(){
+      this.chasis = null;
+    }
+
+    resetFilters(){
+      this.event_select = null;
+      this.georeference_select = null;
+      this.chasis = null;
     }
 
 }

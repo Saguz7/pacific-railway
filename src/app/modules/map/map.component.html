@@ -7,11 +7,14 @@
     <div *ngIf="!ocultarFiltro">
     <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filter-map>
     </div>
+    <ng-container *ngIf="loading">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </ng-container>
 
      <p-divider align="center" type="dashed">
 
         <button *ngIf="ocultarFiltro" (click)="mostrar()" ><span class="material-icons">
-          expand_more 
+          expand_more
           </span></button>
         <button *ngIf="!ocultarFiltro" (click)="ocultar()"><span class="material-icons">
           expand_less
@@ -52,7 +55,7 @@
         </span></button>
   </p-divider>
     <div *ngIf="!ocultarTabla">
-    <app-table-map [Data]='data'></app-table-map>
+    <app-table-map [Data]='data' (SendCenter)="getCenter($event)"></app-table-map>
     <ng-container *ngIf="loading">
       <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
     </ng-container>

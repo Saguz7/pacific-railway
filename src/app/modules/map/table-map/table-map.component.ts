@@ -1,5 +1,6 @@
 import { ComponentRef, ComponentFactoryResolver, ChangeDetectorRef, HostListener, ViewContainerRef, ViewChild, Component, OnInit, Input, Output, EventEmitter,ElementRef,AfterViewInit } from "@angular/core";
 import { Subscription } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-table-map',
@@ -8,11 +9,11 @@ import { Subscription } from 'rxjs';
 })
 export class TableMapComponent implements OnInit {
   data: any[];
-      cols: any[];
-      @Input() Data: any;
+  cols: any[];
+  @Input() Data: any;
+  @Output() SendCenter = new EventEmitter<any>();
 
-  constructor(
-   ) { }
+  constructor(private router: Router) { }
 
 
   ngOnInit() {
@@ -176,7 +177,14 @@ export class TableMapComponent implements OnInit {
   }
 
   gotoppsdetails(reference){
-    console.log(reference);
+    this.router.navigate([`ppsdetails`,  reference ]);
+
+  }
+
+  gotocentermap(object){
+    console.log(object);
+    this.SendCenter.emit(object);
+
   }
 
 }
