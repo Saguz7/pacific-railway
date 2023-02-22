@@ -33,6 +33,10 @@ export class MapComponent implements OnInit {
   jsonmap: any;
   loading: boolean = false;
   counterror: any;
+  zoomgeneral: any;
+  firstview: boolean = false;
+
+
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
@@ -58,7 +62,6 @@ export class MapComponent implements OnInit {
       this.dataGeneral = [];
 
               this.href = this.router.url;
-              console.log(window.location.href.replace('/map',''));
              this.currentURL = window.location.href.replace(this.href,'');
 
              /*
@@ -450,12 +453,10 @@ export class MapComponent implements OnInit {
                               }else{
                                 setTimeout(() => {
                                    this.counterror = this.counterror + 1;
-                                   console.log(this.counterror);
 
                                   if(this.counterror < 10){
                                     this.getDatafromGeoJson();
                                   }else{
-                                    console.log('Entra aqui');
 
                                   }
 
@@ -478,7 +479,6 @@ export class MapComponent implements OnInit {
 
               // URL reference to the blob
               const urljson = URL.createObjectURL(blob);
-              console.log(urljson);
 
               return loadModules([
                 "esri/Map",
@@ -492,25 +492,26 @@ export class MapComponent implements OnInit {
                     "esri/layers/GraphicsLayer",
                     "esri/widgets/Sketch",
                     "esri/widgets/Sketch/SketchViewModel",
-                    "esri/geometry/geometryEngineAsync"
+                    "esri/geometry/geometryEngineAsync",
+                    "esri/geometry/support/webMercatorUtils"
 
 
 
               ])
-                .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync]) => {
+                .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync,webMercatorUtils]) => {
                       //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
                       const map: __esri.Map = new Map({
                         basemap: 'streets'
                       });
 
-                      let urldirect = "Chasis <a href='http://localhost:4200/ppsdetails/{id}'>{id}</a>"
+                      let urldirect = window.location.href.replace('/map','')
 
                       const layer = new GeoJSONLayer({
                            title: "Chasis",
                            url: urljson,
                            outFields: ["*"],
                            popupTemplate: {
-                             title: "Chasis <a href=" + window.location.href.replace('/map','')  + '/ppsdetails/{id}' + ">{id}</a>",
+                             title: 'Chasis <a href="https://saguz7.github.io/pacific-railway/ppsdetails/{id}" title="{id}">{id}</a>',
                              content: "{id} - {move_type}",
                            }
                        });
@@ -533,23 +534,48 @@ export class MapComponent implements OnInit {
 
                        this.mapView.popup.viewModel.includeDefaultActions = false;
 
+                       let that = this;
+
+                       this.mapView.on("drag", function(evt) {
+                         var initialExtent = that.mapView.extent;
+                         const p1 = webMercatorUtils.xyToLngLat(initialExtent.xmin,initialExtent.ymin);
+                         const p2 = webMercatorUtils.xyToLngLat(initialExtent.xmax,initialExtent.ymax);
+                         if(that.mapView.zoom>6){
+                           that.filtersfromzoommap(p1[0],p2[0],p1[1],p2[1]);
+
+                         }else{
+                           that.getAllTable();
+                         }
+
+                        });
+
+
+                       this.mapView.watch('scale', function(evt){
+                         var initialExtent = that.mapView.extent;
+                         const p1 = webMercatorUtils.xyToLngLat(initialExtent.xmin,initialExtent.ymin);
+                         const p2 = webMercatorUtils.xyToLngLat(initialExtent.xmax,initialExtent.ymax);
+                         if(that.mapView.zoom>6){
+                           that.filtersfromzoommap(p1[0].toFixed(2),p2[0].toFixed(2),p1[1].toFixed(2),p2[1].toFixed(2));
+
+                         }else{
+                           that.getAllTable();
+                         }
+
+
+
+                          //document.getElementById('vScale').innerHTML = '1:' + evt.toFixed(2);
+                        });
+
                       // this.mapView.whenLayerView(layer).then(lv => {
                        this.mapView.whenLayerView(layer).then(lv => {
-                         console.log(lv);
                            const layerView = lv;
-                           console.log(layerView);
 
                            const customContentPromise = new CustomContent({
                                outFields: ["*"],
                                creator: (event) => {
-                                 console.log(event);
-                                 console.log(event.graphic.getObjectId());
-
                                  const query = layer.createQuery();
-                                 console.log(event);
                                  query.aggregateIds = [event.graphic.getObjectId()];
-                                 console.log(query);
-                                 return layer.queryFeatures(query).then(result => {
+                                  return layer.queryFeatures(query).then(result => {
                                      const contentDiv = document.createElement("div");
                                      const tbl = document.createElement("table");
                                      let headers = ['Chasis ID','Events','Georeference','PPS Details'];
@@ -592,7 +618,7 @@ export class MapComponent implements OnInit {
                                           if(headerslabel[j]=='url'){
                                             var createA = document.createElement('a');
                                             var createAText = document.createTextNode(`ppsdetails`);
-                                            createA.setAttribute('href',  window.location.href.replace('/map','')  + "/ppsdetails/" + feature.attributes['id']);
+                                            createA.setAttribute('href',   "https://saguz7.github.io/pacific-railway/ppsdetails/" + feature.attributes['id']);
                                             createA.appendChild(createAText);
                                             cell.appendChild(createA);
                                           }
@@ -655,7 +681,7 @@ export class MapComponent implements OnInit {
                                    content: [customContentPromise],
                                    actions: []
                                },
-                               clusterMinSize: "24px",
+                               clusterMinSize: "14px",
                                clusterMaxSize: "60px",
                                labelingInfo: [
                                    {
@@ -716,6 +742,8 @@ export class MapComponent implements OnInit {
 
                        const graphicsLayer = new GraphicsLayer();
                        map.add(graphicsLayer);
+
+
 
                        this.mapView.ui.add("select-by-rectangle", "top-left");
                        const selectButton = document.getElementById("select-by-rectangle");
@@ -779,8 +807,23 @@ export class MapComponent implements OnInit {
              this.data = []
              this.dataGeneral = []
 
-             this.events= []
-             this.georeferences = [];
+             this.events= [
+               {name: "No Filter", value: "No Filter"}
+             ]
+             this.georeferences = [
+               {name: "No Filter", value: "No Filter"},
+               {name: "Bensenville Intermodal Terminal", value: "Bensenville Intermodal Terminal"},
+               {name: "Calgary Intermodal Terminal", value: "Calgary Intermodal Terminal"},
+               {name: "Edmonton Intermodal Terminal", value: "Edmonton Intermodal Terminal"},
+               {name: "Lachine Intermodal Terminal", value: "Lachine Intermodal Terminal"},
+               {name: "Regina Intermodal Terminal", value: "Regina Intermodal Terminal"},
+               {name: "Schiller Park Intermodal Terminal", value: "Schiller Park Intermodal Terminal"},
+               {name: "Saint John Intermodal Terminal", value: "Saint John Intermodal Terminal"},
+               {name: "Vaughan Intermodal Terminal", value: "Vaughan Intermodal Terminal"},
+               {name: "Vancouver Intermodal Terminal", value: "Vancouver Intermodal Terminal"},
+               {name: "Winnipeg Intermodal Terminal", value: "Winnipeg Intermodal Terminal"},
+
+             ];
              for(var i = 0; i < features.length;i++){
                let arr = features[i].properties.move_type.replace('_',' ').split(" ");
                for (var a = 0; a < arr.length; a++) {
@@ -790,7 +833,7 @@ export class MapComponent implements OnInit {
                const found = this.events.find(element => element.name == str2);
                if(!found){
                  this.events.push({name: str2, value: features[i].properties.move_type});
-                 this.georeferences.push({name: str2, value: features[i].properties.move_type});
+                // this.georeferences.push({name: str2, value: features[i].properties.move_type});
                }
 
                this.data.push(
@@ -800,6 +843,9 @@ export class MapComponent implements OnInit {
                      date: this.formatdate(features[i].properties.date),
                      move_type: features[i].properties.move_type,
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
+                     lat: features[i].geometry.coordinates[0],
+                     lon: features[i].geometry.coordinates[1],
+
                  }
                );
 
@@ -810,11 +856,13 @@ export class MapComponent implements OnInit {
                      date: this.formatdate(features[i].properties.date),
                      move_type: features[i].properties.move_type,
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
+                     lat: features[i].geometry.coordinates[0],
+                     lon: features[i].geometry.coordinates[1],
                  }
                );
              }
 
-             console.log(this.events);
+             console.log(this.data);
 
 
            }
@@ -891,7 +939,7 @@ export class MapComponent implements OnInit {
     console.log(json.features);
     console.log('+++++++++++++++++');
 
-    if($event.event!=null){
+    if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){
        arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.properties.move_type == $event.event.value);
 
     }
@@ -900,7 +948,7 @@ export class MapComponent implements OnInit {
       arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.id == $event.chasis);
     }
 
-    if($event.georeference!=null){
+    if($event.georeference!=null && ($event.georeference!=null && $event.georeference.value != 'No Filter')){
       arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.georeference == $event.georeference.value);
     }
 
@@ -931,5 +979,30 @@ export class MapComponent implements OnInit {
       }
     });
    }
+
+
+  getAllTable(){
+    this.data = this.dataGeneral;
+
+  }
+
+
+   filtersfromzoommap(x1,x2,y1,y2){
+     this.data = this.dataGeneral;
+     let datafilter = [];
+     for(var i = 0; i < this.dataGeneral.length;i++){
+       if(x1 < this.dataGeneral[i].lat && x2 > this.dataGeneral[i].lat && y1 < this.dataGeneral[i].lon && y2 > this.dataGeneral[i].lon){
+         datafilter.push(this.dataGeneral[i]);
+       }
+
+     }
+
+     this.data = datafilter;
+     //this.data = this.data.filter(element => x1 < element.lon && x2 > element.lon &&   y1 < element.lat && y2 > element.lat);
+
+  //   console.log(this.data);
+   }
+
+
 
 }

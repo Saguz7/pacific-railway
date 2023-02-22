@@ -158,6 +158,8 @@ export class FilterMapComponent implements OnInit {
       this.event_select = null;
       this.georeference_select = null;
       this.chasis = null;
+      this.SendFilters.emit({});
+
     }
 
 }

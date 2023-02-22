@@ -54,12 +54,12 @@
              </div>
              <div class="col s3">
                <div class="p-inputgroup" *ngIf="Events.length>0">
-                 <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+                 <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
                </div>
              </div>
              <div class="col s3">
                <div class="p-inputgroup" *ngIf="Georeferences.length>0">
-                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
+                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
                </div>
              </div>
              <div class="col s3">

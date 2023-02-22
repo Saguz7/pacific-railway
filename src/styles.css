@@ -49,7 +49,15 @@ body {
     --text-color: black;
 }
 
+.p-inputgroup {
+  width: 100%;
+  max-width: 100%;
+}
 
+.p-inputwrapper-filled{
+  width: 100%;
+  max-width: 100%;
+}
 @media screen and (max-width: 500px) {
   .p-tabmenuitem {
     width: 100% !important;
