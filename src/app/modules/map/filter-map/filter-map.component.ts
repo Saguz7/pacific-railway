@@ -133,9 +133,11 @@ export class FilterMapComponent implements OnInit {
       if(this.event_select!=null){
         objsend['event'] =  this.event_select;
       }
+      /*
       if(this.georeference_select!=null){
         objsend['georeference'] =  this.georeference_select;
       }
+      */
       if(this.chasis!=null && !this.isEmpty(this.chasis)){
         objsend['chasis'] = this.chasis
       }

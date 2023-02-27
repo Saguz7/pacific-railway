@@ -42,151 +42,88 @@ export class RouteMapComponent implements OnInit {
              console.log(this.href);
              console.log(this.currentURL);
 
-     return loadModules([
-       "esri/layers/GeoJSONLayer",
-       "esri/widgets/Sketch",
-       "esri/widgets/Sketch/SketchViewModel",
-       'esri/Map',
-       "esri/layers/GraphicsLayer",
-       'esri/views/MapView',
-       'esri/Graphic',
-       "esri/layers/FeatureLayer",
-       "esri/geometry/geometryEngineAsync"
-
-     ])
-       .then(([GeoJSONLayer,Sketch,SketchViewModel,Map,GraphicsLayer, MapView, Graphic,FeatureLayer,geometryEngineAsync]) => {
-             //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
-         const map: __esri.Map = new Map({
-           basemap: 'streets'
-         });
-
-         const clusterConfig = {
-         type: "cluster",
-         clusterRadius: "100px",
-         // {cluster_count} is an aggregate field containing
-         // the number of features comprised by the cluster
-         popupTemplate: {
-           title: "Information",
-           content: "This cluster represents {cluster_count} chasis.",
-           fieldInfos: [{
-             fieldName: "cluster_count",
-             format: {
-               places: 0,
-               digitSeparator: true
-             }
-           }]
-         },
-         clusterMinSize: "24px",
-         clusterMaxSize: "60px",
-         labelingInfo: [{
-           deconflictionStrategy: "none",
-           labelExpressionInfo: {
-             expression: "Text($feature.cluster_count, '#,###')"
-           },
-           symbol: {
-             type: "text",
-             color: "#004a5d",
-             font: {
-               weight: "bold",
-               family: "Noto Sans",
-               size: "12px"
-             }
-           },
-           labelPlacement: "center-center",
-         }]
-       };
-
-         const geojsonlayer = new GeoJSONLayer({
-             url: this.currentURL + "/assets/geojson.json",
-             featureReduction: clusterConfig,
-           });
-         map.add(geojsonlayer);
-
-         this.mapView = new MapView({
-           container: this.mapViewEl.nativeElement,
-           center: [-118.805, 34.027], // Longitude, latitude
-           zoom: 13, // Zoom level
-           map: map
-         });
+             return loadModules([
+               "esri/layers/GeoJSONLayer",
+               "esri/widgets/Sketch",
+               'esri/Map',
+               "esri/layers/GraphicsLayer",
+               'esri/views/MapView',
+               'esri/Graphic'
+             ])
+               .then(([GeoJSONLayer,Sketch,Map,GraphicsLayer, MapView, Graphic]) => {
+                     //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
+                 const map: __esri.Map = new Map({
+                   basemap: 'streets'
+                 });
 
 
-         const polygonGraphicsLayer = new GraphicsLayer();
-         map.add(polygonGraphicsLayer);
+
+                 this.mapView = new MapView({
+                   container: this.mapViewEl.nativeElement,
+                   map: map,
+                   center: ["-112.794721","49.725848"], //Longitude, latitude
+                   zoom: 13,
+                 });
 
 
-         const graphicsLayer = new GraphicsLayer();
-         map.add(graphicsLayer);
+                 const graphicsLayer = new GraphicsLayer();
+                  map.add(graphicsLayer);
 
-         this.mapView.ui.add("select-by-rectangle", "top-left");
-         const selectButton = document.getElementById("select-by-rectangle");
+                  let arrpoints = [
+                  {lat: "49.725848", lon: "-112.794721"},
+                   {lat: "49.7", lon: "-112.779"},
+                   {lat: "49.756", lon: "-112.288"},
+                   {lat: "49.873", lon: "-110.918"},
+                   {lat: "50.036", lon: "-110.687"}
+                  ]
 
+                  for(var i = 0; i < arrpoints.length;i++){
+                    const point = { //Create a point
+                       type: "point",
+                       longitude: arrpoints[i].lon,
+                       latitude: arrpoints[i].lat
+                    };
+                    const simpleMarkerSymbol = {
+                       type: "simple-marker",
+                       color: [226, 119, 40],  // Orange
+                       outline: {
+                           color: [255, 255, 255], // White
+                           width: 1
+                       }
+                    };
 
-         // click event for the select by rectangle button
-         selectButton.addEventListener("click", () => {
-           this.mapView.popup.close();
-           sketchViewModel.create("rectangle");
-         });
+                    const pointGraphic = new Graphic({
+                       geometry: point, 
+                       attributes: {
+                        // used to define the text string in the symbol
+                         text: "Hola"
+                       },
+                       symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                  }
+                  let that = this;
 
+                  this.mapView.on("click", (event) => {
+                    console.log(this.mapView.zoom);
+                    if(this.mapView.zoom>8){
+                      event.stopPropagation();
+                       this.mapView.hitTest(event).then(({ results }) => {
+                         var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+                         var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+                         console.log(lat);
+                         console.log(lon);
+                       });
+                    }
 
-         this.mapView.ui.add("select-by-circle", "top-left");
-         const selectButtonCCircle = document.getElementById("select-by-circle");
-
-
-         // click event for the select by rectangle button
-         selectButtonCCircle.addEventListener("click", () => {
-           this.mapView.popup.close();
-           sketchViewModel.create("circle");
-         });
-
-         this.mapView.ui.add("clear-selection", "top-left");
-         document.getElementById("clear-selection").addEventListener("click", () => {
-           polygonGraphicsLayer.removeAll();
-
-          });
-
-         const sketchViewModel = new SketchViewModel({
-           view: this.mapView,
-           layer: polygonGraphicsLayer
-         });
-
-         sketchViewModel.on("create", async (event) => {
-           if (event.state === "complete") {
-             // this polygon will be used to query features that intersect it
-             const geometries = polygonGraphicsLayer.graphics.map(function(graphic){
-               return graphic.geometry
-             });
-
-             const queryGeometry = await geometryEngineAsync.union(geometries.toArray());
-            // selectFeatures(queryGeometry);
-           }
-         });
-
-         let that = this;
-
-         this.mapView.on("click", (event) => {
-                event.stopPropagation();
-          this.mapView.hitTest(event).then(({ results }) => {
-            var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-              var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
-               if(results.length>0){
+                 });
 
 
-              this.mapView.popup.open({
-                  // Set the popup's title to the coordinates of the clicked location
-                  title: "Reverse geocode: [" + lon + ", " + lat + "]",
-                  location: event.mapPoint // Set the location of the popup to the clicked location
-              });
 
-               }
-           });
-        });
-
-       })
-
-
-       .catch(err => {
-         console.error(err);
-       });
+               })
+               .catch(err => {
+                 console.error(err);
+               });
 
      }
 
