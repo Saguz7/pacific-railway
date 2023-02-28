@@ -77,190 +77,149 @@ export class MapDivComponent implements OnInit {
     const urljson = URL.createObjectURL(blob);
     return loadModules([
       "esri/Map",
-      "esri/layers/FeatureLayer",
-      "esri/layers/GeoJSONLayer",
       "esri/views/MapView",
-      "esri/widgets/Legend",
-      "esri/widgets/Expand",
-      "esri/widgets/Home",
-      "esri/popup/content/CustomContent",
-      "esri/layers/GraphicsLayer",
-      "esri/widgets/Sketch",
-      "esri/widgets/Sketch/SketchViewModel",
-      "esri/geometry/geometryEngineAsync",
-      "esri/geometry/support/webMercatorUtils"
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "esri/rest/route",
+      "esri/rest/support/RouteParameters",
+      "esri/rest/support/FeatureSet",
+      "esri/config",
+      "esri/widgets/Expand"
     ])
-    .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync,webMercatorUtils]) => {
-
-      const clusterConfig = {
-        type: "cluster",
-        clusterRadius: "100px",
-        // {cluster_count} is an aggregate field containing
-        // the number of features comprised by the cluster
-        popupTemplate: {
-          title: "Cluster summary",
-          content: "This cluster represents {cluster_count} earthquakes.",
-          fieldInfos: [{
-            fieldName: "cluster_count",
-            format: {
-              places: 0,
-              digitSeparator: true
-            }
-          }]
-        },
-        clusterMinSize: "24px",
-        clusterMaxSize: "60px",
-        labelingInfo: [{
-          deconflictionStrategy: "none",
-          labelExpressionInfo: {
-            expression: "Text($feature.cluster_count, '#,###')"
-          },
-          symbol: {
-            type: "text",
-            color: "#004a5d",
-            font: {
-              weight: "bold",
-              family: "Noto Sans",
-              size: "12px"
-            }
-          },
-          labelPlacement: "center-center",
-        }]
-      };
-
-
-      const layer = new GeoJSONLayer({
-        title: "Earthquakes from the last month",
-        url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
-        copyright: "USGS Earthquakes",
-
-        featureReduction: clusterConfig,
-
-        // popupTemplates can still be viewed on
-        // individual features
-        popupTemplate: {
-          title: "Magnitude {mag} {type}",
-          content: "Magnitude {mag} {type} hit {place} on {time}",
-          fieldInfos: [
-            {
-              fieldName: "time",
-              format: {
-                dateFormat: "short-date-short-time"
-              }
-            }
-          ]
-        },
-        renderer: {
-          type: "simple",
-          field: "mag",
-          symbol: {
-            type: "simple-marker",
-            size: 4,
-            color: "#69dcff",
-            outline: {
-              color: "rgba(0, 139, 174, 0.5)",
-              width: 5
-            }
-          }
-        }
-      });
-
-      // background layer for geographic context
-      // projected to Alaska Polar Stereographic
-      const baseLayer = new FeatureLayer({
-        portalItem: {
-          id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
-        },
-        legendEnabled: false,
-        outFields: ["*"],
-          popupTemplate: {
-            title: "city",
-            content: popupListContent
-          },
-          renderer: {
-          type: "simple",
-          symbol: {
-            type: "simple-fill",
-            color: [65, 65, 65, 1],
-            outline: {
-              color: [50, 50, 50, 0.75],
-              width: 0.5
-            }
-          }
-        },
-        spatialReference: {
-          wkid: 5936
-        }
-      });
-
-      function popupListContent(feature) {
-  const tableContent = document.createElement("table");
-  tableContent.classList.add('tablelayout');
-  tableContent.classList.add('esri-widget__table');
-  let infoTamplateData = "";
-  let object = feature.graphic.attributes;
-  console.log(feature.graphic);
-  const fieldArr = [];
-  if (feature.graphic.layer && feature.graphic.layer.fields) {
-    feature.graphic.layer.fields.forEach(element => {
-      // check if the feature has values
-      if (feature.graphic.attributes[element.name] && feature.graphic.attributes[element.name] !== null){
-        fieldArr.push(element.name);
-       }
-    });
-   }
-   fieldArr.forEach((f) => {
-   infoTamplateData += "<tr label= " + f + "><th class='esri-feature__field-header' >" +
-   f + " </th><td class='esri-feature__field-data'>" + object[f] + "</td> </tr>";
-   });
-   tableContent.innerHTML = infoTamplateData;
-   return tableContent;
-}
-
+    .then(([Map, MapView, Graphic, Point, route, RouteParameters, FeatureSet, esriConfig,Expand]) => {
       const map: __esri.Map = new Map({
-        layers: [baseLayer, layer]
+        basemap: "arcgis-navigation"
       });
+
+      esriConfig.apiKey = "AAPK304c230c0e0e488dbe5b69b257f55ef0Eu9jOtbwGIvKFvH3fwYHPaa0qIEBQDop0q3Oym5x0ZKK7rsvqiH88X_UrIDiBit7";
+
+      const center = new Point ([-122.62,45.526201]);
+
+      const origin = new Point([-122.690176,45.522054]);
+      const stop =  new Point([-122.614995,45.526201]);
+      const destination = new Point([-122.68782,45.51238]);
 
       this.mapView = new MapView({
         container: this.mapViewEl.nativeElement,
-        extent: {
-          spatialReference: {
-            wkid: 5936
-          },
-          xmin: 1270382,
-          ymin: -1729511,
-          xmax: 2461436,
-          ymax: -953893
-        },
-        spatialReference: {
-          // WGS_1984_EPSG_Alaska_Polar_Stereographic
-          wkid: 5936
-        },
+        map: map,
+        center: center,
+        zoom: 12,
         constraints: {
-          minScale: 15469455
-        },
-        map: map
+          snapToZoom: false
+        }
       });
 
-      this.mapView.ui.add(new Home({
-        view: this.mapView
-      }), "top-left");
-
-      const legend = new Legend({
-        view: this.mapView,
-        container: "legendDiv"
+      this.mapView.when(()=>{
+        addGraphic("start", origin);
+        addGraphic("stop", stop);
+        addGraphic("finish", destination);
+        getRoute();
       });
 
-      const infoDiv = document.getElementById("infoDiv");
-      this.mapView.ui.add(new Expand({
-        view: this.mapView,
-        content: infoDiv,
-        expandIconClass: "esri-icon-layer-list",
-        expanded: false
-      }), "top-left");
+      this.mapView.on("click", (event)=>{
+        if (this.mapView.graphics.length === 0) {
+          addGraphic("start", event.mapPoint);
+        } else if (this.mapView.graphics.length === 1) {
+          addGraphic("stop", event.mapPoint);
+        } else if (this.mapView.graphics.length === 2) {
+          addGraphic("finish", event.mapPoint);
+          getRoute();
+        } else {
+          this.mapView.graphics.removeAll();
+          this.mapView.ui.empty("top-right");
+          addGraphic("start",event.mapPoint);
+        }
+      });
+
+      function addGraphic(type, point) {
+        let color = "#ffffff";
+        let outlineColor = "#000000"
+        let size = "12px";
+        if (type == "start") {
+          color = "#ffffff";
+        } else if (type == "stop") {
+          color = "#000000";
+          outlineColor = "#ffffff";
+          size = "8px";
+        } else {
+          color = "#000000";
+          outlineColor = "#ffffff";
+        }
+        const graphic = new Graphic({
+          symbol: {
+            type: "simple-marker",
+            color: color,
+            size: size,
+            outline: {
+              color: outlineColor,
+              width: "1px"
+            }
+          },
+          geometry: point
+        });
+        this.mapView.graphics.add(graphic);
+      }
+
+      function getRoute() {
+
+        const routeUrl = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
+
+        const routeParams = new RouteParameters({
+          stops: new FeatureSet({
+            features: this.mapView.graphics.toArray()
+          }),
+          returnDirections: true  
+        });
+
+        route.solve(routeUrl, routeParams)
+          .then((data)=> {
+            if (data.routeResults.length > 0) {
+              showRoute(data.routeResults[0].route);
+              showDirections(data.routeResults[0].directions.features);
+            }
+          })
+          .catch((error)=>{
+            console.log(error);
+          })
+      }
+
+      function showRoute(routeResult) {
+        routeResult.symbol = {
+          type: "simple-line",
+          color: [5, 150, 255],
+          width: 3
+        };
+        this.mapView.graphics.add(routeResult,0);
+      }
+
+      function showDirections(directions) {
+        function showRouteDirections(directions) {
+          const directionsList = document.createElement("ol");
+          directions.forEach(function(result,i){
+            const direction = document.createElement("li");
+            direction.innerHTML = result.attributes.text + ((result.attributes.length > 0) ? " (" + result.attributes.length.toFixed(2) + " miles)" : "");
+            directionsList.appendChild(direction);
+          });
+          directionsElement.appendChild(directionsList);
+        }
+
+        const directionsElement = document.createElement("div");
+        directionsElement.innerHTML = "<h3>Directions</h3>";
+      //  directionsElement.classList = "esri-widget esri-widget--panel esri-directions__scroller directions";
+        directionsElement.style.marginTop = "0";
+        directionsElement.style.padding = "0 15px";
+        directionsElement.style.minHeight = "365px";
+
+        showRouteDirections(directions);
+
+        this.mapView.ui.empty("top-right");
+        this.mapView.ui.add(new Expand({
+          view:this.mapView,
+          content:directionsElement,
+          expanded:true,
+          mode:"floating"}), "top-right");
+      }
     })
-
-
     .catch(err => {
       console.error(err);
     });

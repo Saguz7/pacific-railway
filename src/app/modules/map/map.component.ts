@@ -1,12 +1,15 @@
 import { ComponentRef, ComponentFactoryResolver, ChangeDetectorRef, HostListener, ViewContainerRef, ViewChild, Component, OnInit, Input, Output, EventEmitter,ElementRef,AfterViewInit } from "@angular/core";
-import { Subscription } from 'rxjs';
+import { Subscription ,Observable } from 'rxjs';
 import { MapDivComponent } from './mapdiv/mapdiv.component';
 import { MapStateService } from '../../core/services/map-state/map-state.service';
-
+import {from} from 'rxjs';
 import { loadModules } from 'esri-loader';
 import { Router } from '@angular/router';
+import { GEOJsonService } from '../../core/services/map/geojson.service';
 
 
+
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -47,7 +50,10 @@ export class MapComponent implements OnInit {
     private cdRef : ChangeDetectorRef,
     private CFR?: ComponentFactoryResolver,
     private cdref?: ChangeDetectorRef,
-    private msService?: MapStateService
+    private msService?: MapStateService,
+    //private geojsonService?: GEOJsonService,
+
+
    ) { }
 
    @Output()
@@ -74,7 +80,8 @@ export class MapComponent implements OnInit {
     }
 
     getDatafromGeoJson(){
-      fetch("https://d2gv90pkqj.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+
+      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         if(out.errorMessage==undefined){
@@ -90,10 +97,27 @@ export class MapComponent implements OnInit {
           }, 100);
         }
       }).catch(err => console.error(err));
+
+
     }
+
+    getData(): Observable<any> {
+    return from(
+      fetch(
+        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'GET', // GET, POST, PUT, DELETE
+          mode: 'no-cors' // the most important option
+        }
+      ));
+  }
 
     buildmap(json){
       this.jsonmap = json;
+      console.log(json);
       const blob = new Blob([JSON.stringify(json)], {
         type: "application/json"
       });
@@ -169,13 +193,13 @@ export class MapComponent implements OnInit {
                       // this.mapView.whenLayerView(layer).then(lv => {
                        this.mapView.whenLayerView(layer).then(lv => {
                            const layerView = lv;
-
                            const clusterConfig = {
                                type: "cluster",
                                clusterRadius: "100px",
                                popupTemplate: {
                                  title: "Cluster summary",
                                  content: "This cluster represents {cluster_count} chasis.",
+                                 outFields: ["*"],
                                  fieldInfos: [{
                                    fieldName: "cluster_count",
                                    format: {
@@ -305,20 +329,58 @@ export class MapComponent implements OnInit {
                         });
                        }
 
+                       this.mapView.on("pointer-move",async (event) => {
+                         //console.log(event);
+                         this.mapView.popup.close();
+                         event.stopPropagation();
+                         var screenPoint = {
+                           x: event.x,
+                           y: event.y
+                         };
+                         this.mapView.hitTest(screenPoint)
+                         .then(function (response) {
+                           if(response.results.length>0){
+                             const result = response.results[0];
 
-                              this.mapView.on("pointer-move", (event) => {
-                                //console.log(event);
-                                event.stopPropagation();
-                                this.mapView.hitTest(event).then(({ results }) => {
-                                 if(results.length>0){
-                                   console.log(event);
-                                   console.log(results[0]);
-                                   console.log(results[0]['mapPoint']);
+                             console.log(response);
+                             console.log(screenPoint);
+                             console.log(result['graphic']);
 
-                                 }
-                                 //checar para alert
-                                });
-                             });
+                             if(result['graphic']!=undefined){
+                               if(result['graphic'].attributes['clusterId']==undefined){
+                                 console.log(result['graphic'].attributes);
+                                 let title = 'Chasis <a href="https://saguz7.github.io/pacific-railway/ppsdetails/'+result['graphic'].attributes.id+'" title="'+result['graphic'].attributes.id+'">'+result['graphic'].attributes.id+'</a>';
+                                 that.mapView.popup.open({
+                                     // Set the popup's title to the coordinates of the clicked location
+                                     title: title,
+                                     content: result['graphic'].attributes.id + " - " + result['graphic'].attributes.move_type,
+                                     location: result.mapPoint // Set the location of the popup to the clicked location
+                                 });
+                               }
+                             }
+
+
+
+
+
+
+
+
+
+                           }
+
+                         });
+                         /*
+
+                         const response = await this.mapView.hitTest(event);
+                         if(response.results.length>0){
+                           const result = response.results[0];
+
+                           //console.log(result);
+                         //  console.log(result.type);
+                         }
+                         */
+                       });
 
                 })
 
@@ -355,6 +417,7 @@ export class MapComponent implements OnInit {
                {name: "Vaughan Intermodal Terminal", value: "Vaughan Intermodal Terminal"},
                {name: "Vancouver Intermodal Terminal", value: "Vancouver Intermodal Terminal"},
                {name: "Winnipeg Intermodal Terminal", value: "Winnipeg Intermodal Terminal"},
+               {name: "Big Calgary Circle", value: "Big Calgary Circle"}
 
              ];
              for(var i = 0; i < features.length;i++){
@@ -369,12 +432,22 @@ export class MapComponent implements OnInit {
                 // this.georeferences.push({name: str2, value: features[i].properties.move_type});
                }
 
+               let geofences_array = [];
+               for(var a = 0; a < features[i].geofences.length;a++){
+                 geofences_array.push(
+                   {
+                     name: features[i].geofences[a].name
+                   }
+                 );
+               }
+
                this.data.push(
                  {
                    reference: features[i].id,
                     device_id:  features[i].properties.device_id,
-                     date: this.formatdate(features[i].properties.date),
+                     date: this.formatdate(features[i].properties.recorded_on),
                      move_type: features[i].properties.move_type,
+                     geofences: geofences_array ,
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
@@ -386,8 +459,9 @@ export class MapComponent implements OnInit {
                  {
                    reference: features[i].id,
                     device_id:  features[i].properties.device_id,
-                     date: this.formatdate(features[i].properties.date),
+                     date: this.formatdate(features[i].properties.recorded_on),
                      move_type: features[i].properties.move_type,
+                     geofences: geofences_array ,
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
@@ -432,10 +506,8 @@ export class MapComponent implements OnInit {
 
   getFilters($event){
     this.loading = true;
-    console.log($event.event);
-    this.data = this.dataGeneral;
+     this.data = this.dataGeneral;
 
-     console.log($event.chasis);
 
 
      if($event.chasis!=null){
@@ -446,8 +518,7 @@ export class MapComponent implements OnInit {
          this.data = this.data.filter(element => element.move_type == $event.event.value);
        }
        if($event.georeference!=null){
-         //this.filtersactive = true;
-        // this.data = this.data.filter(element => element.georeference == $event.georeference.value);
+          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
        }
      }
 
@@ -470,7 +541,7 @@ export class MapComponent implements OnInit {
   }
 
   rebuildmap($event){
-    fetch("https://d2gv90pkqj.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event);
@@ -479,10 +550,6 @@ export class MapComponent implements OnInit {
 
   makefromjson(json,$event){
     let arrayfeacturesfilter = json.features;
-    console.log('+++++++++++++++++');
-    console.log(json.features);
-    console.log('+++++++++++++++++');
-
     if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){
        arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.properties.move_type == $event.event.value);
 
@@ -493,7 +560,9 @@ export class MapComponent implements OnInit {
     }
 
     if($event.georeference!=null && ($event.georeference!=null && $event.georeference.value != 'No Filter')){
-      arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.georeference == $event.georeference.value);
+      arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined);
+      //          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
+
     }
 
 
@@ -532,8 +601,7 @@ export class MapComponent implements OnInit {
 
     }else{
       this.data = this.filterspoints;
-      console.log('Entra aqui 2');
-    }
+     }
 
 
   }
@@ -595,5 +663,47 @@ export class MapComponent implements OnInit {
      }
      console.log(datafilter);
    }
+
+   downloadFile(//data: any
+   ) {
+
+     console.log(this.data);
+     let arraytable = [];
+     for(var i = 0; i < this.data.length;i++){
+       arraytable.push(
+         {
+           Reference: this.data[i].reference,
+           Date: this.data[i].date,
+           Move_Type: this.data[i].move_type,
+           Coordinates: this.data[i].coordinates
+         }
+       );
+     }
+
+
+     let data = arraytable;
+    const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
+    const header = ['Reference','Date','Move_Type','Coordinates']; //Object.keys(data[0]);
+    const csv = data.map((row) =>
+      header
+        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        .join(',')
+    );
+    console.log(csv);
+
+    csv.unshift(header.join(','));
+    const csvArray = csv.join('\r\n');
+    console.log(csvArray);
+
+    const a = document.createElement('a');
+    const blob = new Blob([csvArray], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = 'Information.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
 
 }

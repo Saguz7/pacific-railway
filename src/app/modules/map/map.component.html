@@ -43,7 +43,7 @@
         <div id="tableDiv"></div>
       </div>
     </div>
-    </div>
+    <div class="p-col-12">
 
     <p-divider align="center" type="dashed">
 
@@ -54,12 +54,24 @@
         expand_more
         </span></button>
   </p-divider>
+
+  <div class="row">
     <div *ngIf="!ocultarTabla">
     <app-table-map [Data]='data' (SendCenter)="getCenter($event)"></app-table-map>
     <ng-container *ngIf="loading">
       <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
     </ng-container>
-   </div>
+    </div>
+  <div class="col s12 center-align">
+    <button pButton pRipple type="button" label="CSV" class="p-button-success" (click)=downloadFile()></button>
+  </div>
+</div>
+</div>
+
+    </div>
+
+
+
 
 
 
