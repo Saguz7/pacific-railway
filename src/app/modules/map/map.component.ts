@@ -149,10 +149,28 @@ export class MapComponent implements OnInit {
           outFields: ["*"],
           popupTemplate: {
           //  title: 'Chasis <a [routerLink]=["' +environment.url + '"ppsdetails/{id}"] title="{id}">{id}</a>',
-            title: 'Chasis <label (click)="gotoroutemap({id})" title="{id}">{id}</label>',
-            content: "{id} - {move_type}",
+            title: 'Chasis  {id} ',
+            content: [
+							{
+								type: "custom",
+								creator: (graphic) => {
+									// could also check if button already created
+									// and just reuse it
+									let btn = document.createElement("button");
+									btn.innerText = "Click me";
+									btn.addEventListener("click", btnClick);
+									return btn;
+								}
+							}
+            ],
           }
         });
+
+        function btnClick() {
+					console.log("click");
+				}
+
+
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
           center: [-114.8574, 54.6542],
