@@ -1,5 +1,10 @@
 @import 'https://js.arcgis.com/4.10/esri/css/main.css';
 
+.title{
+ font-weight: bold;
+ color: black;
+
+}
 
 .card-content{
    height: 200px;

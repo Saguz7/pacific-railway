@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute,Router } from '@angular/router';
 import { loadModules } from 'esri-loader';
 import { MapStateService } from '../../../core/services/map-state/map-state.service';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
   selector: 'app-pps-details',
   templateUrl: './pps-details.component.html',
@@ -19,6 +19,7 @@ export class PpsDetailsComponent implements OnInit {
   event: any;
   loading: boolean = false;
   counterror: any;
+  properties: any;
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
@@ -26,6 +27,7 @@ export class PpsDetailsComponent implements OnInit {
   constructor(
     private cdRef : ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
+    private http: HttpClient
 
    ) { }
 
@@ -33,8 +35,6 @@ export class PpsDetailsComponent implements OnInit {
   ngOnInit() {
     this.counterror = 0;
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
-
-    console.log(chasis);
 
 
   }
@@ -59,7 +59,8 @@ export class PpsDetailsComponent implements OnInit {
 
    getDatafromGeoJson(){
 
-                fetch("https://d2gv90pkqj.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+
+                fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
                     .then(res => res.json())
                     .then((out) => {
                       if(out.errorMessage==undefined){
@@ -69,12 +70,10 @@ export class PpsDetailsComponent implements OnInit {
                       }else{
                         setTimeout(() => {
                            this.counterror = this.counterror + 1;
-                           console.log(this.counterror);
 
                           if(this.counterror < 10){
                             this.getDatafromGeoJson();
                           }else{
-                            console.log('Entra aqui');
 
                           }
 
@@ -86,25 +85,35 @@ export class PpsDetailsComponent implements OnInit {
                 }).catch(err => console.error(err));
 
 
+
    }
 
   makefromjson(json){
-    console.log(json);
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
     let arrayfeacturesfilter = json.features;
     arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.id == chasis);
     json.features = arrayfeacturesfilter;
     setTimeout(() => {
+      this.getInfoChasis();
       this.buildmap(json);
     }, 100);
 
   }
 
+  getInfoChasis(){
+    let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
+
+         this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
+           let array = JSON.parse(data.body);
+           if(array.length>0){
+             this.properties = array[0];
+           }
+       })
+  }
+
   buildmap(json){
-    console.log(json);
     this.chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
     if(json!=undefined){
-      console.log(json.features);
       this.loading = false;
 
       if(json.features!=undefined && (json.features!=undefined && json.features.length>0)){
@@ -112,7 +121,7 @@ export class PpsDetailsComponent implements OnInit {
         this.lat = json.features[0].geometry.coordinates[0];
         let lat = json.features[0].geometry.coordinates[0];
         let lon = json.features[0].geometry.coordinates[1];
-        this.date = this.formatdatehours(json.features[0].properties.date);
+        this.date = this.formatdatehours(json.features[0].properties.recorded_on);
         this.event = json.features[0].properties.move_type;
 
         return loadModules([
@@ -176,11 +185,12 @@ export class PpsDetailsComponent implements OnInit {
   formatdatehours(date){
     let dateformat = date.split(' ');
     let hourformat = dateformat[1].split('.');
-    console.log(hourformat);
-
-    console.log(dateformat);
     return dateformat[0] + ' ' + hourformat[0];
 
+  }
+
+  formatstring(content){
+    return content.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
   }
 
 

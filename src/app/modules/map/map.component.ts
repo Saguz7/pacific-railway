@@ -117,7 +117,6 @@ export class MapComponent implements OnInit {
 
     buildmap(json){
       this.jsonmap = json;
-      console.log(json);
       const blob = new Blob([JSON.stringify(json)], {
         type: "application/json"
       });
@@ -323,7 +322,6 @@ export class MapComponent implements OnInit {
                          const query = layer.createQuery();
                          query.aggregateIds = [geometry.graphic.getObjectId()];
                          layer.queryFeatures(query).then(result => {
-                           console.log(result);
                             const contentDiv = document.createElement("div");
                             return contentDiv
                         });
@@ -341,14 +339,8 @@ export class MapComponent implements OnInit {
                          .then(function (response) {
                            if(response.results.length>0){
                              const result = response.results[0];
-
-                             console.log(response);
-                             console.log(screenPoint);
-                             console.log(result['graphic']);
-
                              if(result['graphic']!=undefined){
                                if(result['graphic'].attributes['clusterId']==undefined){
-                                 console.log(result['graphic'].attributes);
                                  let title = 'Chasis <a href="https://saguz7.github.io/pacific-railway/ppsdetails/'+result['graphic'].attributes.id+'" title="'+result['graphic'].attributes.id+'">'+result['graphic'].attributes.id+'</a>';
                                  that.mapView.popup.open({
                                      // Set the popup's title to the coordinates of the clicked location
@@ -469,9 +461,6 @@ export class MapComponent implements OnInit {
                );
              }
 
-             console.log(this.data);
-
-
            }
 
            formatdate(date){
@@ -568,7 +557,6 @@ export class MapComponent implements OnInit {
 
 
     json.features = arrayfeacturesfilter;
-    console.log(json);
     setTimeout(() => {
       this.loading = false;
 
@@ -578,11 +566,7 @@ export class MapComponent implements OnInit {
    }
 
    getCenter(event){
-     console.log(event);
-     console.log(event.coordinates);
-
      let coordinates = event.coordinates.split(',');
-     console.log(coordinates);
      document.getElementById("esri-view").focus();
      this.mapView.goTo({
       center: [parseInt(coordinates[0]), parseInt(coordinates[1])]
@@ -661,13 +645,10 @@ export class MapComponent implements OnInit {
          datafilter.push(this.dataGeneral[i]);
        }
      }
-     console.log(datafilter);
    }
 
    downloadFile(//data: any
    ) {
-
-     console.log(this.data);
      let arraytable = [];
      for(var i = 0; i < this.data.length;i++){
        arraytable.push(
@@ -689,12 +670,8 @@ export class MapComponent implements OnInit {
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
         .join(',')
     );
-    console.log(csv);
-
     csv.unshift(header.join(','));
     const csvArray = csv.join('\r\n');
-    console.log(csvArray);
-
     const a = document.createElement('a');
     const blob = new Blob([csvArray], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);

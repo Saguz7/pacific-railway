@@ -48,7 +48,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
  import {DividerModule} from 'primeng/divider';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
 
-
+import { HttpClientModule } from '@angular/common/http';
  import * as $ from "jquery";
 import * as L from 'leaflet';
 
@@ -90,7 +90,8 @@ import * as L from 'leaflet';
     ChartModule,
     DividerModule,
     PanelModule,
-    ProgressBarModule
+    ProgressBarModule,
+    HttpClientModule
   ],
   providers: [EsriMapService],
   bootstrap: [AppComponent]

@@ -38,8 +38,8 @@
 
           <div class="col s12">
 
-            Lat: {{lat}} <br>
-            Lon: {{lon}} <br>
+            <label class="title">Lat:</label> {{lat}} <br>
+            <label class="title">Lon:</label> {{lon}} <br>
           </div>
 
         </div>
@@ -125,8 +125,32 @@
 
           <div class="col s12"  *ngIf="date && event">
 
-            Date: {{date}} <br>
-            Last Event: {{event}} <br>
+            <label class="title"> Date:</label>  {{date}} <br>
+            <label class="title"> Last Event:</label>   {{formatstring(event)}} <br>
+            <ng-container *ngIf="properties!=undefined">
+              <label class="title">Asset Class:</label>  {{formatstring(properties.asset_class)  }} <br>
+              <ng-container *ngIf="properties.chassis_type!=undefined">
+                <label class="title">Chassis Type:</label>  {{properties.chassis_type}} <br>
+              </ng-container>
+
+              <label class="title">Door Type:</label>  {{properties.door_type}} <br>
+              <label class="title">Hash Key:</label>  {{properties.hash_key}} <br>
+              <label class="title">Height:</label>  {{properties.height}} <br>
+              <label class="title">Width:</label>  {{properties.width}} <br>
+              <label class="title">Initial Distance:</label>  {{properties.initial_distance}} <br>
+              <label class="title">Mounting Location:</label>  {{formatstring(properties.mounting_location)}} <br>
+              <ng-container *ngIf="properties.sensors!=undefined">
+              <label class="title">Sensors:</label>    <br>
+
+                <ng-container *ngIf="properties.sensors.length>0">
+                  <ng-container *ngFor="let sensor of properties.sensors; let i = index">
+                    -   {{ formatstring(sensor) }} <br>
+                  </ng-container>
+
+                </ng-container>
+              </ng-container>
+
+            </ng-container>
           </div>
 
         </div>
