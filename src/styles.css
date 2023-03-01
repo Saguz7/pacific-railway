@@ -10,6 +10,9 @@
  -webkit-transition-delay: 9999s;
 }
 
+    .p-inputtext {
+      text-align: center !important;
+    }
 
 input {
    -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
@@ -58,6 +61,10 @@ body {
   width: 100%;
   max-width: 100%;
 }
+
+td {
+             word-break: break-all;
+        }
 @media screen and (max-width: 500px) {
   .p-tabmenuitem {
     width: 100% !important;

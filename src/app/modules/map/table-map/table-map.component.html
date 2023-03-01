@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="col s12">
-          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['reference','date','move_type','coordinates']">
+          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['reference','date','move_Type_format','georeference','coordinates']">
             <ng-template pTemplate="caption">
                         <div class="flex">
                              <span class="p-input-icon-left ml-auto">
@@ -40,8 +40,23 @@
                   <a href="javascript:void(0);" (click)="gotocentermap(object)" > {{object[col.field]}}</a>
 
                 </ng-container>
-                <ng-container *ngIf="col.field!='reference' && col.field!='coordinates'">
-                  {{object[col.field]}}
+                <ng-container *ngIf="col.field=='routemap'">
+                  <a href="javascript:void(0);" (click)="gotoroutemap(object['reference'])" > Route Map</a>
+
+                </ng-container>
+                <ng-container *ngIf="col.field=='move_type'">
+                  <div class="tdbreak">
+                    {{this.formatstring(object[col.field])}}
+
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="col.field!='reference' && col.field!='coordinates' && col.field!='routemap' && col.field!='move_type'">
+
+                  <div class="tdbreak">
+                    {{this.formatstring(object[col.field])}}
+
+                  </div>
 
                 </ng-container>
               </td>

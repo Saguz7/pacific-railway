@@ -16,7 +16,7 @@
               Date:
             </div>
             <div class="col s12">
-              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"> </p-calendar>
+              <p-calendar [(ngModel)]="datefrom" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"> </p-calendar>
             </div>
            </div>
           <div class="col s12">
@@ -24,7 +24,7 @@
               Time:
             </div>
             <div class="col s12">
-          <p-calendar [(ngModel)]="value2" [showTime]="true" timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
+          <p-calendar [(ngModel)]="timefrom" [showTime]="true" timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
         </div>
           </div>
           <div class="col s12"><br>
@@ -43,7 +43,7 @@
               Date:
             </div>
             <div class="col s12">
-              <p-calendar [(ngModel)]="value" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
+              <p-calendar [(ngModel)]="dateto" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
             </div>
            </div>
           <div class="col s12">
@@ -51,13 +51,13 @@
               Time:
             </div>
             <div class="col s12">
-          <p-calendar [(ngModel)]="value2" [showTime]="true"  timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
+          <p-calendar [(ngModel)]="timeto" [showTime]="true"  timeOnly="true" dataType="string" inputId="timeonly" [style]="{'width':'100%'}" [showIcon]="true" icon="pi pi-calendar" [inputStyle]="{'border':'none'}"></p-calendar>
         </div>
           </div>
           <div class="col s12"><br>
           </div>
           <div class="col s12 right-align">
-            <button pButton pRipple type="button" label="Update" class="p-button-danger"></button>
+            <button pButton pRipple type="button" label="Update" (click)="searchForDates()" lass="p-button-danger"></button>
 
           </div>
 
@@ -91,22 +91,7 @@
 
       </div>
       <div class="col s10">
-        <div class="container-map" #mapViewNode></div>
-        <div id="select-by-rectangle" class="esri-widget esri-widget--button esri-widget esri-interactive"
-            title="Select features by rectangle">
-          <span class="esri-icon-checkbox-unchecked"></span>
-        </div>
-        <div id="select-by-circle" class="esri-widget esri-widget--button esri-widget esri-interactive"
-            title="Select features by circle">
-          <span class="esri-icon-radio-unchecked"></span>
-        </div>
-        <div id="clear-selection" class="esri-widget esri-widget--button esri-widget esri-interactive"
-            title="Clear selection">
-          <span class="esri-icon-erase"></span>
-        </div>
-        <div class="container">
-          <div id="tableDiv"></div>
-        </div>
+        <div class="container-map" #mapViewNode></div> 
         <app-temperature-graph></app-temperature-graph>
 
       </div>

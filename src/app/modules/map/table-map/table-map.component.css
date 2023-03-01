@@ -7,5 +7,11 @@
 .container-principal{
   max-width: 100%;
   height:100%;
-  position: relative; 
+  position: relative;
+}
+
+
+
+.tdbreak {
+    white-space: initial;
 }

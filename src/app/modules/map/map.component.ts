@@ -6,6 +6,7 @@ import {from} from 'rxjs';
 import { loadModules } from 'esri-loader';
 import { Router } from '@angular/router';
 import { GEOJsonService } from '../../core/services/map/geojson.service';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -147,7 +148,8 @@ export class MapComponent implements OnInit {
           url: urljson,
           outFields: ["*"],
           popupTemplate: {
-            title: 'Chasis <a href="https://saguz7.github.io/pacific-railway/ppsdetails/{id}" title="{id}">{id}</a>',
+          //  title: 'Chasis <a [routerLink]=["' +environment.url + '"ppsdetails/{id}"] title="{id}">{id}</a>',
+            title: 'Chasis <label (click)="gotoroutemap({id})" title="{id}">{id}</label>',
             content: "{id} - {move_type}",
           }
         });
@@ -192,12 +194,113 @@ export class MapComponent implements OnInit {
                       // this.mapView.whenLayerView(layer).then(lv => {
                        this.mapView.whenLayerView(layer).then(lv => {
                            const layerView = lv;
+                           const customContentPromise = new CustomContent({
+                             outFields: ["*"],
+                             creator: (event) => {
+                               const query = layer.createQuery();
+                               query.aggregateIds = [event.graphic.getObjectId()];
+                                return layer.queryFeatures(query).then(result => {
+                                   const contentDiv = document.createElement("div");
+                                   const tbl = document.createElement("table");
+                                   let headers = ['Chasis ID','Events' ,'PPS Details'];
+                                   let headerslabel = ['id','move_type','url'];
+
+                                   const tblHeader = document.createElement("thead");
+                                   const rowheaders = document.createElement("tr");
+
+                                     for (let i = 0; i < headers.length; i++) {
+                                       const cellheader = document.createElement("th");
+                                       const cellTextHeader = document.createTextNode(headers[i]);
+                                       cellheader.appendChild(cellTextHeader);
+                                       rowheaders.appendChild(cellheader);
+                                     }
+
+                                     // add the row to the end of the table body
+                                     tblHeader.appendChild(rowheaders);
+
+
+                                    const tblBody = document.createElement("tbody");
+
+                                    // creating all cells
+                                    for (const feature of result.features) {
+                                      // creates a table row
+                                      const row = document.createElement("tr");
+
+                                      for (let j = 0; j < headerslabel.length; j++) {
+                                        // Create a <td> element and a text node, make the text
+                                        // node the contents of the <td>, and put the <td> at
+                                        // the end of the table row
+                                         let data = "";
+                                         const cell = document.createElement("td");
+
+                                        if(headerslabel[j]=='id' || headerslabel[j]=='move_type' || headerslabel[j]=='date'){
+                                          data = feature.attributes[headerslabel[j]];
+                                          const cellText = document.createTextNode(data);
+                                          cell.appendChild(cellText);
+
+                                        }
+                                        if(headerslabel[j]=='url'){
+                                          var createA = document.createElement('a');
+                                          var createAText = document.createTextNode(`ppsdetails`);
+                                          createA.setAttribute('href', environment.url +  "ppsdetails/" + feature.attributes['id']);
+                                          createA.appendChild(createAText);
+                                          cell.appendChild(createA);
+                                        }
+                                         row.appendChild(cell);
+                                      }
+
+                                      // add the row to the end of the table body
+                                      tblBody.appendChild(row);
+                                    }
+
+                                    // put the <tbody> in the <table>
+                                    tbl.appendChild(tblHeader);
+
+                                    tbl.appendChild(tblBody);
+                                    // appends <table> into <body>
+                                    document.body.appendChild(tbl);
+                                   /*
+                                   const featuresUl = document.createElement("ul");
+                                   let featureLi;
+                                   for (const feature of result.features) {
+                                       featureLi = document.createElement("li");
+                                       featureLi.innerText = `Chasis ${feature.attributes.id}`;
+                                       featuresUl.appendChild(featureLi);
+                                   }
+                                   contentDiv.appendChild(featuresUl);
+                                   */
+                                   contentDiv.appendChild(tbl);
+
+                                   return contentDiv
+                               });
+
+                               /*
+                                 const query = layerView.createQuery();
+                                 query.aggregateIds = [event.graphic.getObjectId()];
+                                 console.log(query);
+                                 return layerView.queryFeatures(query).then(result => {
+                                     console.log(result.features);
+                                     const contentDiv = document.createElement("div");
+                                     const featuresUl = document.createElement("ul");
+                                     let featureLi;
+                                     for (const feature of result.features) {
+                                         featureLi = document.createElement("li");
+                                         featureLi.innerText = `Chasis ${feature.attributes.id}`;
+                                         featuresUl.appendChild(featureLi);
+                                     }
+                                     contentDiv.appendChild(featuresUl);
+                                     return contentDiv
+                                 });
+                                 */
+                             }
+                         });
                            const clusterConfig = {
                                type: "cluster",
                                clusterRadius: "100px",
                                popupTemplate: {
                                  title: "Cluster summary",
-                                 content: "This cluster represents {cluster_count} chasis.",
+                                // content: [customContentPromise],
+                                content: "This cluster represents {cluster_count} chasis.",
                                  outFields: ["*"],
                                  fieldInfos: [{
                                    fieldName: "cluster_count",
@@ -329,8 +432,7 @@ export class MapComponent implements OnInit {
 
                        this.mapView.on("pointer-move",async (event) => {
                          //console.log(event);
-                         this.mapView.popup.close();
-                         event.stopPropagation();
+                          event.stopPropagation();
                          var screenPoint = {
                            x: event.x,
                            y: event.y
@@ -340,8 +442,12 @@ export class MapComponent implements OnInit {
                            if(response.results.length>0){
                              const result = response.results[0];
                              if(result['graphic']!=undefined){
+
+                               /*
                                if(result['graphic'].attributes['clusterId']==undefined){
-                                 let title = 'Chasis <a href="https://saguz7.github.io/pacific-railway/ppsdetails/'+result['graphic'].attributes.id+'" title="'+result['graphic'].attributes.id+'">'+result['graphic'].attributes.id+'</a>';
+                                 that.mapView.popup.close();
+
+                                let title = 'Chasis <a href="' +environment.url+ 'ppsdetails/'+result['graphic'].attributes.id+'" title="'+result['graphic'].attributes.id+'">'+result['graphic'].attributes.id+'</a>';
                                  that.mapView.popup.open({
                                      // Set the popup's title to the coordinates of the clicked location
                                      title: title,
@@ -349,6 +455,8 @@ export class MapComponent implements OnInit {
                                      location: result.mapPoint // Set the location of the popup to the clicked location
                                  });
                                }
+
+                               */
                              }
 
 
@@ -425,7 +533,14 @@ export class MapComponent implements OnInit {
                }
 
                let geofences_array = [];
+               let georences_string = '';
                for(var a = 0; a < features[i].geofences.length;a++){
+                 if(a == features[i].geofences.length - 1){
+                   georences_string = georences_string + features[i].geofences[a].name;
+
+                  }else{
+                    georences_string = georences_string + features[i].geofences[a].name + ',';
+                 }
                  geofences_array.push(
                    {
                      name: features[i].geofences[a].name
@@ -443,6 +558,10 @@ export class MapComponent implements OnInit {
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
+                     georeference: georences_string,
+                     routemap: environment.url +   features[i].id,
+                     move_Type_format: this.formatstring(features[i].properties.move_type),
+
 
                  }
                );
@@ -457,6 +576,10 @@ export class MapComponent implements OnInit {
                      coordinates: features[i].geometry.coordinates[0] + ',' + features[i].geometry.coordinates[1] ,
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
+                     georeference: georences_string,
+                     routemap: environment.url + features[i].id,
+                     move_Type_format: this.formatstring(features[i].properties.move_type),
+
                  }
                );
              }
@@ -647,6 +770,10 @@ export class MapComponent implements OnInit {
      }
    }
 
+   formatstring(content){
+     return content.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+   }
+
    downloadFile(//data: any
    ) {
      let arraytable = [];
@@ -655,7 +782,8 @@ export class MapComponent implements OnInit {
          {
            Reference: this.data[i].reference,
            Date: this.data[i].date,
-           Move_Type: this.data[i].move_type,
+           Move_Type: this.formatstring(this.data[i].move_type),
+           Geofences: this.data[i].georeference,
            Coordinates: this.data[i].coordinates
          }
        );
@@ -664,7 +792,7 @@ export class MapComponent implements OnInit {
 
      let data = arraytable;
     const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
-    const header = ['Reference','Date','Move_Type','Coordinates']; //Object.keys(data[0]);
+    const header = ['Reference','Date','Move_Type','Geofences','Coordinates']; //Object.keys(data[0]);
     const csv = data.map((row) =>
       header
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
@@ -681,6 +809,10 @@ export class MapComponent implements OnInit {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+  }
+
+  gotoroutemap(indice){
+    console.log(indice);
   }
 
 }

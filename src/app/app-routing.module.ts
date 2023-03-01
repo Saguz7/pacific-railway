@@ -18,6 +18,7 @@ const routes: Routes = [
 
 { path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
 { path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
+{ path: 'routemap/:chasis', component: RouteMapComponent, pathMatch: 'full' },
 
  { path: 'map2', component: MapDivComponent, pathMatch: 'full' },
 

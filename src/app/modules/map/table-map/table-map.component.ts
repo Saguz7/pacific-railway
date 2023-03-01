@@ -22,7 +22,11 @@ export class TableMapComponent implements OnInit {
         { field: 'reference', header: 'Reference' },
         { field: 'date', header: 'Date' },
         { field: 'move_type', header: 'Move Type' },
-        { field: 'coordinates', header: 'Coordinates' }
+        { field: 'georeference', header: 'Geofences' },
+
+        { field: 'coordinates', header: 'Coordinates' },
+        { field: 'routemap', header: 'Route Map' },
+
 
     ];
 
@@ -171,6 +175,10 @@ export class TableMapComponent implements OnInit {
   ngAfterViewInit() {
   }
 
+  formatstring(content){
+    return content.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
   formatdate(date){
     let dateformat = date.split(' ');
     return dateformat[0];
@@ -179,6 +187,10 @@ export class TableMapComponent implements OnInit {
   gotoppsdetails(reference){
     this.router.navigate([`ppsdetails`,  reference ]);
 
+  }
+
+  gotoroutemap(reference){
+    this.router.navigate([`routemap`,  reference ]);
   }
 
   gotocentermap(object){
