@@ -3,7 +3,18 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute,Router } from '@angular/router';
 import { loadModules } from 'esri-loader';
 import { MapStateService } from '../../../core/services/map-state/map-state.service';
+import { PDFService } from '../../../core/services/pdfmake/pdf.service';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+type AOA = any[][];
+declare var saveAs: any;
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import html2canvas from 'html2canvas';
+
+
 @Component({
   selector: 'app-pps-details',
   templateUrl: './pps-details.component.html',
@@ -27,7 +38,10 @@ export class PpsDetailsComponent implements OnInit {
   constructor(
     private cdRef : ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private pdfService: PDFService,
+
+
 
    ) { }
 
@@ -191,6 +205,95 @@ export class PpsDetailsComponent implements OnInit {
 
   formatstring(content){
     return content.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
+  downloadFile(){
+
+    this.chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
+    let that = this;
+
+    this.mapView.takeScreenshot({
+                           width: 180,
+                           height: 120
+                       }).then(function(screenshot) {
+                         console.log(screenshot.dataUrl);
+                       //img.src = screenshot.dataUrl;
+
+                             const docDefinition = {
+                               pageSize: 'LETTER',
+                               pageMargins: [30, 30, 30, 60],
+                               header: {
+                                 margin: 10,
+                                 columns: [
+                                 ]
+                               },
+                               content: [
+                                 that.pdfService.getPPSDetails(that.lon,that.lat),
+                                  {
+                                   image: screenshot.dataUrl,alignment: 'center'
+                                 },
+                                 that.pdfService.getPPSDetailsAtributtes(that.date,that.event,that.properties),
+
+                               ]
+                             };
+                             pdfMake.createPdf(docDefinition).download(that.chasis + '.pdf');
+
+
+                   });
+
+/*
+
+    let that = this;
+    const ref = document.getElementById('map-view');
+        html2canvas(ref, {
+          allowTaint: true
+        }).then(function(canvas) {
+          const dataURL = canvas.toDataURL();
+          const docDefinition = {
+            pageSize: 'LETTER',
+            pageMargins: [30, 30, 30, 60],
+            header: {
+              margin: 10,
+              columns: [
+              ]
+            },
+            content: [
+               {
+                image: dataURL,
+                fit: [500, 900],
+              },
+
+            ]
+          };
+          pdfMake.createPdf(docDefinition).download(that.chasis + '.pdf');
+
+          }).catch(function(error) {
+
+            console.error(error);
+          });
+
+          */
+
+          /*
+
+    console.log(this.pdfService.getPPSDetails(this.lon,this.lat));
+
+    const docDefinition = {
+      pageSize: 'LETTER',
+      pageMargins: [30, 30, 30, 60],
+      header: {
+        margin: 10,
+        columns: [
+        ]
+      },
+      content: [
+        this.pdfService.getPPSDetails(this.lon,this.lat),
+        this.pdfService.getPPSDetailsAtributtes(this.date,this.event,this.properties),
+      ]
+    };
+    pdfMake.createPdf(docDefinition).download(this.chasis + '.pdf');
+
+    */
   }
 
 

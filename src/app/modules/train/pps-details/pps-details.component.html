@@ -45,7 +45,7 @@
         </div>
         <div class="col s8">
           <div class="row">
-            <div class="container-map" #mapViewNode></div>
+            <div id="map-view" class="container-map" #mapViewNode></div>
           </div>
 
         </div>
@@ -284,7 +284,13 @@
     </div>
     -->
     <div class="col s12"><br><br>
+      <div class="col s12 center-align">
+        <button pButton pRipple type="button" label="PDF" class="p-button-success" (click)=downloadFile()></button>
+      </div>
     </div>
+    <div class="col s12"><br><br>
+    </div>
+
 
 
   </div>

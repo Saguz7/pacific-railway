@@ -142,6 +142,8 @@ export class MapComponent implements OnInit {
         const map: __esri.Map = new Map({
           basemap: 'streets'
         });
+        let that = this;
+
         let urldirect = window.location.href.replace('/map','')
         const layer = new GeoJSONLayer({
           title: "Chasis",
@@ -156,9 +158,14 @@ export class MapComponent implements OnInit {
 								creator: (graphic) => {
 									// could also check if button already created
 									// and just reuse it
+
 									let btn = document.createElement("button");
-									btn.innerText = "Click me";
-									btn.addEventListener("click", btnClick);
+									btn.innerText = "Details";
+
+									btn.addEventListener("click", function(event){
+                    btnClick(graphic)
+                  });
+
 									return btn;
 								}
 							}
@@ -166,8 +173,8 @@ export class MapComponent implements OnInit {
           }
         });
 
-        function btnClick() {
-					console.log("click");
+        function btnClick(reference) {
+          that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]); 
 				}
 
 
@@ -182,8 +189,7 @@ export class MapComponent implements OnInit {
         });
         map.add(layer);
         this.mapView.popup.viewModel.includeDefaultActions = false;
-        let that = this;
-        this.mapView.on("drag", function(evt) {
+         this.mapView.on("drag", function(evt) {
           var initialExtent = that.mapView.extent;
           const p1 = webMercatorUtils.xyToLngLat(initialExtent.xmin,initialExtent.ymin);
           const p2 = webMercatorUtils.xyToLngLat(initialExtent.xmax,initialExtent.ymax);
@@ -462,6 +468,7 @@ export class MapComponent implements OnInit {
                              if(result['graphic']!=undefined){
 
                                /*
+
                                if(result['graphic'].attributes['clusterId']==undefined){
                                  that.mapView.popup.close();
 
@@ -474,7 +481,28 @@ export class MapComponent implements OnInit {
                                  });
                                }
 
+
+                               [
+                                {
+                                  type: "custom",
+                                  creator: (graphic) => {
+                                    // could also check if button already created
+                                    // and just reuse it
+                                     let refer:{id};
+
+                                    let btn = document.createElement("button");
+                                    btn.innerText = "Details";
+                                    btn.addEventListener("click", function(){
+                                       btnClick(result['graphic'].attributes.id)
+                                     });
+
+                                    return btn;
+                                  }
+                                }
+                               ]
+
                                */
+
                              }
 
 
