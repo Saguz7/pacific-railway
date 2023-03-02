@@ -213,8 +213,8 @@ export class PpsDetailsComponent implements OnInit {
     let that = this;
 
     this.mapView.takeScreenshot({
-                           width: 180,
-                           height: 120
+                           width: 360,
+                           height: 300
                        }).then(function(screenshot) {
                          console.log(screenshot.dataUrl);
                        //img.src = screenshot.dataUrl;
