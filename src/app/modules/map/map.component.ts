@@ -174,7 +174,7 @@ export class MapComponent implements OnInit {
         });
 
         function btnClick(reference) {
-          that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]); 
+          that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
 				}
 
 
@@ -467,52 +467,34 @@ export class MapComponent implements OnInit {
                              const result = response.results[0];
                              if(result['graphic']!=undefined){
 
-                               /*
 
                                if(result['graphic'].attributes['clusterId']==undefined){
                                  that.mapView.popup.close();
 
-                                let title = 'Chasis <a href="' +environment.url+ 'ppsdetails/'+result['graphic'].attributes.id+'" title="'+result['graphic'].attributes.id+'">'+result['graphic'].attributes.id+'</a>';
+                                let title = 'Chasis ' +result['graphic'].attributes.id+ '';
+                                let idChasis = result['graphic'].attributes.id;
                                  that.mapView.popup.open({
                                      // Set the popup's title to the coordinates of the clicked location
                                      title: title,
-                                     content: result['graphic'].attributes.id + " - " + result['graphic'].attributes.move_type,
+                                     content: getButton(idChasis),
                                      location: result.mapPoint // Set the location of the popup to the clicked location
                                  });
                                }
+                               if(result['graphic'].attributes['clusterId']!=undefined){
+/*
+                                 that.mapView.popup.close();
+                                 that.mapView.popup.open({
+                                   title: "Cluster summary",
 
+                                     // Set the popup's title to the coordinates of the clicked location
+                                      content: "This cluster represents " + result['graphic'].attributes['cluster_count']+" chasis.",
+                                     location: result.mapPoint // Set the location of the popup to the clicked location
+                                 });
 
-                               [
-                                {
-                                  type: "custom",
-                                  creator: (graphic) => {
-                                    // could also check if button already created
-                                    // and just reuse it
-                                     let refer:{id};
+                                 */
 
-                                    let btn = document.createElement("button");
-                                    btn.innerText = "Details";
-                                    btn.addEventListener("click", function(){
-                                       btnClick(result['graphic'].attributes.id)
-                                     });
-
-                                    return btn;
-                                  }
-                                }
-                               ]
-
-                               */
-
+                               }
                              }
-
-
-
-
-
-
-
-
-
                            }
 
                          });
@@ -527,6 +509,25 @@ export class MapComponent implements OnInit {
                          }
                          */
                        });
+
+                       function getButton(reference) {
+                         console.log(reference);
+
+                         let btn = document.createElement("button");
+                         btn.innerText = "Details";
+
+                         btn.addEventListener("click", function(event){
+                            btnClickMouvePointer(reference)
+                         });
+
+                         return btn;
+                        // that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
+                       }
+
+
+                       function btnClickMouvePointer(reference) {
+                           that.router.navigate([`ppsdetails`,  reference ]);
+               				}
 
                 })
 

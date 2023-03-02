@@ -209,91 +209,37 @@ export class PpsDetailsComponent implements OnInit {
 
   downloadFile(){
 
-    this.chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
-    let that = this;
+     let that = this;
 
     this.mapView.takeScreenshot({
-                           width: 360,
-                           height: 300
+                           format: 'png',
+                           quality: 100,
+                           width: 220,
+                           height: 160
                        }).then(function(screenshot) {
-                         console.log(screenshot.dataUrl);
-                       //img.src = screenshot.dataUrl;
 
-                             const docDefinition = {
-                               pageSize: 'LETTER',
-                               pageMargins: [30, 30, 30, 60],
-                               header: {
-                                 margin: 10,
-                                 columns: [
-                                 ]
-                               },
-                               content: [
-                                 that.pdfService.getPPSDetails(that.lon,that.lat),
-                                  {
-                                   image: screenshot.dataUrl,alignment: 'center'
-                                 },
-                                 that.pdfService.getPPSDetailsAtributtes(that.date,that.event,that.properties),
-
+                         setTimeout(() => {
+                           const docDefinition = {
+                             pageSize: 'LETTER',
+                             pageMargins: [30, 30, 30, 60],
+                             header: {
+                               margin: 10,
+                               columns: [
                                ]
-                             };
-                             pdfMake.createPdf(docDefinition).download(that.chasis + '.pdf');
+                             },
+                             content: [
+                               that.pdfService.getTitle(that.chasis),
+                               that.pdfService.getPPSDetails(that.lon,that.lat),
+                                {
+                                 image: screenshot.dataUrl,alignment: 'center'
+                               },
+                               that.pdfService.getPPSDetailsAtributtes(that.date,that.event,that.properties),
 
-
+                             ]
+                           };
+                           pdfMake.createPdf(docDefinition).download(that.chasis + '.pdf');
+                         }, 500);
                    });
-
-/*
-
-    let that = this;
-    const ref = document.getElementById('map-view');
-        html2canvas(ref, {
-          allowTaint: true
-        }).then(function(canvas) {
-          const dataURL = canvas.toDataURL();
-          const docDefinition = {
-            pageSize: 'LETTER',
-            pageMargins: [30, 30, 30, 60],
-            header: {
-              margin: 10,
-              columns: [
-              ]
-            },
-            content: [
-               {
-                image: dataURL,
-                fit: [500, 900],
-              },
-
-            ]
-          };
-          pdfMake.createPdf(docDefinition).download(that.chasis + '.pdf');
-
-          }).catch(function(error) {
-
-            console.error(error);
-          });
-
-          */
-
-          /*
-
-    console.log(this.pdfService.getPPSDetails(this.lon,this.lat));
-
-    const docDefinition = {
-      pageSize: 'LETTER',
-      pageMargins: [30, 30, 30, 60],
-      header: {
-        margin: 10,
-        columns: [
-        ]
-      },
-      content: [
-        this.pdfService.getPPSDetails(this.lon,this.lat),
-        this.pdfService.getPPSDetailsAtributtes(this.date,this.event,this.properties),
-      ]
-    };
-    pdfMake.createPdf(docDefinition).download(this.chasis + '.pdf');
-
-    */
   }
 
 
