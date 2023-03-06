@@ -62,6 +62,11 @@ body {
   max-width: 100%;
 }
 
+.esri-button {
+  color: black !important;;
+  }
+
+
 td {
              word-break: break-all;
         }

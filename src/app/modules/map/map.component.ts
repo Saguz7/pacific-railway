@@ -85,6 +85,8 @@ export class MapComponent implements OnInit {
       fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
+
+        console.log(out);
         if(out.errorMessage==undefined){
           this.loading = false;
           this.buildmap(out);
@@ -146,12 +148,12 @@ export class MapComponent implements OnInit {
 
         let urldirect = window.location.href.replace('/map','')
         const layer = new GeoJSONLayer({
-          title: "Chasis",
+          title: "Chassis",
           url: urljson,
           outFields: ["*"],
           popupTemplate: {
           //  title: 'Chasis <a [routerLink]=["' +environment.url + '"ppsdetails/{id}"] title="{id}">{id}</a>',
-            title: 'Chasis  {id} ',
+            title: 'Chassis  {id} ',
             content: [
 							{
 								type: "custom",
@@ -226,7 +228,7 @@ export class MapComponent implements OnInit {
                                 return layer.queryFeatures(query).then(result => {
                                    const contentDiv = document.createElement("div");
                                    const tbl = document.createElement("table");
-                                   let headers = ['Chasis ID','Events' ,'PPS Details'];
+                                   let headers = ['Chassis ID','Events' ,'PPS Details'];
                                    let headerslabel = ['id','move_type','url'];
 
                                    const tblHeader = document.createElement("thead");
@@ -324,7 +326,7 @@ export class MapComponent implements OnInit {
                                popupTemplate: {
                                  title: "Cluster summary",
                                 // content: [customContentPromise],
-                                content: "This cluster represents {cluster_count} chasis.",
+                                content: "This cluster represents {cluster_count} chassis.",
                                  outFields: ["*"],
                                  fieldInfos: [{
                                    fieldName: "cluster_count",
@@ -471,7 +473,7 @@ export class MapComponent implements OnInit {
                                if(result['graphic'].attributes['clusterId']==undefined){
                                  that.mapView.popup.close();
 
-                                let title = 'Chasis ' +result['graphic'].attributes.id+ '';
+                                let title = 'Chassis ' +result['graphic'].attributes.id+ '';
                                 let idChasis = result['graphic'].attributes.id;
                                  that.mapView.popup.open({
                                      // Set the popup's title to the coordinates of the clicked location

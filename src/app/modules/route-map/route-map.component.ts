@@ -25,6 +25,8 @@ export class RouteMapComponent implements OnInit {
   dateto: any;
   timeto: any;
 
+  historicalpoints = [];
+
   //  map: Map;
 
   public mapView: __esri.MapView;
@@ -44,6 +46,8 @@ export class RouteMapComponent implements OnInit {
 
 
    ngOnInit() {
+
+     this.historicalpoints= [];
 
              this.href = this.router.url;
             this.currentURL = window.location.href.replace(this.href,'');
@@ -81,19 +85,19 @@ export class RouteMapComponent implements OnInit {
                  const graphicsLayer = new GraphicsLayer();
                   map.add(graphicsLayer);
 
-                  let arrpoints = [
-                  {lat: "49.725848", lon: "-112.794721"},
-                   {lat: "49.7", lon: "-112.779"},
-                   {lat: "49.756", lon: "-112.288"},
-                   {lat: "49.873", lon: "-110.918"},
-                   {lat: "50.036", lon: "-110.687"}
+                  this.historicalpoints = [
+                  {num:1, lat: "49.725848", lon: "-112.794721"},
+                   {num:2,lat: "49.7", lon: "-112.779"},
+                   {num:3,lat: "49.756", lon: "-112.288"},
+                   {num:4,lat: "49.873", lon: "-110.918"},
+                   {num:5,lat: "50.036", lon: "-110.687"}
                   ]
 
-                  for(var i = 0; i < arrpoints.length;i++){
+                  for(var i = 0; i < this.historicalpoints.length;i++){
                     const point = { //Create a point
                        type: "point",
-                       longitude: arrpoints[i].lon,
-                       latitude: arrpoints[i].lat
+                       longitude: this.historicalpoints[i].lon,
+                       latitude: this.historicalpoints[i].lat
                     };
                     const simpleMarkerSymbol = {
                        type: "simple-marker",
@@ -108,7 +112,7 @@ export class RouteMapComponent implements OnInit {
                        geometry: point,
                        attributes: {
                         // used to define the text string in the symbol
-                         text: "Hola"
+                         text: this.historicalpoints[i].num,
                        },
                        symbol: simpleMarkerSymbol
                     });
@@ -148,6 +152,19 @@ export class RouteMapComponent implements OnInit {
 
 
      ngAfterViewInit() {
+     }
+
+     centermap($event){
+
+        this.mapView.goTo({
+        center: [parseInt($event.lon), parseInt($event.lat)]
+      })
+      .catch(function(error) {
+        if (error.name != "AbortError") {
+           console.error(error);
+        }
+      });
+       console.log($event);
      }
 
 }

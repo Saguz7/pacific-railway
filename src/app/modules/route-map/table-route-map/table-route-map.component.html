@@ -1,0 +1,58 @@
+   <div class="row">
+
+
+    <div class="p-col-12" *ngIf="Data!=undefined"><br><br>
+      <ng-container *ngIf="Data.length>0">
+        <div class="col s12">
+          <div class="col s2">
+            Historical Points ({{Data.length}})
+          </div>
+          <div class="col s8">
+          </div>
+          <div class="col s2 right-align">
+          </div>
+        </div>
+        <div class="col s12">
+          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" >
+        <ng-template pTemplate="header" let-columns>
+       <tr>
+           <th *ngFor="let col of columns" pReorderableColumn>
+               {{col.header}}
+           </th>
+       </tr>
+   </ng-template>
+
+        <ng-template pTemplate="body" let-object>
+            <tr>
+              <td *ngFor="let col of cols">
+                  <div class="tdbreak">
+
+                    <ng-container *ngIf="col.field=='num'">
+                      <a href="javascript:void(0);" (click)="gotomapcenter(object)" > {{object[col.field]}}</a>
+
+                    </ng-container>
+                    <ng-container *ngIf="col.field!='num'">
+                      {{ object[col.field]}}
+
+                    </ng-container>
+
+                  </div>
+
+              </td>
+            </tr>
+        </ng-template>
+    </p-table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="Data.length==0">
+        <div class="col s12">
+          Historical Points ({{Data.length}})
+        </div>
+      </ng-container>
+
+
+
+    </div><br><br>
+
+
+</div>

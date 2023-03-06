@@ -63,6 +63,8 @@
 
           </div>
         </p-panel>
+
+            <!--
         <p-panel header="Display Options">
           <div class="field-radiobutton">
                 <p-radioButton name="option" value="1" [(ngModel)]="option" inputId="option1"></p-radioButton>
@@ -83,6 +85,8 @@
           <div class="col s12"><br>
           </div>
         </p-panel>
+      -->
+
         <div class="col s12"><br>
         </div>
 
@@ -91,8 +95,15 @@
 
       </div>
       <div class="col s10">
-        <div class="container-map" #mapViewNode></div> 
+        <div class="container-map" #mapViewNode></div>
+
+
+          <app-table-route-map [Data]="historicalpoints" (SendCenter)="centermap($event)"></app-table-route-map>
+
+        <!--
         <app-temperature-graph></app-temperature-graph>
+
+        -->
 
       </div>
     </div>

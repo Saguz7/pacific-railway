@@ -10,6 +10,8 @@ import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
 import { RouteMapComponent } from './modules/route-map/route-map.component';
+import { TableRouteMapComponent } from './modules/route-map/table-route-map/table-route-map.component';
+
 import { TemperatureGraphComponent } from './modules/route-map/temperature-graph/temperature-graph.component';
 
 
@@ -69,7 +71,8 @@ import * as L from 'leaflet';
     NavlaunchComponent,
     NotificationComponent,
     PRSMComponent,
-    TemperatureGraphComponent
+    TemperatureGraphComponent,
+    TableRouteMapComponent
 
   ],
   imports: [
