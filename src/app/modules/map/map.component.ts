@@ -7,6 +7,7 @@ import { loadModules } from 'esri-loader';
 import { Router } from '@angular/router';
 import { GEOJsonService } from '../../core/services/map/geojson.service';
 import { environment } from '../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -52,6 +53,7 @@ export class MapComponent implements OnInit {
     private CFR?: ComponentFactoryResolver,
     private cdref?: ChangeDetectorRef,
     private msService?: MapStateService,
+    private http?: HttpClient
     //private geojsonService?: GEOJsonService,
 
 
@@ -85,9 +87,11 @@ export class MapComponent implements OnInit {
       fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
-
         console.log(out);
-        if(out.errorMessage==undefined){
+         this.getHistorico(out.features);
+
+
+         if(out.errorMessage==undefined){
           this.loading = false;
           this.buildmap(out);
           this.rehacerjson(out.features);
@@ -99,8 +103,64 @@ export class MapComponent implements OnInit {
             }
           }, 100);
         }
+
       }).catch(err => console.error(err));
 
+
+    }
+
+    getHistorico(features){
+      for(var i = 0; i < features.length;i++){
+        let indice = i;
+        let datefrom = new Date(2022,0,1);
+
+        let dateto = new Date(2022,1,28);
+         let dateToSend =  this.convertDatetoString(datefrom);
+        let fromToSend =  this.convertDatetoString(dateto);
+        let obj_send = {
+          id: features[indice]['id'],
+          initial_date: dateToSend,
+          final_date: fromToSend
+        }
+
+                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                       let results = JSON.parse(data.body);
+                       if(results.message != 'No data history for id'){
+                         console.log('.........................................');
+
+                         console.log(results);
+                         console.log(features[indice]);
+                         console.log('.........................................');
+                       }else{
+                         console.log('-----------------------------------------');
+
+                       }
+
+
+                   })
+      }
+
+    }
+
+    convertDatetoString(date: any) {
+
+
+      let day= "";
+      let year = date.getFullYear().toString();
+      let month = "";
+
+      if ((date.getMonth() + 1) < 10) {
+        month = "0" + (date.getMonth() + 1).toString();
+      } else {
+        month = (date.getMonth() + 1).toString();
+      }
+      if ((date.getDate() + 1) <= 10) {
+        day = "0" + (date.getDate()).toString();
+      } else {
+        day = (date.getDate()).toString();
+      }
+
+      return year + "-" + month + "-" + day;
 
     }
 
@@ -583,19 +643,22 @@ export class MapComponent implements OnInit {
 
                let geofences_array = [];
                let georences_string = '';
-               for(var a = 0; a < features[i].geofences.length;a++){
-                 if(a == features[i].geofences.length - 1){
-                   georences_string = georences_string + features[i].geofences[a].name;
+               if(features[i].geofences!=undefined){
+                 for(var a = 0; a < features[i].geofences.length;a++){
+                   if(a == features[i].geofences.length - 1){
+                     georences_string = georences_string + features[i].geofences[a].name;
 
-                  }else{
-                    georences_string = georences_string + features[i].geofences[a].name + ',';
-                 }
-                 geofences_array.push(
-                   {
-                     name: features[i].geofences[a].name
+                    }else{
+                      georences_string = georences_string + features[i].geofences[a].name + ',';
                    }
-                 );
+                   geofences_array.push(
+                     {
+                       name: features[i].geofences[a].name
+                     }
+                   );
+                 }
                }
+
 
                this.data.push(
                  {

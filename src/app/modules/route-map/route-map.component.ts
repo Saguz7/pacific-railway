@@ -61,11 +61,36 @@ export class RouteMapComponent implements OnInit {
 
              let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
+/*
              this.datefrom = new Date();
              this.timefrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
 
              this.dateto = new Date();
              this.timeto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), 0, 0, 0);
+
+             */
+
+             this.datefrom = new Date(2022,1,1);
+             this.timefrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
+
+             this.dateto = new Date(2022,1,28);
+             this.timeto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), 0, 0, 0);
+             let dateToSend =  this.convertDatetoString(this.datefrom);
+             let fromToSend =  this.convertDatetoString(this.dateto);
+             let obj_send = {
+               id: chasis,
+               initial_date: dateToSend,
+               final_date: fromToSend
+             }
+             console.log(dateToSend);
+             console.log(fromToSend);
+
+                          console.log();
+
+                          this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                            let results = JSON.parse(data.body);
+                            console.log(results);
+                        })
 
              /*
              this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis,initial_date: , final_date: }}}).subscribe(data => {
@@ -193,23 +218,25 @@ export class RouteMapComponent implements OnInit {
      searchForDates(){
 
 
+       let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
+
+
        let dateToSend =  this.convertDatetoString(this.datefrom) + 'T' + this.timefrom + '.000';
        let fromToSend =  this.convertDatetoString(this.dateto) + 'T' + this.timeto + '.000';
-
+       let obj_send = {
+         id: chasis,
+         initial_date: dateToSend,
+         final_date: fromToSend
+       }
        console.log(dateToSend);
        console.log(fromToSend);
-                    let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
-
-                    /*
 
                     console.log();
 
-                    this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis,initial_date: dateToSend, final_date: fromToSend}}}).subscribe(data => {
+                    this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                       let results = JSON.parse(data.body);
                       console.log(results);
                   })
-
-                  */
 
                   this.buildmap();
 
@@ -344,7 +371,7 @@ export class RouteMapComponent implements OnInit {
          day = (date.getDate()).toString();
        }
 
-       return day + "-" + month + "-" + year;
+       return year + "-" + month + "-" + day;
 
      }
 
@@ -354,7 +381,7 @@ export class RouteMapComponent implements OnInit {
        console.log(this.dateto);
        console.log(this.timeto);
 
-       //             let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0); 
+       //             let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
      }
 
 
