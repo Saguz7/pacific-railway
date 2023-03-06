@@ -27,6 +27,7 @@ export class RouteMapComponent implements OnInit {
   timeto: Date;
 
   historicalpoints = [];
+  validatedDates: boolean = true;
 
   //  map: Map;
 
@@ -199,12 +200,16 @@ export class RouteMapComponent implements OnInit {
        console.log(fromToSend);
                     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
+                    /*
+
                     console.log();
 
                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis,initial_date: dateToSend, final_date: fromToSend}}}).subscribe(data => {
                       let results = JSON.parse(data.body);
                       console.log(results);
                   })
+
+                  */
 
                   this.buildmap();
 
@@ -341,6 +346,15 @@ export class RouteMapComponent implements OnInit {
 
        return day + "-" + month + "-" + year;
 
+     }
+
+     validate(){
+       console.log(this.datefrom);
+       console.log(this.timefrom);
+       console.log(this.dateto);
+       console.log(this.timeto);
+
+       //             let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0); 
      }
 
 
