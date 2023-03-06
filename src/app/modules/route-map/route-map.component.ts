@@ -353,8 +353,14 @@ export class RouteMapComponent implements OnInit {
        console.log(this.timefrom);
        console.log(this.dateto);
        console.log(this.timeto);
-
-       //             let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0); 
+       
+       let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), this.timefrom.getHours(), this.timefrom.getMinutes(), 0); 
+       let dateauxto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), this.timeto.getHours(), this.timeto.getMinutes(), 0); 
+      
+      if (dateauxfrom.getTime() < dateauxto.getTime()) {
+        return this.validatedDates = true;
+      }
+      return this.validatedDates = false;
      }
 
 
