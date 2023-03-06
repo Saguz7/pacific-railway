@@ -19,9 +19,9 @@ export class TableRouteMapComponent implements OnInit {
   ngOnInit() {
 
     this.cols = [
-        { field: 'num', header: 'N°' },
-        { field: 'lat', header: 'Latitude' },
-        { field: 'lon', header: 'Longitude' },
+        { width: '4',field: 'num', header: 'N°' },
+        { width: '48',field: 'lat', header: 'Latitude' },
+        { width: '48',field: 'lon', header: 'Longitude' },
 
     ];
   }

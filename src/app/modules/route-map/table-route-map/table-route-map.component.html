@@ -16,15 +16,20 @@
           <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" >
         <ng-template pTemplate="header" let-columns>
        <tr>
-           <th *ngFor="let col of columns" pReorderableColumn>
+         <ng-container *ngFor="let col of columns">
+           <th  style="width:{{col.width}}%" pReorderableColumn>
                {{col.header}}
            </th>
+         </ng-container>
+
        </tr>
    </ng-template>
 
         <ng-template pTemplate="body" let-object>
             <tr>
-              <td *ngFor="let col of cols">
+              <ng-container *ngFor="let col of cols">
+
+              <td  style="width:{{col.width}}%">
                   <div class="tdbreak">
 
                     <ng-container *ngIf="col.field=='num'">
@@ -39,6 +44,8 @@
                   </div>
 
               </td>
+            </ng-container>
+
             </tr>
         </ng-template>
     </p-table>
