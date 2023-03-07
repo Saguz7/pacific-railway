@@ -105,8 +105,8 @@
 }
 
 .p-button-danger:hover{
-  background: grey;
-  background-color: grey;
+  background: rgb(209, 8, 8) !important;
+  background-color: rgb(202, 10, 10) !important;
   border: none;
 
 }

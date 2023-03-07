@@ -88,7 +88,7 @@ export class MapComponent implements OnInit {
       .then(res => res.json())
       .then((out) => {
         console.log(out);
-         this.getHistorico(out.features);
+        // this.getHistorico(out.features);
 
 
          if(out.errorMessage==undefined){
@@ -119,22 +119,31 @@ export class MapComponent implements OnInit {
         let fromToSend =  this.convertDatetoString(dateto);
         let obj_send = {
           id: features[indice]['id'],
-          initial_date: dateToSend,
-          final_date: fromToSend
+        //  initial_date: dateToSend,
+        //  final_date: fromToSend
         }
 
                      this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
+                       console.log('.........................................');
+
+                       console.log(results.length);
+                       console.log(features[indice]);
+                       console.log('.........................................');
+
+                       /*
                        if(results.message != 'No data history for id'){
                          console.log('.........................................');
 
-                         console.log(results);
+                         console.log(results.length);
                          console.log(features[indice]);
                          console.log('.........................................');
                        }else{
                          console.log('-----------------------------------------');
 
                        }
+
+                       */
 
 
                    })
@@ -643,8 +652,54 @@ export class MapComponent implements OnInit {
 
                let geofences_array = [];
                let georences_string = '';
+               if(typeof features[i].geofences[0] == 'string'){
+                 let featurestring = features[i].geofences[0];
+                // featurestring = this.replaceAll(featurestring,"'", '"');
+                // featurestring = this.replaceAll(featurestring,"'", '"');
+              //   featurestring = this.replaceAll(featurestring," ", '');
+                featurestring = this.replaceAll(featurestring,"'", '');
+
+                 let arrayaux = [];
+
+
+                 let sentencias = featurestring.split(/[{}]/);
+                 const resultado = sentencias.filter(sentence => sentence.length>2);
+
+                 for(var r = 0; r < resultado.length;r++){
+                   let objaux = {id: '', name: ''}
+                   if(resultado[r].length>2){
+                      var arraysplitcoma = resultado[r].split(',');
+                     for(var v = 0; v < arraysplitcoma.length;v++){
+                       var arraysplitdospuntos = arraysplitcoma[v].split(':');
+                       objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
+
+                       if(!this.isEmpty(arraysplitdospuntos[1].trim())){
+                         const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
+                         if(!found){
+                           geofences_array.push(objaux);
+                          }
+                        }
+                     }
+                   }
+                 }
+               }
+
+
+               for(var e = 0; e < geofences_array.length; e++){
+                 if(e == geofences_array.length - 1){
+                   georences_string = georences_string + geofences_array[e].name;
+
+                  }else{
+                    georences_string = georences_string + geofences_array[e].name + ',';
+                 }
+               }
+
+               /*
                if(features[i].geofences!=undefined){
                  for(var a = 0; a < features[i].geofences.length;a++){
+
+                   let results = JSON.parse(features[i].geofences);
+
                    if(a == features[i].geofences.length - 1){
                      georences_string = georences_string + features[i].geofences[a].name;
 
@@ -656,8 +711,10 @@ export class MapComponent implements OnInit {
                        name: features[i].geofences[a].name
                      }
                    );
+
                  }
                }
+               */
 
 
                this.data.push(
@@ -697,6 +754,10 @@ export class MapComponent implements OnInit {
              }
 
            }
+
+           replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+          }
 
            formatdate(date){
              let dateformat = date.split(' ');
@@ -774,6 +835,8 @@ export class MapComponent implements OnInit {
 
   makefromjson(json,$event){
     let arrayfeacturesfilter = json.features;
+    console.log(arrayfeacturesfilter);
+
     if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){
        arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.properties.move_type == $event.event.value);
 
@@ -781,23 +844,68 @@ export class MapComponent implements OnInit {
 
     if($event.chasis!=null){
       arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.id == $event.chasis);
+
     }
 
     if($event.georeference!=null && ($event.georeference!=null && $event.georeference.value != 'No Filter')){
-      arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined);
+
+      this.convertfeactures(json,arrayfeacturesfilter,$event.georeference.value);
+      //arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined);
       //          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
 
+    }else{
+      json.features = arrayfeacturesfilter;
+      console.log(json.features);
+      setTimeout(() => {
+        this.loading = false;
+
+        this.buildmap(json);
+      }, 100);
     }
 
 
 
-    json.features = arrayfeacturesfilter;
-    setTimeout(() => {
-      this.loading = false;
 
-      this.buildmap(json);
-    }, 100);
 
+   }
+
+   convertfeactures(json,arrayfeacturesfilter,value){
+     let geofences_array = [];
+     for(var i = 0; i < arrayfeacturesfilter.length;i++){
+       if(typeof arrayfeacturesfilter[i].geofences[0] == 'string'){
+
+          let featurestring = arrayfeacturesfilter[i].geofences[0];
+          console.log(featurestring);
+        featurestring = this.replaceAll(featurestring,"'", '');
+         let sentencias = featurestring.split(/[{}]/);
+         const resultado = sentencias.filter(sentence => sentence.length>2);
+
+         for(var r = 0; r < resultado.length;r++){
+           let objaux = {id: '', name: ''}
+           if(resultado[r].length>2){
+              var arraysplitcoma = resultado[r].split(',');
+             for(var v = 0; v < arraysplitcoma.length;v++){
+               var arraysplitdospuntos = arraysplitcoma[v].split(':');
+               objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
+
+               if(!this.isEmpty(arraysplitdospuntos[1].trim())){
+                 console.log(arraysplitdospuntos[1].trim());
+                 if(arraysplitdospuntos[1].trim() == value){
+                   geofences_array.push(arrayfeacturesfilter[i]);
+                 }
+                }
+             }
+           }
+         }
+       }
+       }
+       json.features = geofences_array;
+       console.log(json);
+       setTimeout(() => {
+         this.loading = false;
+
+          this.buildmap(json);
+       }, 100);
    }
 
    getCenter(event){
@@ -921,6 +1029,10 @@ export class MapComponent implements OnInit {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+  }
+
+  isEmpty(str) {
+    return (!str || 0 === str.length);
   }
 
   gotoroutemap(indice){

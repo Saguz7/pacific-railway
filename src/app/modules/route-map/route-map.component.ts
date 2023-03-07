@@ -23,8 +23,8 @@ export class RouteMapComponent implements OnInit {
   datefrom: Date;
   timefrom: Date;
 
-  dateto: Date;
-  timeto: Date;
+  dateto: Date = new Date();
+  timeto: Date = new Date();
 
   historicalpoints = [];
   validatedDates: boolean = true;
@@ -79,8 +79,8 @@ export class RouteMapComponent implements OnInit {
              let fromToSend =  this.convertDatetoString(this.dateto);
              let obj_send = {
                id: chasis,
-               initial_date: dateToSend,
-               final_date: fromToSend
+              // initial_date: dateToSend,
+              // final_date: fromToSend
              }
              console.log(dateToSend);
              console.log(fromToSend);
@@ -88,8 +88,15 @@ export class RouteMapComponent implements OnInit {
                           console.log();
 
                           this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                            console.log(typeof data);
+                            console.log(data.body);
+                            var datajson = JSON.stringify(data.body);
+                            console.log(datajson);
+
                             let results = JSON.parse(data.body);
                             console.log(results);
+                            console.log(typeof results);
+
                         })
 
              /*
@@ -217,16 +224,28 @@ export class RouteMapComponent implements OnInit {
 
      searchForDates(){
 
+       console.log(this.timefrom);
+       let timefromstring = '00:00:00'
+       let timetostring = '00:00:00'
+       console.log(typeof this.timefrom);
+       if(typeof this.timefrom != 'object'){
+         timefromstring = this.timefrom + ':00'
+       }
+       if(typeof this.timeto != 'object'){
+         timetostring = this.timeto+ ':00'
+
+       }
+
 
        let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
 
-       let dateToSend =  this.convertDatetoString(this.datefrom) + 'T' + this.timefrom + '.000';
-       let fromToSend =  this.convertDatetoString(this.dateto) + 'T' + this.timeto + '.000';
+       let dateToSend =  this.convertDatetoString(this.datefrom) + 'T' + timefromstring ;
+       let fromToSend =  this.convertDatetoString(this.dateto) + 'T' + timetostring ;
        let obj_send = {
          id: chasis,
-         initial_date: dateToSend,
-         final_date: fromToSend
+         //initial_date: dateToSend,
+         //final_date: fromToSend
        }
        console.log(dateToSend);
        console.log(fromToSend);
@@ -234,8 +253,12 @@ export class RouteMapComponent implements OnInit {
                     console.log();
 
                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                      console.log(data.body);
+
                       let results = JSON.parse(data.body);
                       console.log(results);
+
+                      console.log(results['features']);
                   })
 
                   this.buildmap();
@@ -376,12 +399,43 @@ export class RouteMapComponent implements OnInit {
      }
 
      validate(){
-       console.log(this.datefrom);
-       console.log(this.timefrom);
-       console.log(this.dateto);
-       console.log(this.timeto);
+       let hourfrom = 0;
+       let minutefrom = 0;
+       let hourto = 0;
+       let minuteto = 0;
 
-       //             let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
+          if(typeof this.timefrom == 'string'){
+           let datefromstring = '';
+           datefromstring = this.timefrom;
+         var arraystring = datefromstring.split(':');
+         hourfrom = parseInt(arraystring[0]);
+         minutefrom = parseInt(arraystring[1]);
+         }else{
+         hourfrom = this.timefrom.getHours();
+         minutefrom = this.timefrom.getMinutes();
+       }
+         if(typeof this.timeto == 'string'){
+           let datetostring = '';
+           datetostring = this.timeto;
+         var arraystringto = datetostring.split(':');
+         hourto = parseInt(arraystringto[0]);
+         minuteto = parseInt(arraystringto[1]);
+
+         }else{
+         hourto = this.timeto.getHours();
+         minuteto = this.timeto.getMinutes();
+       }
+
+
+
+
+
+       let dateauxfrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), hourfrom, minutefrom, 0);
+       let dateauxto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), hourto, minuteto, 0);
+      if (dateauxfrom.getTime() < dateauxto.getTime()) {
+        return this.validatedDates = true;
+      }
+      return this.validatedDates = false;
      }
 
 
