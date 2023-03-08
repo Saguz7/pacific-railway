@@ -33,6 +33,10 @@ export class TableRouteMapComponent implements OnInit {
   ngAfterViewInit() {
   }
 
+  isEmpty(str) {
+    return (!str || 0 === str.length);
+  }
+
   gotomapcenter(value){
     this.SendCenter.emit(value);
 

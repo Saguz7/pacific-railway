@@ -297,18 +297,23 @@ export class RouteMapComponent implements OnInit {
 
          let total_distance;
          let traveled_distance;
+         let total_distance_km;
 
          if(features[i].properties.total_distance!='nan'){
            if(features[i].properties.total_distance!=null){
              total_distance = parseFloat(features[i].properties.total_distance);
+             total_distance_km = this.convertkm(total_distance);
 
            }
           }
          if(features[i].properties.move_type == 'move_stop' && reference_move_stop==undefined){
            reference_move_stop = total_distance;
+
          }
          if(features[i].properties.move_type == 'move_stop' && reference_move_stop!=undefined){
            traveled_distance = total_distance - reference_move_stop;
+           traveled_distance = this.convertkm(traveled_distance);
+
          }
 
          this.historicalpoints.push(
@@ -320,7 +325,7 @@ export class RouteMapComponent implements OnInit {
              //id_geofence:  features[i].properties.move_type,
              move_type:  features[i].properties.move_type,
              move_type_format: this.formatstring(features[i].properties.move_type),
-             total_distance:  ''+total_distance,
+             total_distance:  ''+total_distance_km,
              traveled_distance: traveled_distance
            },
 
@@ -359,6 +364,21 @@ export class RouteMapComponent implements OnInit {
                          map.add(graphicsLayer);
 
                          for(var i = 0; i < this.historicalpoints.length;i++){
+                           let equalspoint = this.historicalpoints.filter(element => element.lon == this.historicalpoints[i].lon && element.lat == this.historicalpoints[i].lat);
+                           let pointtext = '';
+
+                           if(equalspoint.length>1){
+                             for(var a = 0; a < equalspoint.length;a++){
+                               if(a != equalspoint.length-1){
+                                 pointtext = pointtext + equalspoint[a].num
+                               }else{
+                                 pointtext = pointtext + equalspoint[a].num + ',';
+                               }
+                             }
+                           }else{
+                             pointtext = this.historicalpoints[i].num
+
+                           }
                            const point = { //Create a point
                               type: "point",
                               longitude: this.historicalpoints[i].lon,
@@ -367,7 +387,7 @@ export class RouteMapComponent implements OnInit {
                            const simpleMarkerSymbol = {
                               type: "simple-marker",
                                size: "25px",
-                                      text: this.historicalpoints[i].num,
+                               text: pointtext,
                               color: [226, 119, 40],  // Orange
                               outline: {
                                   color: [255, 255, 255], // White
@@ -424,6 +444,7 @@ export class RouteMapComponent implements OnInit {
 
                                        that.mapView.popup.open({
                                            // Set the popup's title to the coordinates of the clicked location
+                                           title: found.num,
                                            content: getContent(found),
                                            location: results[0].mapPoint // Set the location of the popup to the clicked location
                                        });
@@ -522,6 +543,12 @@ export class RouteMapComponent implements OnInit {
                       });
      }
 
+     convertkm(meters){
+       let convertmeters = meters / 1000
+       let result = new Intl.NumberFormat("en-US").format(convertmeters);
+       return result
+     }
+
      formatdate(date){
        let dateformat = date.split(' ');
        let hourformat = dateformat[1].split('.');
@@ -604,7 +631,7 @@ export class RouteMapComponent implements OnInit {
        document.getElementById("esri-view").focus();
 
         this.mapView.goTo({
-        center: [$event.lon, $event.lat],zoom:12
+        center: [$event.lon, $event.lat],zoom:24
       })
       .catch(function(error) {
         if (error.name != "AbortError") {
@@ -631,7 +658,11 @@ export class RouteMapComponent implements OnInit {
        for(var i = 0; i < this.historicalpoints.length;i++){
          let total_distance = '';
          if(this.historicalpoints[i].total_distance!='undefined'){
-           total_distance = '' + this.historicalpoints[i].total_distance;
+           total_distance = '' + this.historicalpoints[i].total_distance + ' km';
+         }
+         let traveled_distance = '';
+         if(!this.isEmpty(this.historicalpoints[i].traveled_distance)){
+           traveled_distance = '' + this.historicalpoints[i].traveled_distance+ ' km';
          }
          arraytable.push(
            {
@@ -641,7 +672,7 @@ export class RouteMapComponent implements OnInit {
              Move_Type: this.historicalpoints[i].move_type_format,
              Date: this.historicalpoints[i].date,
              Total_Distance: total_distance,
-             Traveled_Distance: this.historicalpoints[i].traveled_distance,
+             Traveled_Distance: traveled_distance,
 
            }
          );

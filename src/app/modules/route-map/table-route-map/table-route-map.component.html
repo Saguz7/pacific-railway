@@ -41,14 +41,25 @@
                     </ng-container>
                     <ng-container *ngIf="col.field=='total_distance'">
                       <ng-container *ngIf="object[col.field]!='undefined'">
-                           {{ object[col.field]}}
+                           {{ object[col.field]}} km
 
 
                       </ng-container>
 
 
                     </ng-container>
-                    <ng-container *ngIf="col.field!='num' && col.field!='total_distance'">
+
+                    <ng-container *ngIf="col.field=='traveled_distance'">
+                      <ng-container *ngIf="!isEmpty(object[col.field])">
+                           {{ object[col.field]}} km
+
+
+                      </ng-container>
+
+
+                    </ng-container>
+                    <ng-container *ngIf="col.field!='num' && col.field!='total_distance' && col.field!='traveled_distance'">
+
                       {{ object[col.field]}}
 
                     </ng-container>
