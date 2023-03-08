@@ -25,6 +25,17 @@
 
 
 }
+
+.value_popup{
+  color: #000 !important;
+
+}
+
+.title_popup{
+  color: #000 !important;
+  font-weight: bold;
+
+}
 .pi-search{
   margin-left: -40px !important;
 }

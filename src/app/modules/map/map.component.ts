@@ -87,7 +87,6 @@ export class MapComponent implements OnInit {
       fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
-        console.log(out);
         // this.getHistorico(out.features);
 
 
@@ -125,25 +124,7 @@ export class MapComponent implements OnInit {
 
                      this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
-                       console.log('.........................................');
 
-                       console.log(results.length);
-                       console.log(features[indice]);
-                       console.log('.........................................');
-
-                       /*
-                       if(results.message != 'No data history for id'){
-                         console.log('.........................................');
-
-                         console.log(results.length);
-                         console.log(features[indice]);
-                         console.log('.........................................');
-                       }else{
-                         console.log('-----------------------------------------');
-
-                       }
-
-                       */
 
 
                    })
@@ -229,15 +210,27 @@ export class MapComponent implements OnInit {
 								creator: (graphic) => {
 									// could also check if button already created
 									// and just reuse it
+                  let divcontent = document.createElement("div");
+                  let btn = document.createElement("button");
+                  btn.innerText = "Details";
 
-									let btn = document.createElement("button");
-									btn.innerText = "Details";
-
-									btn.addEventListener("click", function(event){
+                  btn.addEventListener("click", function(event){
                     btnClick(graphic)
                   });
 
-									return btn;
+                  divcontent.appendChild(btn);
+
+                  let btnroute = document.createElement("button");
+                  btnroute.innerText = "Route Map";
+
+                  btnroute.addEventListener("click", function(event){
+                    btnClickRoute(graphic)
+                  });
+
+                  divcontent.appendChild(btnroute);
+
+
+									return divcontent;
 								}
 							}
             ],
@@ -246,6 +239,10 @@ export class MapComponent implements OnInit {
 
         function btnClick(reference) {
           that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
+				}
+
+        function btnClickRoute(reference) {
+          that.router.navigate([`routemap`,  reference.graphic.attributes.id ]);
 				}
 
 
@@ -582,7 +579,7 @@ export class MapComponent implements OnInit {
                        });
 
                        function getButton(reference) {
-                         console.log(reference);
+                         let divcontent = document.createElement("div");
 
                          let btn = document.createElement("button");
                          btn.innerText = "Details";
@@ -591,7 +588,20 @@ export class MapComponent implements OnInit {
                             btnClickMouvePointer(reference)
                          });
 
-                         return btn;
+                        divcontent.appendChild(btn);
+
+
+
+                        let btnroute = document.createElement("button");
+                        btnroute.innerText = "Route Map";
+
+                        btnroute.addEventListener("click", function(event){
+                           btnClickMouvePointerRoute(reference)
+                        });
+
+                       divcontent.appendChild(btnroute);
+
+                         return divcontent;
                         // that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
                        }
 
@@ -599,6 +609,10 @@ export class MapComponent implements OnInit {
                        function btnClickMouvePointer(reference) {
                            that.router.navigate([`ppsdetails`,  reference ]);
                				}
+
+                      function btnClickMouvePointerRoute(reference) {
+                          that.router.navigate([`routemap`,  reference ]);
+                     }
 
                 })
 
@@ -625,17 +639,17 @@ export class MapComponent implements OnInit {
              ]
              this.georeferences = [
                {name: "No Filter", value: "No Filter"},
-               {name: "Bensenville Intermodal Terminal", value: "Bensenville Intermodal Terminal"},
-               {name: "Calgary Intermodal Terminal", value: "Calgary Intermodal Terminal"},
-               {name: "Edmonton Intermodal Terminal", value: "Edmonton Intermodal Terminal"},
-               {name: "Lachine Intermodal Terminal", value: "Lachine Intermodal Terminal"},
-               {name: "Regina Intermodal Terminal", value: "Regina Intermodal Terminal"},
-               {name: "Schiller Park Intermodal Terminal", value: "Schiller Park Intermodal Terminal"},
-               {name: "Saint John Intermodal Terminal", value: "Saint John Intermodal Terminal"},
-               {name: "Vaughan Intermodal Terminal", value: "Vaughan Intermodal Terminal"},
-               {name: "Vancouver Intermodal Terminal", value: "Vancouver Intermodal Terminal"},
-               {name: "Winnipeg Intermodal Terminal", value: "Winnipeg Intermodal Terminal"},
-               {name: "Big Calgary Circle", value: "Big Calgary Circle"}
+               {name: "Bensenville Intermodal Terminal", value: "e6468692-50cf-46a1-bac7-5c1baeb4749d"},
+               {name: "Calgary Intermodal Terminal", value: "7f8d3475-8f79-4936-b4e3-efe71913d254"},
+               {name: "Edmonton Intermodal Terminal", value: "3346e7dc-0e31-4d17-9805-380baf1d9772"},
+               {name: "Lachine Intermodal Terminal", value: "9d23cf32-2fb1-4e39-a326-9c332fc12c58"},
+               {name: "Regina Intermodal Terminal", value: "0a369dbc-d048-4bf8-91dd-92cd5a47e00b"},
+               {name: "Schiller Park Intermodal Terminal", value: "87ca9217-cb63-410c-bd04-62318cdd56cf"},
+               {name: "Saint John Intermodal Terminal", value: "0dafa1ee-b472-4cb0-a615-70dbcb9ded1c"},
+               {name: "Vaughan Intermodal Terminal", value: "744883a4-2e52-4f7a-95e5-4f76bed45f2d"},
+               {name: "Vancouver Intermodal Terminal", value: "445f7608-2c14-41e8-be80-0c4ad6dadffb"},
+               {name: "Winnipeg Intermodal Terminal", value: "156c6c75-fdb1-45d2-94c0-8c0791bd2da6"},
+               //{name: "Big Calgary Circle", value: "Big Calgary Circle"}
 
              ];
              for(var i = 0; i < features.length;i++){
@@ -671,14 +685,26 @@ export class MapComponent implements OnInit {
                       var arraysplitcoma = resultado[r].split(',');
                      for(var v = 0; v < arraysplitcoma.length;v++){
                        var arraysplitdospuntos = arraysplitcoma[v].split(':');
-                       objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
+                       if(arraysplitdospuntos[1]!=undefined){
+                         objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
 
-                       if(!this.isEmpty(arraysplitdospuntos[1].trim())){
-                         const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
-                         if(!found){
-                           geofences_array.push(objaux);
+                         if(!this.isEmpty(arraysplitdospuntos[1].trim())){
+                           const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
+                           if(!found){
+
+                             const foundinteres = this.georeferences.find(element => element.value == arraysplitdospuntos[1].trim());
+                            if(foundinteres){
+                              geofences_array.push(objaux);
+                             }
+
+                             }
                           }
-                        }
+                       }
+
+
+
+
+
                      }
                    }
                  }
@@ -687,10 +713,10 @@ export class MapComponent implements OnInit {
 
                for(var e = 0; e < geofences_array.length; e++){
                  if(e == geofences_array.length - 1){
-                   georences_string = georences_string + geofences_array[e].name;
+                   georences_string = georences_string + this.getGeofencesPrimor(geofences_array[e]);
 
                   }else{
-                    georences_string = georences_string + geofences_array[e].name + ',';
+                    georences_string = georences_string + this.getGeofencesPrimor(geofences_array[e]) + ',';
                  }
                }
 
@@ -759,6 +785,16 @@ export class MapComponent implements OnInit {
             return string.split(search).join(replace);
           }
 
+          getGeofencesPrimor(geofence){
+            let name_geofence = geofence.name;
+             const found = this.georeferences.find(element => element.value == geofence.id);
+            if(found){
+              name_geofence = found.name;
+             }
+            return name_geofence;
+
+          }
+
            formatdate(date){
              let dateformat = date.split(' ');
              return dateformat[0];
@@ -803,7 +839,7 @@ export class MapComponent implements OnInit {
          this.data = this.data.filter(element => element.move_type == $event.event.value);
        }
        if($event.georeference!=null){
-          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
+          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.id == $event.georeference.value) !=undefined );
        }
      }
 
@@ -835,7 +871,6 @@ export class MapComponent implements OnInit {
 
   makefromjson(json,$event){
     let arrayfeacturesfilter = json.features;
-    console.log(arrayfeacturesfilter);
 
     if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){
        arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.properties.move_type == $event.event.value);
@@ -855,7 +890,6 @@ export class MapComponent implements OnInit {
 
     }else{
       json.features = arrayfeacturesfilter;
-      console.log(json.features);
       setTimeout(() => {
         this.loading = false;
 
@@ -875,7 +909,6 @@ export class MapComponent implements OnInit {
        if(typeof arrayfeacturesfilter[i].geofences[0] == 'string'){
 
           let featurestring = arrayfeacturesfilter[i].geofences[0];
-          console.log(featurestring);
         featurestring = this.replaceAll(featurestring,"'", '');
          let sentencias = featurestring.split(/[{}]/);
          const resultado = sentencias.filter(sentence => sentence.length>2);
@@ -886,21 +919,23 @@ export class MapComponent implements OnInit {
               var arraysplitcoma = resultado[r].split(',');
              for(var v = 0; v < arraysplitcoma.length;v++){
                var arraysplitdospuntos = arraysplitcoma[v].split(':');
-               objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
 
-               if(!this.isEmpty(arraysplitdospuntos[1].trim())){
-                 console.log(arraysplitdospuntos[1].trim());
-                 if(arraysplitdospuntos[1].trim() == value){
-                   geofences_array.push(arrayfeacturesfilter[i]);
-                 }
-                }
+               if(arraysplitdospuntos.length>1){
+                 if(!this.isEmpty(arraysplitdospuntos[1].trim())){
+                   objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
+                   if(arraysplitdospuntos[1].trim() == value){
+                     geofences_array.push(arrayfeacturesfilter[i]);
+                   }
+                  }
+               }
+
+
              }
            }
          }
        }
        }
        json.features = geofences_array;
-       console.log(json);
        setTimeout(() => {
          this.loading = false;
 

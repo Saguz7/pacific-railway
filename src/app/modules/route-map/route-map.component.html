@@ -1,6 +1,23 @@
 <div class="container-principal">
   <div class="row card">
     <div class="col s12"><br><br>
+      <div class="row center-align">
+        <div class="row center-align">
+          <div class="col s6 left-align">
+            <p-button (click)="gotomap()" label="Map" icon="pi pi-chevron-left" styleClass="p-button-link"></p-button>
+           </div>
+          <div class="col s6 right-align">
+                   <p-button  (click)="gotoppsdetails()" label="PPS Details" styleClass="p-button-link"></p-button>
+          </div>
+        </div>
+        <div class="col s12">
+          <br>
+                ID: {{chasis}} <!-- <label> Load # 5600670637</label> -->
+              <hr>
+            </div>
+      </div>
+
+
       <div class="col s2">
         <p-panel header="Time Range">
           <div class = "row">
@@ -106,9 +123,28 @@
       </div>
       <div class="col s10">
         <div id="esri-view" class="container-map" #mapViewNode></div>
+        <ng-container *ngIf="loading">
+          <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+        </ng-container>
+        <ng-container *ngIf="historicalpoints.length>0">
+          <app-filterroute-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filterroute-map>
+        </ng-container>
+
+           <app-table-route-map [Data]="historicalpoints" (SendCenter)="centermap($event)"></app-table-route-map>
+
+          <div class="col s12 center-align" *ngIf="historicalpoints!=undefined">
+            <ng-container *ngIf="historicalpoints.length>0">
+              <button pButton pRipple type="button" label="CSV" (click)="downloadcsv()" lass="p-button-danger" ></button>
+
+            </ng-container>
 
 
-          <app-table-route-map [Data]="historicalpoints" (SendCenter)="centermap($event)"></app-table-route-map>
+
+
+          </div>
+          <div class="col s12 center-align" *ngIf="historicalpoints!=undefined"><br><br>
+          </div>
+
 
         <!--
         <app-temperature-graph></app-temperature-graph>

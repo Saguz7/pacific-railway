@@ -5,6 +5,14 @@
   </ng-container>
   <div class="row card">
     <div class="row center-align">
+      <div class="row center-align">
+        <div class="col s6 left-align">
+          <p-button (click)="gotomap()" label="Map" icon="pi pi-chevron-left" styleClass="p-button-link"></p-button>
+         </div>
+        <div class="col s6 right-align">
+                 <p-button  (click)="gotoroutemap()" label="Route Map" styleClass="p-button-link"></p-button>
+        </div>
+      </div>
       <div class="col s12">
 <br>
       {{chasis}} <!-- <label> Load # 5600670637</label> -->
@@ -133,7 +141,7 @@
                 <label class="title">Chassis Type:</label>  {{properties.chassis_type}} <br>
               </ng-container>
 
-              <label class="title">Door Type:</label>  {{properties.door_type}} <br> 
+              <label class="title">Door Type:</label>  {{properties.door_type}} <br>
               <label class="title">Height:</label>  {{properties.height}} <br>
               <label class="title">Width:</label>  {{properties.width}} <br>
               <label class="title">Initial Distance:</label>  {{properties.initial_distance}} <br>

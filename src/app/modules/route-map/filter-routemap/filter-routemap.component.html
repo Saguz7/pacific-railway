@@ -1,0 +1,70 @@
+   <div  class="row">
+    <div class="p-col-12">
+      <div class="col s12"> 
+        <br><br>
+        <div class="col s12">
+          <div class="col s12">
+            Search By:
+          </div>
+          <div class="col s6">
+            <div class="col s3">
+              <!--
+
+              <p-radioButton [(ngModel)]="selectedOption" value="2" name="groupname"></p-radioButton>
+            -->
+
+              <label for="groupname"> Events</label>
+            </div>
+            <div class="col s3">
+              <!--
+              <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
+            -->
+
+              <label for="groupname"> Geofences</label>
+            </div>
+          </div>
+          <div class="col s6">
+          </div>
+
+
+         </div>
+
+         <div class="col s12">
+
+           <div class="col s6">
+             <div class="col s3">
+               <div class="p-inputgroup" *ngIf="Events.length>0">
+                 <p-dropdown [options]="Events" [(ngModel)]="event_select" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
+               </div>
+             </div>
+             <div class="col s3">
+               <div class="p-inputgroup" *ngIf="Georeferences.length>0">
+                 <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select"  [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
+               </div>
+             </div>
+             <div class="col s3">
+               <div class="col s6">
+                 <button pButton pRipple type="button" label="Go" class="p-button-success" (click)=send_filter()></button>
+               </div>
+               <div class="col s6">
+                 <button pButton pRipple type="button" label="Reset" class="p-button-danger" (click)=resetFilters()></button>
+
+               </div>
+
+             </div>
+
+
+
+
+         </div>
+         <div class="col s4">
+
+         </div>
+         </div>
+
+      </div>
+      <div class="col s12"><br>
+      </div>
+
+    </div>
+  </div>

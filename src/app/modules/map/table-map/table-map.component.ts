@@ -194,7 +194,6 @@ export class TableMapComponent implements OnInit {
   }
 
   gotocentermap(object){
-    console.log(object);
     this.SendCenter.emit(object);
 
   }

@@ -36,6 +36,7 @@ export class PpsDetailsComponent implements OnInit {
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
   constructor(
+    private router : Router,
     private cdRef : ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
@@ -241,6 +242,18 @@ export class PpsDetailsComponent implements OnInit {
                          }, 500);
                    });
   }
+
+
+  gotomap(){
+    this.router.navigate([`map`]);
+  }
+
+  gotoroutemap(){
+    let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
+
+    this.router.navigate([`routemap`,  chasis ]);
+  }
+
 
 
 }

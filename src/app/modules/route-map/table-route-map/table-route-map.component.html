@@ -36,7 +36,16 @@
                       <a href="javascript:void(0);" (click)="gotomapcenter(object)" > {{object[col.field]}}</a>
 
                     </ng-container>
-                    <ng-container *ngIf="col.field!='num'">
+                    <ng-container *ngIf="col.field=='total_distance'">
+                      <ng-container *ngIf="object[col.field]!='undefined'">
+                           {{ object[col.field]}}
+
+
+                      </ng-container>
+
+
+                    </ng-container>
+                    <ng-container *ngIf="col.field!='num' && col.field!='total_distance'">
                       {{ object[col.field]}}
 
                     </ng-container>

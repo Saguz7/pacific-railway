@@ -41,7 +41,12 @@
 
                 </ng-container>
                 <ng-container *ngIf="col.field=='routemap'">
-                  <a href="javascript:void(0);" (click)="gotoroutemap(object['reference'])" > Route Map</a>
+                  <div class="center-align">
+                    <button pButton pRipple type="button" icon="pi pi-reply" class="p-button-rounded p-button-outlined"  (click)="gotoroutemap(object['reference'])" >
+
+                    </button>
+                  </div>
+
 
                 </ng-container>
                 <ng-container *ngIf="col.field=='move_type'">

@@ -9,10 +9,10 @@ import { LoginComponent } from './auth/login/login.component';
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
-import { RouteMapComponent } from './modules/route-map/route-map.component';
 import { TableRouteMapComponent } from './modules/route-map/table-route-map/table-route-map.component';
+import { RouteMapComponent } from './modules/route-map/route-map.component';
 
-import { TemperatureGraphComponent } from './modules/route-map/temperature-graph/temperature-graph.component';
+import { FilterRouteMapComponent } from './modules/route-map/filter-routemap/filter-routemap.component';
 
 
 
@@ -70,9 +70,9 @@ import * as L from 'leaflet';
     PpsDetailsComponent,
     NavlaunchComponent,
     NotificationComponent,
-    PRSMComponent,
-    TemperatureGraphComponent,
-    TableRouteMapComponent
+    PRSMComponent, 
+    TableRouteMapComponent,
+    FilterRouteMapComponent
 
   ],
   imports: [

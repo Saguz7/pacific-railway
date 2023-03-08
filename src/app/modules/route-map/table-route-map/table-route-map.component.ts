@@ -20,8 +20,12 @@ export class TableRouteMapComponent implements OnInit {
 
     this.cols = [
         { width: '4',field: 'num', header: 'N°' },
-        { width: '48',field: 'lat', header: 'Latitude' },
-        { width: '48',field: 'lon', header: 'Longitude' },
+        { width: '16',field: 'lat', header: 'Latitude' },
+        { width: '16',field: 'lon', header: 'Longitude' },
+        { width: '16',field: 'move_type_format', header: 'Move Type' },
+        { width: '16',field: 'date', header: 'Date' },
+        { width: '16',field: 'total_distance', header: 'Total Distance' },
+        { width: '16',field: 'traveled_distance', header: 'Traveled Distance' }
 
     ];
   }
@@ -32,7 +36,6 @@ export class TableRouteMapComponent implements OnInit {
   gotomapcenter(value){
     this.SendCenter.emit(value);
 
-    console.log(value);
   }
 
 
