@@ -90,30 +90,6 @@
 
           </div>
         </p-panel>
-
-            <!--
-        <p-panel header="Display Options">
-          <div class="field-radiobutton">
-                <p-radioButton name="option" value="1" [(ngModel)]="option" inputId="option1"></p-radioButton>
-                <label class="options-labels" for="option1"> Points only</label>
-            </div><br>
-            <div class="field-radiobutton">
-                <p-radioButton name="option" value="2" [(ngModel)]="option" inputId="option2"></p-radioButton>
-                <label class="options-labels" for="option2"> Alerts</label>
-            </div><br>
-            <div class="field-radiobutton">
-                <p-radioButton name="option" value="3" [(ngModel)]="option" inputId="option3"></p-radioButton>
-                <label class="options-labels" for="option3"> Door events</label>
-            </div><br>
-            <div class="field-radiobutton">
-                <p-radioButton name="option" value="4" [(ngModel)]="option" inputId="option4"></p-radioButton>
-                <label class="options-labels" for="option4"> Temperature Graph</label>
-            </div>
-          <div class="col s12"><br>
-          </div>
-        </p-panel>
-      -->
-
         <div class="col s12"><br>
         </div>
 
@@ -126,13 +102,21 @@
         <ng-container *ngIf="loading">
           <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
         </ng-container>
-        <ng-container *ngIf="historicalpoints.length>0">
-          <app-filterroute-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filterroute-map>
-        </ng-container>
+
+
+
+        <!--
+        <app-temperature-graph></app-temperature-graph>
+
+        -->
+
+      </div>
+      <div class="col s12">
+           <app-filterroute-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filterroute-map>
 
            <app-table-route-map [Data]="historicalpoints" (SendCenter)="centermap($event)"></app-table-route-map>
 
-          <div class="col s12 center-align" *ngIf="historicalpoints!=undefined">
+          <div class="col s12" *ngIf="historicalpoints!=undefined">
             <ng-container *ngIf="historicalpoints.length>0">
               <button pButton pRipple type="button" label="CSV" (click)="downloadcsv()" lass="p-button-danger" ></button>
 
@@ -144,14 +128,8 @@
           </div>
           <div class="col s12 center-align" *ngIf="historicalpoints!=undefined"><br><br>
           </div>
-
-
-        <!--
-        <app-temperature-graph></app-temperature-graph>
-
-        -->
-
       </div>
+
     </div>
   </div>
 

@@ -61,7 +61,7 @@
     "rxjs-compat": "^6.6.7",
     "sha-256": "^1.0.3",
     "sha256": "^0.2.0",
-    "sweetalert2": "^11.1.10",
+    "sweetalert2": "^11.7.3",
     "tslib": "^2.0.0",
     "zen-observable": "^0.8.15",
     "zone.js": "~0.10.2"
