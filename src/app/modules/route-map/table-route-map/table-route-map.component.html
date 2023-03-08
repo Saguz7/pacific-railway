@@ -33,7 +33,10 @@
                   <div class="tdbreak">
 
                     <ng-container *ngIf="col.field=='num'">
+                      <div class="center-align">
+
                       <a href="javascript:void(0);" (click)="gotomapcenter(object)" > {{object[col.field]}}</a>
+                    </div>
 
                     </ng-container>
                     <ng-container *ngIf="col.field=='total_distance'">

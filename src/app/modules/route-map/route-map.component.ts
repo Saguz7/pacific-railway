@@ -604,7 +604,7 @@ export class RouteMapComponent implements OnInit {
        document.getElementById("esri-view").focus();
 
         this.mapView.goTo({
-        center: [parseInt($event.lon), parseInt($event.lat)],zoom:12
+        center: [$event.lon, $event.lat],zoom:12
       })
       .catch(function(error) {
         if (error.name != "AbortError") {

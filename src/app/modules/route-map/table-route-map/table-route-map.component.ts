@@ -19,13 +19,13 @@ export class TableRouteMapComponent implements OnInit {
   ngOnInit() {
 
     this.cols = [
-        { width: '4',field: 'num', header: 'N°' },
-        { width: '16',field: 'lat', header: 'Latitude' },
-        { width: '16',field: 'lon', header: 'Longitude' },
-        { width: '16',field: 'move_type_format', header: 'Move Type' },
-        { width: '16',field: 'date', header: 'Date' },
-        { width: '16',field: 'total_distance', header: 'Total Distance' },
-        { width: '16',field: 'traveled_distance', header: 'Traveled Distance' }
+        { width: '10',field: 'num', header: 'N°' },
+        { width: '15',field: 'lat', header: 'Latitude' },
+        { width: '15',field: 'lon', header: 'Longitude' },
+        { width: '15',field: 'move_type_format', header: 'Move Type' },
+        { width: '15',field: 'date', header: 'Date' },
+        { width: '15',field: 'total_distance', header: 'Total Distance' },
+        { width: '15',field: 'traveled_distance', header: 'Traveled Distance' }
 
     ];
   }
