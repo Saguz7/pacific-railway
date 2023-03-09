@@ -614,18 +614,7 @@ export class MapComponent implements OnInit {
                           that.router.navigate([`chassis-history`,  reference ]);
                      }
 
-                     if(coords!=null){
-                       console.log('Entra aqui');
-                       console.log(coords);
-                       this.mapView.goTo({
-                        center: [coords[0], coords[1]],zoom:8
-                      })
-                      .catch(function(error) {
-                        if (error.name != "AbortError") {
-                           console.error(error);
-                        }
-                      });
-                     }
+
 
                 })
 
@@ -634,7 +623,19 @@ export class MapComponent implements OnInit {
                   console.error(err);
                 });
 
-
+                setTimeout(() => {
+                  if(coords!=null){
+                    console.log('Entra aqui');
+                    this.mapView.goTo({
+                     center: [coords[0], coords[1]],zoom:8
+                   })
+                   .catch(function(error) {
+                     if (error.name != "AbortError") {
+                        console.error(error);
+                     }
+                   });
+                  }
+                }, 500);
 
               }
 
@@ -851,8 +852,8 @@ export class MapComponent implements OnInit {
      if($event.chasis!=null){
        console.log($event.chasis);
 
-       this.data = this.data.filter(element => String(element.reference) == String($event.chasis));
-       if(this.data.length){
+       this.data = this.data.filter(element => String(element.reference) == String($event.chasis.trim()));
+       if(this.data.length>0){
          coords = [this.data[0].lon,this.data[0].lat]
        }
        console.log(this.data);
@@ -863,7 +864,7 @@ export class MapComponent implements OnInit {
        }
        if($event.georeference!=null){
           this.data = this.data.filter(element => element.geofences.find(geofence => geofence.id == $event.georeference.value) !=undefined );
-          if(this.data.length){
+          if(this.data.length>0){
             coords = [this.data[0].lon,this.data[0].lat]
           }
        }
