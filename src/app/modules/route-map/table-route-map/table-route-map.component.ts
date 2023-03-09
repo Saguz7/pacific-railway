@@ -20,16 +20,19 @@ export class TableRouteMapComponent implements OnInit {
 
     this.cols = [
         { width: '10',field: 'num', header: 'N°' },
-        { width: '12',field: 'lat', header: 'Latitude' },
-        { width: '12',field: 'lon', header: 'Longitude' },
+        //{ width: '12',field: 'lat', header: 'Latitude' },
+        //{ width: '12',field: 'lon', header: 'Longitude' },
+        { width: '12',field: 'coordinates', header: 'Coordinates' },
         { width: '12',field: 'move_type_format', header: 'Move Type' },
         { width: '12',field: 'date', header: 'Date' },
-        { width: '10',field: 'total_distance', header: 'Total Distance' },
-        { width: '10',field: 'traveled_distance', header: 'Traveled Distance' },
-        { width: '16',field: 'georeference', header: 'Geofence' }
+        { width: '12',field: 'total_distance', header: 'Total Distance' },
+        { width: '12',field: 'traveled_distance', header: 'Traveled Distance' },
+        { width: '24',field: 'georeference', header: 'Geofence' }
 
     ];
   }
+
+
 
   ngAfterViewInit() {
   }

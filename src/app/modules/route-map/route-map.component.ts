@@ -30,7 +30,7 @@ export class RouteMapComponent implements OnInit {
   timeto: Date = new Date();
 
   historicalpoints = [];
-  validatedDates: boolean = false;
+  validatedDates: boolean = true;
   loading: boolean = false;
   chasis: any;
 
@@ -55,7 +55,9 @@ export class RouteMapComponent implements OnInit {
 
 
    ngOnInit() {
-
+     this.events= [
+       {name: "No Filter", value: "No Filter"}
+     ]
      this.historicalpoints= [];
 
              this.href = this.router.url;
@@ -67,21 +69,21 @@ export class RouteMapComponent implements OnInit {
           //   this.datefrom = new Date();
           //   this.timefrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
 
+             let dateactual =  new Date()
+             this.datefrom = new Date();
+             this.datefrom.setDate(dateactual.getDate() - 7);
+             //this.datefrom.setDate(this.datefrom.getDate() - 7);
+             this.timefrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
+
              this.dateto = new Date();
+          //   this.dateto.setDate(this.datefrom.getDate() - 7);
              this.timeto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), 0, 0, 0);
-
-
-            // this.datefrom = new Date(2023,1,6);
-             //this.timefrom = new Date(this.datefrom.getFullYear(), this.datefrom.getMonth(), this.datefrom.getDate(), 0, 0, 0);
-
-             //this.dateto = new Date(2023,1,10);
-            // this.timeto = new Date(this.dateto.getFullYear(), this.dateto.getMonth(), this.dateto.getDate(), 0, 0, 0);
-            // let dateToSend =  this.convertDatetoString(this.datefrom);
-             //let fromToSend =  this.convertDatetoString(this.dateto);
+             let dateToSend =  this.convertDatetoString(this.datefrom);
+             let fromToSend =  this.convertDatetoString(this.dateto);
              let obj_send = {
                id: chasis,
-              // initial_date: dateToSend,
-              // final_date: fromToSend
+               initial_date: dateToSend,
+               final_date: fromToSend
              }
              this.loading = true;
                           this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
@@ -140,9 +142,11 @@ export class RouteMapComponent implements OnInit {
 
      buildmap(features){
        if(features!=undefined){
+         /*
          this.events= [
            {name: "No Filter", value: "No Filter"}
          ]
+         */
          this.georeferences = [
            {name: "No Filter", value: "No Filter"},
            {name: "Bensenville Intermodal Terminal", value: "e6468692-50cf-46a1-bac7-5c1baeb4749d"},
@@ -185,7 +189,7 @@ export class RouteMapComponent implements OnInit {
 
            if(features[i].properties.total_distance!='nan'){
              if(features[i].properties.total_distance!=null){
-               total_distance = parseFloat(features[i].properties.total_distance);
+               total_distance = parseFloat(features[i].properties.total_distance) * 0.621371;
                total_distance_km = this.convertkm(total_distance);
 
              }
@@ -196,7 +200,7 @@ export class RouteMapComponent implements OnInit {
            }
            if(features[i].properties.move_type == 'move_stop' && reference_move_stop!=undefined){
              if(total_distance!=null){
-               traveled_distance = total_distance - reference_move_stop;
+               traveled_distance =  (total_distance - reference_move_stop)* 0.621371;
                traveled_distance = this.convertkm(traveled_distance);
              }
 
@@ -230,11 +234,15 @@ export class RouteMapComponent implements OnInit {
                      if(!this.isEmpty(arraysplitdospuntos[1].trim())){
                        const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
                        if(!found){
+                         geofences_array.push(objaux);
 
+/*
                          const foundinteres = this.georeferences.find(element => element.value == arraysplitdospuntos[1].trim());
                         if(foundinteres){
                           geofences_array.push(objaux);
                          }
+
+                         */
 
                          }
                       }
@@ -263,6 +271,7 @@ export class RouteMapComponent implements OnInit {
                num:(i+1),
                lat: features[i].geometry.coordinates[1],
                lon: features[i].geometry.coordinates[0],
+               coordinates: this.trunc(features[i].geometry.coordinates[0],3)  + ',' + this.trunc(features[i].geometry.coordinates[1],3) ,
                date: this.formatdate(features[i].properties.recorded_on),
                //id_geofence:  features[i].properties.move_type,
                move_type:  features[i].properties.move_type,
@@ -590,7 +599,7 @@ export class RouteMapComponent implements OnInit {
        document.getElementById("esri-view").focus();
 
         this.mapView.goTo({
-        center: [$event.lon, $event.lat],zoom:24
+        center: [$event.lon, $event.lat],zoom:16
       })
       .catch(function(error) {
         if (error.name != "AbortError") {
@@ -637,17 +646,18 @@ export class RouteMapComponent implements OnInit {
        for(var i = 0; i < this.historicalpoints.length;i++){
          let total_distance = '';
          if(this.historicalpoints[i].total_distance!='undefined'){
-           total_distance = '' + this.historicalpoints[i].total_distance + ' km';
+           total_distance = '' + this.historicalpoints[i].total_distance + ' mi';
          }
          let traveled_distance = '';
          if(!this.isEmpty(this.historicalpoints[i].traveled_distance)){
-           traveled_distance = '' + this.historicalpoints[i].traveled_distance+ ' km';
+           traveled_distance = '' + this.historicalpoints[i].traveled_distance+ ' mi';
          }
          arraytable.push(
            {
              Order: this.historicalpoints[i].num,
-             Latitude: this.historicalpoints[i].lat,
-             Longitude: this.historicalpoints[i].lon ,
+            // Latitude: this.historicalpoints[i].lat,
+            // Longitude: this.historicalpoints[i].lon ,
+            Coordinates: this.historicalpoints[i].coordinates,
              Move_Type: this.historicalpoints[i].move_type_format,
              Date: this.historicalpoints[i].date,
              Total_Distance: total_distance,
@@ -661,7 +671,7 @@ export class RouteMapComponent implements OnInit {
 
        let data = arraytable;
       const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
-      const header = ['Order','Latitude','Longitude','Move_Type','Date','Total_Distance','Traveled_Distance','Geofences']; //Object.keys(data[0]);
+      const header = ['Order','Coordinates','Move_Type','Date','Total_Distance','Traveled_Distance','Geofences']; //Object.keys(data[0]);
       const csv = data.map((row) =>
         header
           .map((fieldName) => JSON.stringify(row[fieldName], replacer))
@@ -683,6 +693,14 @@ export class RouteMapComponent implements OnInit {
      isEmpty(str) {
        return (!str || 0 === str.length);
      }
+
+     trunc(x, posiciones) {
+      var s = x.toString()
+      var l = s.length
+      var decimalLength = s.indexOf('.') + 1
+      var numStr = s.substr(0, decimalLength + posiciones)
+      return Number(numStr)
+    }
 
      getFilters($event){
        //this.loading = true;
@@ -744,6 +762,9 @@ export class RouteMapComponent implements OnInit {
      }
 
      makefromjson(json,$event){
+       console.log(json);
+       console.log(json.features);
+
        let arrayfeacturesfilter = json.features;
 
        if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){

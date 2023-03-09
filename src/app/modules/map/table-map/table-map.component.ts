@@ -25,7 +25,7 @@ export class TableMapComponent implements OnInit {
         { field: 'georeference', header: 'Geofences' },
 
         { field: 'coordinates', header: 'Coordinates' },
-        { field: 'routemap', header: 'Route Map' },
+        { field: 'routemap', header: 'Chassis History' },
 
 
     ];
@@ -185,12 +185,12 @@ export class TableMapComponent implements OnInit {
   }
 
   gotoppsdetails(reference){
-    this.router.navigate([`ppsdetails`,  reference ]);
+    this.router.navigate([`chassis-details`,  reference ]);
 
   }
 
   gotoroutemap(reference){
-    this.router.navigate([`routemap`,  reference ]);
+    this.router.navigate([`chassis-history`,  reference ]);
   }
 
   gotocentermap(object){

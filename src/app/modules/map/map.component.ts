@@ -92,7 +92,7 @@ export class MapComponent implements OnInit {
 
          if(out.errorMessage==undefined){
           this.loading = false;
-          this.buildmap(out);
+          this.buildmap(out,null);
           this.rehacerjson(out.features);
         }else{
           setTimeout(() => {
@@ -168,7 +168,7 @@ export class MapComponent implements OnInit {
       ));
   }
 
-    buildmap(json){
+    buildmap(json,coords){
       this.jsonmap = json;
       const blob = new Blob([JSON.stringify(json)], {
         type: "application/json"
@@ -212,7 +212,7 @@ export class MapComponent implements OnInit {
 									// and just reuse it
                   let divcontent = document.createElement("div");
                   let btn = document.createElement("button");
-                  btn.innerText = "Details";
+                  btn.innerText = "Chassis Details";
 
                   btn.addEventListener("click", function(event){
                     btnClick(graphic)
@@ -221,7 +221,7 @@ export class MapComponent implements OnInit {
                   divcontent.appendChild(btn);
 
                   let btnroute = document.createElement("button");
-                  btnroute.innerText = "Route Map";
+                  btnroute.innerText = "Chassis History";
 
                   btnroute.addEventListener("click", function(event){
                     btnClickRoute(graphic)
@@ -238,11 +238,11 @@ export class MapComponent implements OnInit {
         });
 
         function btnClick(reference) {
-          that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
+          that.router.navigate([`chassis-details`,  reference.graphic.attributes.id ]);
 				}
 
         function btnClickRoute(reference) {
-          that.router.navigate([`routemap`,  reference.graphic.attributes.id ]);
+          that.router.navigate([`chassis-history`,  reference.graphic.attributes.id ]);
 				}
 
 
@@ -333,8 +333,8 @@ export class MapComponent implements OnInit {
                                         }
                                         if(headerslabel[j]=='url'){
                                           var createA = document.createElement('a');
-                                          var createAText = document.createTextNode(`ppsdetails`);
-                                          createA.setAttribute('href', environment.url +  "ppsdetails/" + feature.attributes['id']);
+                                          var createAText = document.createTextNode(`Chassis Details`);
+                                          createA.setAttribute('href', environment.url +  "chassis-details/" + feature.attributes['id']);
                                           createA.appendChild(createAText);
                                           cell.appendChild(createA);
                                         }
@@ -582,7 +582,7 @@ export class MapComponent implements OnInit {
                          let divcontent = document.createElement("div");
 
                          let btn = document.createElement("button");
-                         btn.innerText = "Details";
+                         btn.innerText = "Chassis Details";
 
                          btn.addEventListener("click", function(event){
                             btnClickMouvePointer(reference)
@@ -593,7 +593,7 @@ export class MapComponent implements OnInit {
 
 
                         let btnroute = document.createElement("button");
-                        btnroute.innerText = "Route Map";
+                        btnroute.innerText = "Chassis History";
 
                         btnroute.addEventListener("click", function(event){
                            btnClickMouvePointerRoute(reference)
@@ -607,11 +607,24 @@ export class MapComponent implements OnInit {
 
 
                        function btnClickMouvePointer(reference) {
-                           that.router.navigate([`ppsdetails`,  reference ]);
+                           that.router.navigate([`chassis-details`,  reference ]);
                				}
 
                       function btnClickMouvePointerRoute(reference) {
-                          that.router.navigate([`routemap`,  reference ]);
+                          that.router.navigate([`chassis-history`,  reference ]);
+                     }
+
+                     if(coords!=null){
+                       console.log('Entra aqui');
+                       console.log(coords);
+                       this.mapView.goTo({
+                        center: [coords[0], coords[1]],zoom:8
+                      })
+                      .catch(function(error) {
+                        if (error.name != "AbortError") {
+                           console.error(error);
+                        }
+                      });
                      }
 
                 })
@@ -691,11 +704,13 @@ export class MapComponent implements OnInit {
                          if(!this.isEmpty(arraysplitdospuntos[1].trim())){
                            const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
                            if(!found){
-
+                             geofences_array.push(objaux);
+/*
                              const foundinteres = this.georeferences.find(element => element.value == arraysplitdospuntos[1].trim());
                             if(foundinteres){
                               geofences_array.push(objaux);
                              }
+                             */
 
                              }
                           }
@@ -826,13 +841,21 @@ export class MapComponent implements OnInit {
   }
 
   getFilters($event){
+    let coords = null;
     this.loading = true;
      this.data = this.dataGeneral;
 
 
+     console.log(this.dataGeneral);
 
      if($event.chasis!=null){
-       this.data = this.data.filter(element => element.reference == $event.chasis);
+       console.log($event.chasis);
+
+       this.data = this.data.filter(element => String(element.reference) == String($event.chasis));
+       if(this.data.length){
+         coords = [this.data[0].lon,this.data[0].lat]
+       }
+       console.log(this.data);
      }else{
        if($event.event!=null){
 
@@ -840,6 +863,9 @@ export class MapComponent implements OnInit {
        }
        if($event.georeference!=null){
           this.data = this.data.filter(element => element.geofences.find(geofence => geofence.id == $event.georeference.value) !=undefined );
+          if(this.data.length){
+            coords = [this.data[0].lon,this.data[0].lat]
+          }
        }
      }
 
@@ -853,7 +879,8 @@ export class MapComponent implements OnInit {
      }
 
      setTimeout(() => {
-       this.rebuildmap($event);
+       console.log(this.data);
+       this.rebuildmap($event,coords);
      }, 100);
 
 
@@ -861,15 +888,15 @@ export class MapComponent implements OnInit {
 
   }
 
-  rebuildmap($event){
+  rebuildmap($event, coords){
     fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
-          this.makefromjson(out,$event);
+          this.makefromjson(out,$event,coords);
     }).catch(err => console.error(err));
   }
 
-  makefromjson(json,$event){
+  makefromjson(json,$event, coords){
     let arrayfeacturesfilter = json.features;
 
     if($event.event!=null && ($event.event!=null && $event.event.value != 'No Filter')){
@@ -884,7 +911,7 @@ export class MapComponent implements OnInit {
 
     if($event.georeference!=null && ($event.georeference!=null && $event.georeference.value != 'No Filter')){
 
-      this.convertfeactures(json,arrayfeacturesfilter,$event.georeference.value);
+      this.convertfeactures(json,arrayfeacturesfilter,$event.georeference.value,null);
       //arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined);
       //          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
 
@@ -892,8 +919,9 @@ export class MapComponent implements OnInit {
       json.features = arrayfeacturesfilter;
       setTimeout(() => {
         this.loading = false;
+        console.log(coords);
 
-        this.buildmap(json);
+        this.buildmap(json,coords);
       }, 100);
     }
 
@@ -903,7 +931,7 @@ export class MapComponent implements OnInit {
 
    }
 
-   convertfeactures(json,arrayfeacturesfilter,value){
+   convertfeactures(json,arrayfeacturesfilter,value,coords){
      let geofences_array = [];
      for(var i = 0; i < arrayfeacturesfilter.length;i++){
        if(typeof arrayfeacturesfilter[i].geofences[0] == 'string'){
@@ -938,8 +966,9 @@ export class MapComponent implements OnInit {
        json.features = geofences_array;
        setTimeout(() => {
          this.loading = false;
+         console.log(coords);
 
-          this.buildmap(json);
+          this.buildmap(json,coords);
        }, 100);
    }
 
@@ -947,7 +976,7 @@ export class MapComponent implements OnInit {
      let coordinates = event.coordinates.split(',');
      document.getElementById("esri-view").focus();
      this.mapView.goTo({
-      center: [parseInt(coordinates[0]), parseInt(coordinates[1])]
+      center: [coordinates[0], coordinates[1]],zoom:8
     })
     .catch(function(error) {
       if (error.name != "AbortError") {

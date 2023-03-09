@@ -1,15 +1,6 @@
-   <div  class="row card">
+   <div  class="row">
     <div class="p-col-12">
       <div class="col s12">
-        <div class="col s12">
-          <div class="col s8">
-            Select All *
-          </div>
-          <div class="col s4 right-align" style="color: red; font-size: 12px;">
-            Manage Report Schedules
-          </div>
-        </div>
-        <br><br>
         <div class="col s12">
           <div class="col s12">
             Search By:
@@ -22,6 +13,8 @@
 
               <label for="groupname"> Chassis ID</label>
             </div>
+            <div class="col s1">
+             </div>
             <div class="col s3">
               <!--
 
@@ -38,7 +31,7 @@
               <label for="groupname"> Geofences</label>
             </div>
           </div>
-          <div class="col s6">
+          <div class="col s5">
           </div>
 
 
@@ -52,6 +45,9 @@
                   <input [(ngModel)]="chasis" (onChange)="deleteoptions()" type="text" pInputText>
                </div>
              </div>
+             <div class="col s1">
+               <label for="groupname"> OR</label>
+             </div>
              <div class="col s3">
                <div class="p-inputgroup" *ngIf="Events.length>0">
                  <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
@@ -62,7 +58,7 @@
                  <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
                </div>
              </div>
-             <div class="col s3">
+             <div class="col s2">
                <div class="col s6">
                  <button pButton pRipple type="button" label="Go" class="p-button-success" (click)=send_filter()></button>
                </div>
@@ -77,7 +73,11 @@
 
 
          </div>
-         <div class="col s4">
+         <div class="col s3">
+
+         </div>
+         <div class="col s3">
+           <button pButton pRipple type="button" label="Reset" class="p-button-danger" (click)=resetFilters()></button>
 
          </div>
          <!--
@@ -215,8 +215,6 @@
       </form>
     -->
 
-      </div>
-      <div class="col s12"><br>
       </div>
 
     </div>

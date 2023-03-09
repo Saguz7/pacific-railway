@@ -12,19 +12,19 @@ import { LoginComponent } from './auth/login/login.component';
  import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 
 const routes: Routes = [
- { path: 'map', component: MapComponent, pathMatch: 'full' },
- { path: 'ppsdetails/:chasis', component: PpsDetailsComponent, pathMatch: 'full' },
- { path: 'map/ppsdetails/:chasis', component: PpsDetailsComponent, pathMatch: 'full' },
+ { path: 'current-chassis-location', component: MapComponent, pathMatch: 'full' },
+ { path: 'chassis-details/:chasis', component: PpsDetailsComponent, pathMatch: 'full' },
+// { path: 'map/ppsdetails/:chasis', component: PpsDetailsComponent, pathMatch: 'full' },
 
-{ path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
-{ path: 'routemap', component: RouteMapComponent, pathMatch: 'full' },
-{ path: 'routemap/:chasis', component: RouteMapComponent, pathMatch: 'full' },
+//{ path: 'launchpad', component: LaunchpadComponent, pathMatch: 'full' },
+//{ path: 'chassis-history', component: RouteMapComponent, pathMatch: 'full' },
+{ path: 'chassis-history/:chasis', component: RouteMapComponent, pathMatch: 'full' },
 
- { path: 'map2', component: MapDivComponent, pathMatch: 'full' },
+ //{ path: 'map2', component: MapDivComponent, pathMatch: 'full' },
 
-  { path: 'login', component: LoginComponent, pathMatch: 'full' },
- { path: '', redirectTo: '/map', pathMatch: 'full' },
-  { path: '**', redirectTo: '/map'}
+  //{ path: 'login', component: LoginComponent, pathMatch: 'full' },
+ { path: '', redirectTo: '/current-chassis-location', pathMatch: 'full' },
+  { path: '**', redirectTo: '/current-chassis-location'}
 ];
 
 @NgModule({
