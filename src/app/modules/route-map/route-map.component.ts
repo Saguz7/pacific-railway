@@ -838,6 +838,6 @@ export class RouteMapComponent implements OnInit {
       gotoppsdetails(){
         let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
-        this.router.navigate([`ppsdetails`,  chasis ]);
+        this.router.navigate([`chassis-details`,  chasis ]);
       }
 }

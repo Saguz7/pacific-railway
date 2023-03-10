@@ -251,7 +251,7 @@ export class PpsDetailsComponent implements OnInit {
   gotoroutemap(){
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
-    this.router.navigate([`routemap`,  chasis ]);
+    this.router.navigate(['chassis-history',  chasis ]);
   }
 
 
