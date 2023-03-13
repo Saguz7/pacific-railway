@@ -1,14 +1,16 @@
 <div class="container-principal">
+  <p-toast></p-toast>
+
   <div class="row card">
     <div class="col s12 center-align">
-            <h6>Current Chassis Location</h6> 
+            <h6>Current Chassis Location</h6>
     </div>
     <!--
     <div class="p-col-10 p-offset-1"><br><br>
     </div><br><br>
     -->
     <div *ngIf="!ocultarFiltro">
-    <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)"></app-filter-map>
+    <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)" (Sendchecked)="getChecked($event)"></app-filter-map>
     </div>
     <ng-container *ngIf="loading">
       <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>

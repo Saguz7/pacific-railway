@@ -31,6 +31,8 @@ export class PpsDetailsComponent implements OnInit {
   loading: boolean = false;
   counterror: any;
   properties: any;
+  georeferences = [];
+  geofences_array = [];
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
@@ -50,7 +52,21 @@ export class PpsDetailsComponent implements OnInit {
   ngOnInit() {
     this.counterror = 0;
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
+    this.georeferences = [
+      {name: "No Filter", value: "No Filter"},
+      {name: "Bensenville Intermodal Terminal", value: "e6468692-50cf-46a1-bac7-5c1baeb4749d"},
+      {name: "Calgary Intermodal Terminal", value: "7f8d3475-8f79-4936-b4e3-efe71913d254"},
+      {name: "Edmonton Intermodal Terminal", value: "3346e7dc-0e31-4d17-9805-380baf1d9772"},
+      {name: "Lachine Intermodal Terminal", value: "9d23cf32-2fb1-4e39-a326-9c332fc12c58"},
+      {name: "Regina Intermodal Terminal", value: "0a369dbc-d048-4bf8-91dd-92cd5a47e00b"},
+      {name: "Schiller Park Intermodal Terminal", value: "87ca9217-cb63-410c-bd04-62318cdd56cf"},
+      {name: "Saint John Intermodal Terminal", value: "0dafa1ee-b472-4cb0-a615-70dbcb9ded1c"},
+      {name: "Vaughan Intermodal Terminal", value: "744883a4-2e52-4f7a-95e5-4f76bed45f2d"},
+      {name: "Vancouver Intermodal Terminal", value: "445f7608-2c14-41e8-be80-0c4ad6dadffb"},
+      {name: "Winnipeg Intermodal Terminal", value: "156c6c75-fdb1-45d2-94c0-8c0791bd2da6"},
+      //{name: "Big Calgary Circle", value: "Big Calgary Circle"}
 
+    ];
 
   }
 
@@ -131,13 +147,75 @@ export class PpsDetailsComponent implements OnInit {
     if(json!=undefined){
       this.loading = false;
 
+      console.log(json);
+
       if(json.features!=undefined && (json.features!=undefined && json.features.length>0)){
+        console.log(json.features);
+        console.log(json.features[0]);
+        console.log(json.features[0].geofences);
+
+        console.log(json.features[0].properties.geofences);
+
         this.lon = json.features[0].geometry.coordinates[1];
         this.lat = json.features[0].geometry.coordinates[0];
         let lat = json.features[0].geometry.coordinates[0];
         let lon = json.features[0].geometry.coordinates[1];
         this.date = this.formatdatehours(json.features[0].properties.recorded_on);
         this.event = json.features[0].properties.move_type;
+
+        let geofences_array = [];
+        let georences_string = '';
+        if(typeof json.features[0].geofences[0] == 'string'){
+          let featurestring = json.features[0].geofences[0];
+         // featurestring = this.replaceAll(featurestring,"'", '"');
+         // featurestring = this.replaceAll(featurestring,"'", '"');
+        //   featurestring = this.replaceAll(featurestring," ", '');
+         featurestring = this.replaceAll(featurestring,"'", '');
+
+          let arrayaux = [];
+
+
+          let sentencias = featurestring.split(/[{}]/);
+          const resultado = sentencias.filter(sentence => sentence.length>2);
+
+          for(var r = 0; r < resultado.length;r++){
+            let objaux = {id: '', name: ''}
+            if(resultado[r].length>2){
+               var arraysplitcoma = resultado[r].split(',');
+              for(var v = 0; v < arraysplitcoma.length;v++){
+                var arraysplitdospuntos = arraysplitcoma[v].split(':');
+                if(arraysplitdospuntos[1]!=undefined){
+                  objaux[arraysplitdospuntos[0].trim()] = arraysplitdospuntos[1].trim();
+
+                  if(!this.isEmpty(arraysplitdospuntos[1].trim())){
+                    const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
+                    if(!found){
+                      geofences_array.push(objaux);
+                      }
+                   }
+                }
+
+
+
+
+
+              }
+            }
+          }
+        }
+        for(var e = 0; e < geofences_array.length; e++){
+          if(e == geofences_array.length - 1){
+            georences_string = georences_string + this.getGeofencesPrimor(geofences_array[e]);
+
+           }else{
+             georences_string = georences_string + this.getGeofencesPrimor(geofences_array[e]) + ',';
+          }
+        }
+
+        console.log(geofences_array);
+        console.log(georences_string);
+
+        this.geofences_array = geofences_array;
 
         return loadModules([
           "esri/layers/GeoJSONLayer",
@@ -234,7 +312,7 @@ export class PpsDetailsComponent implements OnInit {
                                 {
                                  image: screenshot.dataUrl,alignment: 'center'
                                },
-                               that.pdfService.getPPSDetailsAtributtes(that.date,that.event,that.properties),
+                               that.pdfService.getPPSDetailsAtributtes(that.date,that.event,that.properties,that.geofences_array),
 
                              ]
                            };
@@ -242,6 +320,24 @@ export class PpsDetailsComponent implements OnInit {
                          }, 500);
                    });
   }
+
+  getGeofencesPrimor(geofence){
+    let name_geofence = geofence.name;
+     const found = this.georeferences.find(element => element.value == geofence.id);
+    if(found){
+      name_geofence = found.name;
+     }
+    return name_geofence;
+
+  }
+
+  isEmpty(str) {
+    return (!str || 0 === str.length);
+  }
+
+  replaceAll(string, search, replace) {
+   return string.split(search).join(replace);
+ }
 
 
   gotomap(){

@@ -13,7 +13,7 @@
                  <h6>Chassis Details</h6>
          </div>
         <div class="col s4 right-align">
-                 <p-button  (click)="gotoroutemap()" label="Route Map" styleClass="p-button-link"></p-button>
+                 <p-button  (click)="gotoroutemap()" label="Chassis History" styleClass="p-button-link"></p-button>
         </div>
       </div>
       <div class="col s12">
@@ -22,23 +22,13 @@
     <hr>
   </div>
     </div>
-    <div class="col s12"><br><br>
-    </div>
-    <div class="col s12">
-      <div class="col s12">
-
-      Information
-    <hr>
-  </div>
-
-    </div>
     <div class="col s12 card-general">
       <div class="col s6">
         <div class="col s12 card-content">
           <div class="col s12">
             <div class="col s12">
 
-            Current Location
+            Last Reported Location
             </div>
            </div>
            <div class="col s12">
@@ -61,63 +51,6 @@
 
         </div>
         </div>
-        <!--
-        <div class="col s12 card-content">
-        <div class="col s6">
-          <div class="col s12">
-            Shipper - SH
-            <hr>
-          </div>
-          <div class="col s12">
-            MARTIN BROWER OF <br>
-            CANADA <br>
-            536 DEERHURST DRIVE <br>
-            BRAMPTON, ON L6T5K3 <br>
-          </div>
-
-        </div>
-        <div class="col s6">
-          <div class="col s12">
-            Consignee - CN
-            <hr>
-          </div>
-          <div class="col s12">
-            NOVA COLD LOGISTICS <br>
-            ULC <br>
-            10401 46TH ST SE <br>
-            CALGARY, AB T2C2X9 <br>
-            </div>
-        </div>
-        </div>
-        <div class="col s12 card-content">
-          <div class="col s6">
-            <div class="col s12">
-              Ship From - SF
-              <hr>
-            </div>
-            <div class="col s12">
-              MARTIN BROWER OF <br>
-              CANADA <br>
-              526 DEERHURST DRIVE <br>
-              BRAMPTON, ON L6TSK3 <br>
-            </div>
-
-
-          </div>
-          <div class="col s6">
-            <div class="col s12">
-
-            Ultimate Consignee - UC
-            <hr>
-            </div>
-            <div class="col s12">
-            </div>
-
-          </div>
-        </div>
-
-        -->
-
       </div>
       <div class="col s6">
 
@@ -132,9 +65,9 @@
              <hr>
 
             </div>
-        <div class="col s4">
+        <div class="col s12">
 
-          <div class="col s12"  *ngIf="date && event">
+          <div class="col s6"  *ngIf="date && event">
 
             <label class="title"> Date:</label>  {{date}} <br>
             <label class="title"> Last Event:</label>   {{formatstring(event)}} <br>
@@ -163,6 +96,13 @@
             </ng-container>
           </div>
 
+          <div class="col s6" >
+            <label class="title">Geofences:</label>    <br>
+            <ng-container *ngFor="let geofence of geofences_array; let i = index">
+               {{ geofence.name }} <br>
+            </ng-container>
+          </div>
+
         </div>
         <div class="col s8">
           <div class="row">
@@ -171,128 +111,8 @@
 
         </div>
         </div>
-
-        <!--
-
-        <div class="col s12 card-content">
-          <div class="col s12">
-            <div class="col s12">
-
-            PPS DETAILS
-            </div>
-           </div>
-           <div class="col s6">
-             <hr>
-
-            </div>
-            <div class="col s6">
-              <hr>
-
-             </div>
-             <div class="col s12">
-
-               <div class="col s12">
-                 Power
-              </div>
-            </div>
-        <div class="col s6">
-
-          <div class="col s12">
-
-            Billed Set Point: -10.0 C <br>
-            Current Set Point: -10.0 C <br>
-            Ambient Temperature: 31.0 C <br>
-            Door Contact:Closed <br>
-          </div>
-
-        </div>
-        <div class="col s6">
-          <div class="col s12">
-            Fuel Level: 72% <br>
-            Returm Air Temperature: -9.2 C <br>
-            Active Alarms <br>
-            Route History <br>
-          </div>
-
-        </div>
-        </div>
--->
-
-
-
       </div>
     </div>
-
-    <!--
-    <div class="col s12 card-content">
-      <div class="col s12">
-        <div class="col s12">
-          <div class="col s12">
-            <div class="col s12">
-
-            <div class="col s12">
-
-              Stops
-            <hr>
-            </div>
-            <div class="col s6">
-              <div class="col s4 right-align">
-                Transportation Mode: <br>
-                Shipment Type: <br>
-                Origin Ramp: <br>
-                Destionation Ramp:
-              </div>
-              <div class="col s8">
-                Intermodal.<br>
-                Ramp to Ramp  <br>
-                VAUGHAN IMS <br>
-                CALGARY IMS
-              </div>
-            </div>
-          </div>
-
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    -->
-
-    <!--
-    <div class="col s12 card-content">
-      <div class="col s12">
-        <div class="col s12">
-          <div class="col s12">
-            <div class="col s12">
-
-            <div class="col s12">
-
-              Routing Information
-            <hr>
-            </div>
-            <div class="col s6">
-              <div class="col s4 right-align">
-                Routing: <br>
-                Revenue Code: <br>
-                Payment Method: <br>
-              </div>
-              <div class="col s8">
-                CPRS<br>
-                   <br>
-                Prepaid <br>
-              </div>
-            </div>
-          </div>
-
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-    -->
     <div class="col s12"><br><br>
       <div class="col s12 center-align">
         <button pButton pRipple type="button" label="PDF" class="p-button-success" (click)=downloadFile()></button>

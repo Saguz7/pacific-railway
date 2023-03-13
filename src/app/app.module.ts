@@ -48,8 +48,9 @@ import { PpsDetailsComponent } from './modules/train/pps-details/pps-details.com
  import {PanelModule} from 'primeng/panel';
 import {ProgressBarModule} from 'primeng/progressbar';
  import {DividerModule} from 'primeng/divider';
+ import {ToastModule} from 'primeng/toast';
  import { EsriMapService } from './core/services/esri-map/esri-map.service';
-
+import {InputSwitchModule} from 'primeng/inputswitch';
 import { HttpClientModule } from '@angular/common/http';
  import * as $ from "jquery";
 import * as L from 'leaflet';
@@ -70,7 +71,7 @@ import * as L from 'leaflet';
     PpsDetailsComponent,
     NavlaunchComponent,
     NotificationComponent,
-    PRSMComponent, 
+    PRSMComponent,
     TableRouteMapComponent,
     FilterRouteMapComponent
 
@@ -94,7 +95,9 @@ import * as L from 'leaflet';
     DividerModule,
     PanelModule,
     ProgressBarModule,
-    HttpClientModule
+    HttpClientModule,
+    InputSwitchModule,
+    ToastModule
   ],
   providers: [EsriMapService],
   bootstrap: [AppComponent]

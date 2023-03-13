@@ -19,6 +19,7 @@ export class FilterMapComponent implements OnInit {
    event_select: any;
    georeference_select: any;
    chasis: any;
+   checked: boolean;
 
    @Input() Events: any;
    @Input() Georeferences: any;
@@ -29,6 +30,7 @@ export class FilterMapComponent implements OnInit {
 
    @Output() ocultarBarra:boolean;
    @Output() SendFilters = new EventEmitter<any>();
+   @Output() Sendchecked = new EventEmitter<any>();
 
   ngOnInit() {
 
@@ -156,6 +158,11 @@ export class FilterMapComponent implements OnInit {
       this.georeference_select = null;
       this.chasis = null;
       this.SendFilters.emit({});
+
+    }
+
+    send(){
+       this.Sendchecked.emit(this.checked);
 
     }
 

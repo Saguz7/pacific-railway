@@ -8,14 +8,17 @@ import { Router } from '@angular/router';
 import { GEOJsonService } from '../../core/services/map/geojson.service';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import Swal from 'sweetalert2'
+import {MessageService} from 'primeng/api';
 
 
 import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
+  providers: [MessageService]
+
 })
 
 
@@ -26,7 +29,7 @@ export class MapComponent implements OnInit {
   componentsReferences = [];
   events = [];
   georeferences = [];
-
+  checked: boolean;
   //  map: Map;
 
   public mapView: __esri.MapView;
@@ -41,13 +44,19 @@ export class MapComponent implements OnInit {
   zoomgeneral: any;
   firstview: boolean = false;
   filtersactive: boolean = false;
+  reload: boolean = false;
   filterspoints = [];
+  contador2: any;
+  minutos: any;
+  segundos: any;
+  jsongeneral: any;
 
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
   constructor(
+    private messageService: MessageService,
     private router : Router,
     private cdRef : ChangeDetectorRef,
     private CFR?: ComponentFactoryResolver,
@@ -66,6 +75,12 @@ export class MapComponent implements OnInit {
 
     ngOnInit() {
 
+
+
+
+      //this.contador_regresivo();
+
+
       this.events = [];
       this.counterror = 0;
 
@@ -75,6 +90,102 @@ export class MapComponent implements OnInit {
       this.href = this.router.url;
       this.currentURL = window.location.href.replace(this.href,'');
     }
+
+    contador_regresivo() {
+
+      let actual = new Date();
+      let minactual = actual.getMinutes()
+      let segundoactual = actual.getSeconds()
+
+      let intervalo = 0;
+      let intervalosegundos = 0;
+
+      for(var i = 0; i < 60;i++){
+        if(minactual < ((i+1) * 10)){
+          if(intervalo == 0){
+            intervalo = (i+1) * 10;
+          }
+        }
+      }
+      if(intervalo-minactual>1){
+        this.minutos = (intervalo-minactual)-1;
+
+      }else{
+        this.minutos = (intervalo-minactual);
+
+      }
+
+       this.segundos = 60-segundoactual;
+
+      if(this.contador2 == undefined) {
+        this.contador2 = setInterval(()=> {
+
+          if(this.minutos == 0 && this.segundos == 0){
+            this.contador_regresivo();
+
+            if(!this.reload){
+              this.refreshdata();
+              this.contador2  = undefined;
+             //  Swal.fire('Updating information!')
+              this.messageService.add({severity:'success', summary: 'Success', detail: 'Updating information!'});
+            }else{
+              this.messageService.add({severity:'info', summary: 'Info', detail: 'New data available!'});
+            //  Swal.fire('New information available!')
+            }
+              clearInterval(this.contador2);
+          }else{
+            if(this.minutos == 1 && this.segundos == 0){
+              if(!this.reload){
+                this.messageService.add({severity:'warn', summary: 'Warn', detail: 'New data will be available in a minute!'});
+              }
+
+
+            }
+            if (this.segundos > 0 && this.segundos <= 60) {
+             this.segundos--;
+
+           } else {
+             if (this.minutos > 0 && this.minutos <= 60) {
+                this.minutos--;
+               this.segundos = 59;
+
+              }
+           }
+          }
+
+
+
+        }, 1000);
+      }
+    }
+
+    refreshdata(){
+      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      .then(res => res.json())
+      .then((out) => {
+        // this.getHistorico(out.features);
+
+        this.jsongeneral = out;
+
+
+         if(out.errorMessage==undefined){
+          this.loading = false;
+          this.buildmap(out,null);
+          this.rehacerjson(out.features);
+        }else{
+          setTimeout(() => {
+            this.counterror = this.counterror + 1;
+            if(this.counterror < 10){
+              this.getDatafromGeoJson();
+            }
+          }, 100);
+        }
+
+      }).catch(err => console.error(err));
+
+    }
+
+
 
     ngAfterViewInit() {
       this.loading = true;
@@ -89,6 +200,7 @@ export class MapComponent implements OnInit {
       .then((out) => {
         // this.getHistorico(out.features);
 
+        this.jsongeneral = out;
 
          if(out.errorMessage==undefined){
           this.loading = false;
@@ -169,6 +281,7 @@ export class MapComponent implements OnInit {
   }
 
     buildmap(json,coords){
+
       this.jsonmap = json;
       const blob = new Blob([JSON.stringify(json)], {
         type: "application/json"
@@ -614,7 +727,18 @@ export class MapComponent implements OnInit {
                           that.router.navigate([`chassis-history`,  reference ]);
                      }
 
-
+                     setTimeout(() => {
+                       if(coords!=null){
+                         this.mapView.goTo({
+                          center: [coords[1], coords[0]],zoom:10
+                        })
+                        .catch(function(error) {
+                          if (error.name != "AbortError") {
+                             console.error(error);
+                          }
+                        });
+                       }
+                     }, 100);
 
                 })
 
@@ -623,19 +747,7 @@ export class MapComponent implements OnInit {
                   console.error(err);
                 });
 
-                setTimeout(() => {
-                  if(coords!=null){
-                    console.log('Entra aqui');
-                    this.mapView.goTo({
-                     center: [coords[0], coords[1]],zoom:8
-                   })
-                   .catch(function(error) {
-                     if (error.name != "AbortError") {
-                        console.error(error);
-                     }
-                   });
-                  }
-                }, 500);
+
 
               }
 
@@ -819,25 +931,25 @@ export class MapComponent implements OnInit {
   ocultar(){
 
     const map = document.querySelector('.esri-view');
-    map.setAttribute('style', 'height: 600px');
+    map.setAttribute('style', 'height: 800px');
     return (this.ocultarFiltro = true);
   }
 
   mostrar(){
     const map = document.querySelector('.esri-view');
-    map.setAttribute('style', 'height: 300px');
+    map.setAttribute('style', 'height: 500px');
     return(this.ocultarFiltro = false);
   }
 
   ocultarTab(){
     const map = document.querySelector('.esri-view');
-    map.setAttribute('style', 'height: 600px');
+    map.setAttribute('style', 'height: 800px');
     return (this.ocultarTabla = true);
   }
 
   mostrarTabla(){
     const map = document.querySelector('.esri-view');
-    map.setAttribute('style', 'height: 300px');
+    map.setAttribute('style', 'height: 500px');
     return(this.ocultarTabla = false);
   }
 
@@ -847,16 +959,13 @@ export class MapComponent implements OnInit {
      this.data = this.dataGeneral;
 
 
-     console.log(this.dataGeneral);
 
      if($event.chasis!=null){
-       console.log($event.chasis);
 
        this.data = this.data.filter(element => String(element.reference) == String($event.chasis.trim()));
        if(this.data.length>0){
          coords = [this.data[0].lon,this.data[0].lat]
        }
-       console.log(this.data);
      }else{
        if($event.event!=null){
 
@@ -880,7 +989,6 @@ export class MapComponent implements OnInit {
      }
 
      setTimeout(() => {
-       console.log(this.data);
        this.rebuildmap($event,coords);
      }, 100);
 
@@ -890,11 +998,16 @@ export class MapComponent implements OnInit {
   }
 
   rebuildmap($event, coords){
+    console.log(this.jsongeneral);
+
+     this.makefromjson(this.jsongeneral,$event,coords);
+    /*
     fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
     }).catch(err => console.error(err));
+    */
   }
 
   makefromjson(json,$event, coords){
@@ -912,7 +1025,7 @@ export class MapComponent implements OnInit {
 
     if($event.georeference!=null && ($event.georeference!=null && $event.georeference.value != 'No Filter')){
 
-      this.convertfeactures(json,arrayfeacturesfilter,$event.georeference.value,null);
+      this.convertfeactures(json,arrayfeacturesfilter,$event.georeference.value,coords);
       //arrayfeacturesfilter = arrayfeacturesfilter.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined);
       //          this.data = this.data.filter(element => element.geofences.find(geofence => geofence.name == $event.georeference.value) !=undefined );
 
@@ -920,8 +1033,6 @@ export class MapComponent implements OnInit {
       json.features = arrayfeacturesfilter;
       setTimeout(() => {
         this.loading = false;
-        console.log(coords);
-
         this.buildmap(json,coords);
       }, 100);
     }
@@ -967,8 +1078,6 @@ export class MapComponent implements OnInit {
        json.features = geofences_array;
        setTimeout(() => {
          this.loading = false;
-         console.log(coords);
-
           this.buildmap(json,coords);
        }, 100);
    }
@@ -977,7 +1086,7 @@ export class MapComponent implements OnInit {
      let coordinates = event.coordinates.split(',');
      document.getElementById("esri-view").focus();
      this.mapView.goTo({
-      center: [coordinates[0], coordinates[1]],zoom:8
+      center: [coordinates[0], coordinates[1]],zoom:10
     })
     .catch(function(error) {
       if (error.name != "AbortError") {
@@ -1103,5 +1212,9 @@ export class MapComponent implements OnInit {
   gotoroutemap(indice){
     console.log(indice);
   }
+
+  getChecked($event){
+    this.reload = $event;
+   }
 
 }

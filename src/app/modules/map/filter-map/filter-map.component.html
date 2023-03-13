@@ -77,9 +77,17 @@
 
          </div>
          <div class="col s3">
-           <button pButton pRipple type="button" label="Reset" class="p-button-danger" (click)=resetFilters()></button>
+           <div>
+             <ng-container>
+               Auto-Update
+             </ng-container>
+           </div>
+           <div>
+             <p-inputSwitch [(ngModel)]="checked" (ngModelChange)="send()"></p-inputSwitch>
 
-         </div>
+           </div>
+
+          </div>
          <!--
          <div class="col s4 right-align">
            <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text" *ngIf="!ocultarBarra" (click)="ocultar()" ></button>

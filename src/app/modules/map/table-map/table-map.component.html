@@ -1,7 +1,7 @@
    <div class="row">
 
 
-    <div class="p-col-12" *ngIf="Data!=undefined"><br><br>
+    <div class="p-col-12" *ngIf="Data!=undefined">
       <ng-container *ngIf="Data.length>0">
         <div class="col s12">
           <div class="col s2">
@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="col s12">
-          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['reference','date','move_Type_format','georeference','coordinates']">
+          <p-table #dt1 [value]="Data" [columns]="cols" [reorderableColumns]="true" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" styleClass="p-datatable-striped p-datatable-gridline"  [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['reference','date','move_Type_format','georeference','coordinates']">
             <ng-template pTemplate="caption">
                         <div class="flex">
                              <span class="p-input-icon-left ml-auto">
@@ -24,8 +24,17 @@
         <ng-template pTemplate="header" let-columns>
        <tr>
            <th *ngFor="let col of columns" pReorderableColumn>
+             <ng-container *ngIf="col.header=='Chassis History'">
+               <div class="center-align">
+                 {{col.header}}
+
+               </div>
+             </ng-container>
+             <ng-container *ngIf="col.header!='Chassis History'">
                {{col.header}}
-           </th>
+
+             </ng-container>
+            </th>
        </tr>
    </ng-template>
 

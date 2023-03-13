@@ -27,6 +27,10 @@ input {
   transform: scale(0);
 }
 
+td {
+  padding: 0rem 1rem !important;
+}
+
 input:-webkit-autofill-strong-password {
    -webkit-text-security: none !important;
    -webkit-user-select: none !important;

@@ -271,7 +271,7 @@ export class RouteMapComponent implements OnInit {
                num:(i+1),
                lat: features[i].geometry.coordinates[1],
                lon: features[i].geometry.coordinates[0],
-               coordinates: this.trunc(features[i].geometry.coordinates[0],3)  + ',' + this.trunc(features[i].geometry.coordinates[1],3) ,
+               coordinates: this.trunc(features[i].geometry.coordinates[0],3)  + ' , ' + this.trunc(features[i].geometry.coordinates[1],3) ,
                date: this.formatdate(features[i].properties.recorded_on),
                //id_geofence:  features[i].properties.move_type,
                move_type:  features[i].properties.move_type,
@@ -599,7 +599,7 @@ export class RouteMapComponent implements OnInit {
        document.getElementById("esri-view").focus();
 
         this.mapView.goTo({
-        center: [$event.lon, $event.lat],zoom:16
+        center: [$event.lon, $event.lat],zoom:10
       })
       .catch(function(error) {
         if (error.name != "AbortError") {
