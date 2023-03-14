@@ -23,6 +23,7 @@ export class FilterMapComponent implements OnInit {
 
    @Input() Events: any;
    @Input() Georeferences: any;
+   @Input() Time: any;
 
   constructor(
     private formBuilder: FormBuilder,

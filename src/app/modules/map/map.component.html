@@ -10,7 +10,7 @@
     </div><br><br>
     -->
     <div *ngIf="!ocultarFiltro">
-    <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)" (Sendchecked)="getChecked($event)"></app-filter-map>
+    <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)" (Sendchecked)="getChecked($event)" [Time]="timestring"></app-filter-map>
     </div>
     <ng-container *ngIf="loading">
       <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>

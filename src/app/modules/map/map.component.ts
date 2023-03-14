@@ -50,6 +50,7 @@ export class MapComponent implements OnInit {
   minutos: any;
   segundos: any;
   jsongeneral: any;
+  timestring: any;
 
 
   // this is needed to be able to create the MapView at the DOM element in this component
@@ -78,7 +79,7 @@ export class MapComponent implements OnInit {
 
 
 
-      //this.contador_regresivo();
+      this.contador_regresivo();
 
 
       this.events = [];
@@ -117,13 +118,19 @@ export class MapComponent implements OnInit {
 
        this.segundos = 60-segundoactual;
 
+
       if(this.contador2 == undefined) {
         this.contador2 = setInterval(()=> {
-
+          this.timestring = this.minutos;
+          if(this.segundos<10){
+            this.timestring = this.timestring + ':0' + this.segundos
+          }else{
+            this.timestring = this.timestring + ':' + this.segundos
+          }
           if(this.minutos == 0 && this.segundos == 0){
             this.contador_regresivo();
 
-            if(!this.reload){
+            if(this.reload){
               this.refreshdata();
               this.contador2  = undefined;
              //  Swal.fire('Updating information!')
@@ -135,7 +142,7 @@ export class MapComponent implements OnInit {
               clearInterval(this.contador2);
           }else{
             if(this.minutos == 1 && this.segundos == 0){
-              if(!this.reload){
+              if(this.reload){
                 this.messageService.add({severity:'warn', summary: 'Warn', detail: 'New data will be available in a minute!'});
               }
 
@@ -160,6 +167,8 @@ export class MapComponent implements OnInit {
     }
 
     refreshdata(){
+      this.loading = true;
+
       fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
@@ -998,16 +1007,14 @@ export class MapComponent implements OnInit {
   }
 
   rebuildmap($event, coords){
-    console.log(this.jsongeneral);
 
-     this.makefromjson(this.jsongeneral,$event,coords);
-    /*
     fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
     }).catch(err => console.error(err));
-    */
+
+
   }
 
   makefromjson(json,$event, coords){

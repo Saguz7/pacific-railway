@@ -5,225 +5,66 @@
           <div class="col s12">
             Search By:
           </div>
-          <div class="col s6">
-            <div class="col s3">
-              <!--
-              <p-radioButton [(ngModel)]="selectedOption" value="1" name="groupname"></p-radioButton>
-            -->
-
+          <div class="col s12 m8 l8">
+            <div class="col s12 m2 l2">
               <label for="groupname"> Chassis ID</label>
             </div>
-            <div class="col s1">
+            <div class="col s1 m1 l1">
              </div>
-            <div class="col s3">
-              <!--
-
-              <p-radioButton [(ngModel)]="selectedOption" value="2" name="groupname"></p-radioButton>
-            -->
-
+            <div class="col s12 m2 l2">
               <label for="groupname"> Events</label>
             </div>
-            <div class="col s3">
-              <!--
-              <p-radioButton [(ngModel)]="selectedOption" value="3" name="groupname"></p-radioButton>
-            -->
-
+            <div class="col s12 m2 l2">
               <label for="groupname"> Geofences</label>
             </div>
           </div>
-          <div class="col s5">
-          </div>
-
-
          </div>
-
          <div class="col s12">
-
-           <div class="col s6">
-             <div class="col s3">
+           <div class="col s12 m8 l8">
+             <div class="col s12 m2 l2">
                <div class="p-inputgroup">
                   <input [(ngModel)]="chasis" (onChange)="deleteoptions()" type="text" pInputText>
                </div>
              </div>
-             <div class="col s1">
+             <div class="col s1 m1 l1">
                <label for="groupname"> OR</label>
              </div>
-             <div class="col s3">
+             <div class="col s12 m2 l2">
                <div class="p-inputgroup" *ngIf="Events.length>0">
                  <p-dropdown [options]="Events" [(ngModel)]="event_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
                </div>
              </div>
-             <div class="col s3">
+             <div class="col s12 m2 l2">
                <div class="p-inputgroup" *ngIf="Georeferences.length>0">
                  <p-dropdown [options]="Georeferences" [(ngModel)]="georeference_select" (onChange)="deletechasis()" [showClear]="true" optionLabel="name"  [style]="{'width':'100%','max-width':'100%'}"></p-dropdown>
                </div>
              </div>
              <div class="col s2">
-               <div class="col s6">
+               <div class="col s12 m12 l6">
                  <button pButton pRipple type="button" label="Go" class="p-button-success" (click)=send_filter()></button>
                </div>
-               <div class="col s6">
+               <div class="col s12 m12 l6">
                  <button pButton pRipple type="button" label="Reset" class="p-button-danger" (click)=resetFilters()></button>
-
                </div>
-
              </div>
-
-
-
-
          </div>
-         <div class="col s3">
-
-         </div>
-         <div class="col s3">
+         <div class="col s12 m4 l4">
            <div>
              <ng-container>
                Auto-Update
+               <ng-container *ngIf="checked">
+                  ({{Time}})
+                </ng-container>
+                 
+
              </ng-container>
            </div>
-           <div>
+           <div class="valign-wrapper">
              <p-inputSwitch [(ngModel)]="checked" (ngModelChange)="send()"></p-inputSwitch>
 
            </div>
-
           </div>
-         <!--
-         <div class="col s4 right-align">
-           <button pButton pRipple type="button" label="Hide Filter Bar" class="p-button-secondary p-button-text" *ngIf="!ocultarBarra" (click)="ocultar()" ></button>
-           <button pButton pRipple type="button" label="Show Filter Bar" class="p-button-secondary p-button-text" *ngIf="ocultarBarra" (click)="mostrar()" ></button>
-           <button pButton pRipple type="button" label="Filters {{getFormsInitialized()}}" class="p-button-secondary p-button-text"></button>
-           <button pButton pRipple type="button" label="Go" class="p-button-danger" (click)=verForms()></button>
          </div>
-         -->
-         </div>
-<!--
-        <form [formGroup]="form" (ngSubmit)="submit($event)" autocomplete="off" class="form-auth">
-
-
-
-
-
-
-
-        <div *ngIf="!ocultarBarra">
-        <div class="col s12">
-          <div class="col s1">
-            <div>
-              Company:
-            </div>
-            <div>
-              <p-dropdown [options]="companies_options" formControlName=company optionLabel="name" [style]="{'width':'100%'}"></p-dropdown>
-            </div>
-           </div>
-          <div class="col s1">
-             <div>
-               Load/Empty:
-            </div>
-            <div>
-              <p-dropdown [options]="load_emptys_options" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
-            </div>
-          </div>
-          <div class="col s1">
-            <div>
-              Origin:
-           </div>
-           <div>
-             <input formControlName=origin type="text" pInputText>
-           </div>
-
-          </div>
-          <div class="col s1">
-            <div>
-              Stripper:
-           </div>
-           <div>
-             <input formControlName=stripper type="text" pInputText>
-           </div>
-          </div>
-          <div class="col s1">
-            <div>
-              Destination:
-           </div>
-           <div>
-             <input formControlName=destination type="text" pInputText>
-           </div>
-          </div>
-          <div class="col s1">
-            <div>
-              Consignee:
-           </div>
-           <div>
-             <input formControlName=consignee type="text" pInputText>
-           </div>
-          </div>
-          <div class="col s2">
-
-            <div>
-              Last Reported Station:
-           </div>
-           <div>
-             <input formControlName=last_report_station type="text" pInputText>
-           </div>
-          </div>
-          <div class="col s2">
-
-            <div>
-              Equipment Status:
-           </div>
-           <div>
-             <p-dropdown [options]="equipment_status_options" formControlName=load_empty optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
-           </div>
-          </div>
-          <div class="col s2">
-
-            <div>
-              Equipment Type:
-           </div>
-           <div>
-             <p-dropdown [options]="equipment_types_options" formControlName=equipment_type optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
-           </div>
-          </div>
-          <div class="col s1">
-          </div>
-          <div class="col s1">
-          </div>
-        </div>
-
-        <div class="col s12">
-          <div class="col s1">
-
-            <div>
-              Load Status:
-           </div>
-           <div>
-             <p-dropdown [options]="load_status_options" formControlName=load_status optionLabel="name"  [style]="{'width':'100%'}"></p-dropdown>
-           </div>
-          </div>
-          <div class="col s2">
-
-            <div>
-              Storage Guarantee:
-           </div>
-           <div>
-             <input formControlName=storage_guarantee type="text" pInputText>
-           </div>
-          </div>
-          <div class="col s2">
-
-            <div>
-              Pickup Number:
-           </div>
-           <div>
-             <input formControlName=pickup_number type="text" pInputText>
-           </div>
-          </div>
-        </div>
-        </div>
-      </form>
-    -->
-
       </div>
-
     </div>
   </div>
