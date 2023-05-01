@@ -308,7 +308,7 @@ export class PpsDetailsComponent implements OnInit {
                              },
                              content: [
                                that.pdfService.getTitle(that.chasis),
-                               that.pdfService.getPPSDetails(that.lon,that.lat),
+                               that.pdfService.getPPSDetails(that.lat,that.lon),
                                 {
                                  image: screenshot.dataUrl,alignment: 'center'
                                },
