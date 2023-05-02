@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:4400/'
+  APP_URL_BASE: 'http://localhost:4400/',
+  API_URL_BASE: 'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/',
 
 };
 

@@ -169,7 +169,7 @@ export class MapComponent implements OnInit {
     refreshdata(){
       this.loading = true;
 
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch(environment.API_URL_BASE + "get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -204,7 +204,7 @@ export class MapComponent implements OnInit {
 
     getDatafromGeoJson(){
 
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch(environment.API_URL_BASE + "get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -243,7 +243,7 @@ export class MapComponent implements OnInit {
         //  final_date: fromToSend
         }
 
-                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                     this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
 
 
@@ -278,7 +278,7 @@ export class MapComponent implements OnInit {
     getData(): Observable<any> {
     return from(
       fetch(
-        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
         {
           headers: {
             'Content-Type': 'application/json',
@@ -456,7 +456,7 @@ export class MapComponent implements OnInit {
                                         if(headerslabel[j]=='url'){
                                           var createA = document.createElement('a');
                                           var createAText = document.createTextNode(`Chassis Details`);
-                                          createA.setAttribute('href', environment.url +  "chassis-details/" + feature.attributes['id']);
+                                          createA.setAttribute('href', environment.APP_URL_BASE +  "chassis-details/" + feature.attributes['id']);
                                           createA.appendChild(createAText);
                                           cell.appendChild(createA);
                                         }
@@ -891,7 +891,7 @@ export class MapComponent implements OnInit {
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
                      georeference: georences_string,
-                     routemap: environment.url +   features[i].id,
+                     routemap: environment.APP_URL_BASE +   features[i].id,
                      move_Type_format: this.formatstring(features[i].properties.move_type),
 
 
@@ -909,7 +909,7 @@ export class MapComponent implements OnInit {
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
                      georeference: georences_string,
-                     routemap: environment.url + features[i].id,
+                     routemap: environment.APP_URL_BASE + features[i].id,
                      move_Type_format: this.formatstring(features[i].properties.move_type),
 
                  }
@@ -1008,7 +1008,7 @@ export class MapComponent implements OnInit {
 
   rebuildmap($event, coords){
 
-    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+    fetch(environment.API_URL_BASE + "get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
