@@ -148,15 +148,8 @@ export class PpsDetailsComponent implements OnInit {
     if(json!=undefined){
       this.loading = false;
 
-      console.log(json);
 
       if(json.features!=undefined && (json.features!=undefined && json.features.length>0)){
-        console.log(json.features);
-        console.log(json.features[0]);
-        console.log(json.features[0].geofences);
-
-        console.log(json.features[0].properties.geofences);
-
         this.lon = json.features[0].geometry.coordinates[1];
         this.lat = json.features[0].geometry.coordinates[0];
         let lat = json.features[0].geometry.coordinates[0];
@@ -212,10 +205,6 @@ export class PpsDetailsComponent implements OnInit {
              georences_string = georences_string + this.getGeofencesPrimor(geofences_array[e]) + ',';
           }
         }
-
-        console.log(geofences_array);
-        console.log(georences_string);
-
         this.geofences_array = geofences_array;
 
         return loadModules([

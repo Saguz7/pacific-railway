@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2'
 import {MessageService} from 'primeng/api';
-
+import { Location } from '@angular/common';
 
 import { saveAs } from 'file-saver';
 @Component({
@@ -60,6 +60,7 @@ export class MapComponent implements OnInit {
     private messageService: MessageService,
     private router : Router,
     private cdRef : ChangeDetectorRef,
+    private location: Location,
     private CFR?: ComponentFactoryResolver,
     private cdref?: ChangeDetectorRef,
     private msService?: MapStateService,
@@ -89,7 +90,7 @@ export class MapComponent implements OnInit {
       this.dataGeneral = [];
       this.filterspoints = [];
       this.href = this.router.url;
-      this.currentURL = window.location.href.replace(this.href,'');
+      this.currentURL = window.location.href.replace(this.href,''); 
     }
 
     contador_regresivo() {
@@ -456,7 +457,8 @@ export class MapComponent implements OnInit {
                                         if(headerslabel[j]=='url'){
                                           var createA = document.createElement('a');
                                           var createAText = document.createTextNode(`Chassis Details`);
-                                          createA.setAttribute('href', environment.APP_URL_BASE +  "chassis-details/" + feature.attributes['id']);
+
+                                          createA.setAttribute('href', this.href +  "/chassis-details/" + feature.attributes['id']);
                                           createA.appendChild(createAText);
                                           cell.appendChild(createA);
                                         }
@@ -879,8 +881,8 @@ export class MapComponent implements OnInit {
                }
                */
 
-
-               this.data.push(
+               var createAText = document.createTextNode(`Chassis Details`);
+                this.data.push(
                  {
                    reference: features[i].id,
                     device_id:  features[i].properties.device_id,
@@ -891,7 +893,7 @@ export class MapComponent implements OnInit {
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
                      georeference: georences_string,
-                     routemap: environment.APP_URL_BASE +   features[i].id,
+                     routemap: this.href +   features[i].id,
                      move_Type_format: this.formatstring(features[i].properties.move_type),
 
 
@@ -909,7 +911,7 @@ export class MapComponent implements OnInit {
                      lat: features[i].geometry.coordinates[0],
                      lon: features[i].geometry.coordinates[1],
                      georeference: georences_string,
-                     routemap: environment.APP_URL_BASE + features[i].id,
+                     routemap: this.href + features[i].id,
                      move_Type_format: this.formatstring(features[i].properties.move_type),
 
                  }
