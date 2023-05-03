@@ -6,7 +6,8 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class GEOJsonService {
-  private apiurl: string = environment.API_URL_BASE + 'get-cpr-geojson';
+  //private apiurl: string = environment.API_URL_BASE + 'get-cpr-geojson';
+  private apiurl: string = 'https://1jz8l0lbc6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson';
 
   constructor(private http: HttpClient) {}
 

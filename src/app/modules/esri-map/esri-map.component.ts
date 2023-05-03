@@ -115,7 +115,6 @@ export class EsriMapComponent implements OnInit, OnDestroy {
     // Initialize MapView and return an instance of MapView
     this.initializeMap().then(mapView => {
       // The map has been initialized
-      console.log("mapView ready: ", this._view.ready);
       this._loaded = this._view.ready;
       this.mapLoadedEvent.emit(true);
     });
