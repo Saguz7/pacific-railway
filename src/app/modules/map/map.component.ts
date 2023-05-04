@@ -171,7 +171,7 @@ export class MapComponent implements OnInit {
       this.loading = true;
 
   //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -207,7 +207,7 @@ export class MapComponent implements OnInit {
     getDatafromGeoJson(){
 
     //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -247,7 +247,7 @@ export class MapComponent implements OnInit {
         }
 
                   //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                     this.http.post<any>('https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
 
 
@@ -283,7 +283,7 @@ export class MapComponent implements OnInit {
     return from(
       fetch(
         //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        'https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
           headers: {
             'Content-Type': 'application/json',
@@ -1015,7 +1015,7 @@ export class MapComponent implements OnInit {
   rebuildmap($event, coords){
 
     //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+    fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false, 
-  API_URL_BASE: 'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/',
+  API_URL_BASE: 'https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/',
 
 };
 
