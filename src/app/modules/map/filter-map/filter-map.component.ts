@@ -130,7 +130,7 @@ export class FilterMapComponent implements OnInit {
     send_filter(){
        let objsend = {};
       if(this.event_select!=null){
-        objsend['event'] =  this.event_select;
+        objsend['event'] =  this.event_select.toUpperCase();
       }
 
       if(this.georeference_select!=null){

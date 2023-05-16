@@ -29,6 +29,7 @@ export class MapComponent implements OnInit {
   componentsReferences = [];
   events = [];
   georeferences = [];
+  puntosarray = [];
   checked: boolean;
   //  map: Map;
 
@@ -52,6 +53,7 @@ export class MapComponent implements OnInit {
   jsongeneral: any;
   timestring: any;
 
+  layer: any;
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
@@ -171,7 +173,7 @@ export class MapComponent implements OnInit {
       this.loading = true;
 
   //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -207,7 +209,7 @@ export class MapComponent implements OnInit {
     getDatafromGeoJson(){
 
     //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -247,7 +249,7 @@ export class MapComponent implements OnInit {
         }
 
                   //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                     this.http.post<any>('https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                     this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
 
 
@@ -283,7 +285,7 @@ export class MapComponent implements OnInit {
     return from(
       fetch(
         //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        'https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
           headers: {
             'Content-Type': 'application/json',
@@ -324,7 +326,7 @@ export class MapComponent implements OnInit {
         let that = this;
 
         let urldirect = window.location.href.replace('/map','')
-        const layer = new GeoJSONLayer({
+        this.layer = new GeoJSONLayer({
           title: "Chassis",
           url: urljson,
           outFields: ["*"],
@@ -364,12 +366,22 @@ export class MapComponent implements OnInit {
           }
         });
 
+
+
+
         function btnClick(reference) {
-          that.router.navigate([`chassis-details`,  reference.graphic.attributes.id ]);
+          ///that.router.navigate([`chassis-details`,  reference.graphic.attributes.id ]);
+
+          const url = that.router.createUrlTree([`chassis-details`, reference.graphic.attributes.id]).toString();
+          window.open(url, '_blank');
+
 				}
 
         function btnClickRoute(reference) {
-          that.router.navigate([`chassis-history`,  reference.graphic.attributes.id ]);
+          //that.router.navigate([`chassis-history`,  reference.graphic.attributes.id ]);
+          //
+          const url = that.router.createUrlTree([`chassis-history`, reference.graphic.attributes.id]).toString();
+          window.open(url, '_blank');
 				}
 
 
@@ -382,7 +394,7 @@ export class MapComponent implements OnInit {
             minZoom : 3,
           },
         });
-        map.add(layer);
+        map.add(this.layer);
         this.mapView.popup.viewModel.includeDefaultActions = false;
          this.mapView.on("drag", function(evt) {
           var initialExtent = that.mapView.extent;
@@ -411,14 +423,14 @@ export class MapComponent implements OnInit {
                         });
 
                       // this.mapView.whenLayerView(layer).then(lv => {
-                       this.mapView.whenLayerView(layer).then(lv => {
+                       this.mapView.whenLayerView(this.layer).then(lv => {
                            const layerView = lv;
                            const customContentPromise = new CustomContent({
                              outFields: ["*"],
                              creator: (event) => {
-                               const query = layer.createQuery();
+                               const query = this.layer.createQuery();
                                query.aggregateIds = [event.graphic.getObjectId()];
-                                return layer.queryFeatures(query).then(result => {
+                                return this.layer.queryFeatures(query).then(result => {
                                    const contentDiv = document.createElement("div");
                                    const tbl = document.createElement("table");
                                    let headers = ['Chassis ID','Events' ,'PPS Details'];
@@ -552,13 +564,13 @@ export class MapComponent implements OnInit {
                                ]
                            };
 
-                           layer.featureReduction = clusterConfig;
+                           this.layer.featureReduction = clusterConfig;
 
                            const toggleButton = document.getElementById("cluster");
 
                            toggleButton.addEventListener("click", () => {
-                               let fr = layer.featureReduction;
-                               layer.featureReduction =
+                               let fr = this.layer.featureReduction;
+                               this.layer.featureReduction =
                                    fr && fr.type === "cluster" ? null : clusterConfig;
                                toggleButton.innerText =
                                    toggleButton.innerText === "Enable Clustering"
@@ -642,9 +654,9 @@ export class MapComponent implements OnInit {
                        });
 
                        function selectFeatures(geometry) {
-                         const query = layer.createQuery();
+                         const query = this.layer.createQuery();
                          query.aggregateIds = [geometry.graphic.getObjectId()];
-                         layer.queryFeatures(query).then(result => {
+                         this.layer.queryFeatures(query).then(result => {
                             const contentDiv = document.createElement("div");
                             return contentDiv
                         });
@@ -745,7 +757,7 @@ export class MapComponent implements OnInit {
                      setTimeout(() => {
                        if(coords!=null){
                          this.mapView.goTo({
-                          center: [coords[1], coords[0]],zoom:10
+                          center: [coords[1], coords[0]],zoom:7
                         })
                         .catch(function(error) {
                           if (error.name != "AbortError") {
@@ -972,12 +984,9 @@ export class MapComponent implements OnInit {
     let coords = null;
     this.loading = true;
      this.data = this.dataGeneral;
-
-
-
      if($event.chasis!=null){
 
-       this.data = this.data.filter(element => String(element.reference) == String($event.chasis.trim()));
+       this.data = this.data.filter(element => String(element.reference) == String($event.chasis.trim().toUpperCase()));
        if(this.data.length>0){
          coords = [this.data[0].lon,this.data[0].lat]
        }
@@ -1015,7 +1024,7 @@ export class MapComponent implements OnInit {
   rebuildmap($event, coords){
 
     //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-    fetch("https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+    fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
@@ -1097,16 +1106,21 @@ export class MapComponent implements OnInit {
    }
 
    getCenter(event){
+
      let coordinates = event.coordinates.split(',');
-     document.getElementById("esri-view").focus();
+     const longitude = parseFloat(coordinates[0]);
+    const latitude = parseFloat(coordinates[1]);
+
+
      this.mapView.goTo({
-      center: [coordinates[0], coordinates[1]],zoom:10
+        center: [longitude, latitude],zoom:8
     })
     .catch(function(error) {
       if (error.name != "AbortError") {
          console.error(error);
       }
     });
+
    }
 
 

@@ -90,7 +90,39 @@ export class PDFService {
           ]
         },
         {canvas: [ { type: 'line', x1: 10, y1: 0, x2: 505, y2: 0, lineWidth: 2 } ]},
+
+
+
+
       );
+
+
+      content_array_left.push(
+        { columns: [
+            { width: 40, text: '', margin: [0, 0, 0, 3]},
+           ]
+        },
+          { columns: [
+          {  width: '25%',  text: 'Date:' , fontSize: 10,bold: true, margin: [0, 0, 0, 0]},
+          {  width: '75%',  text: date, fontSize: 9 , margin: [0, 0, 0, 0]}
+
+          ]
+          },
+
+          { columns: [
+            { width: 40, text: '', margin: [0, 0, 0, 3]},
+           ]
+          },
+
+          { columns: [
+             {  width: '25%',  text: 'Last Event:' , fontSize: 10,bold: true, margin: [0, 0, 0, 0]},
+             {  width: '75%',  text: this.formatstring(event), fontSize: 9 , margin: [0, 0, 0, 0]}
+
+          ]
+          },
+
+        );
+
 
 
 
@@ -414,6 +446,13 @@ export class PDFService {
 
     formatstring(content){
       return content.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+    }
+
+    formatdatehours(date){
+      let dateformat = date.split(' ');
+      let hourformat = dateformat[1].split('.');
+      return dateformat[0] + ' ' + hourformat[0];
+
     }
 
 

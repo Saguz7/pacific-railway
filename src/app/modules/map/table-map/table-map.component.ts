@@ -185,12 +185,16 @@ export class TableMapComponent implements OnInit {
   }
 
   gotoppsdetails(reference){
-    this.router.navigate([`chassis-details`,  reference ]);
+    //this.router.navigate([`chassis-details`,  reference ]);
+    const url = this.router.createUrlTree([`chassis-details`, reference]).toString();
+    window.open(url, '_blank');
 
   }
 
   gotoroutemap(reference){
-    this.router.navigate([`chassis-history`,  reference ]);
+    //this.router.navigate([`chassis-history`,  reference ]);
+    const url = this.router.createUrlTree([`chassis-history`, reference]).toString();
+    window.open(url, '_blank');
   }
 
   gotocentermap(object){
