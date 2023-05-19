@@ -90,13 +90,18 @@ export class RouteMapComponent implements OnInit {
                         //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
                             this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
 
-                            if(data.body['message']!=undefined){
-                              Swal.fire('No results found')
+                              let responseBody;
+                                 try {
+                                   responseBody = JSON.parse(data.body);
+                                 } catch (error) {
+                                   responseBody = {};
+                                 }
 
-                            }else{
-                              this.buildmap(data.body.features);
-
-                            }
+                                 if (responseBody.message === "No data history for id") { 
+                                   this.buildmap([]);
+                                 } else {
+                                   this.buildmap(data.body.features);
+                                 }
 
 
                         })
@@ -131,15 +136,19 @@ export class RouteMapComponent implements OnInit {
        }
                   //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
                     this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                      var jsonbody = JSON.parse(data.body);
-                      if(jsonbody['message']!=undefined){
-                        Swal.fire('No results found')
-                        this.buildmap([]);
+                      let responseBody;
+                         try {
+                           responseBody = JSON.parse(data.body);
+                         } catch (error) {
+                           responseBody = {};
+                         }
 
-                      }else{
-                        this.buildmap(data.body.features);
-
-                      }
+                         if (responseBody.message === "No data history for id") {
+                           Swal.fire('No results found');
+                           this.buildmap([]);
+                         } else {
+                           this.buildmap(data.body.features);
+                         }
                    })
 
               //    this.buildmap();
