@@ -56,6 +56,10 @@ export class RouteMapComponent implements OnInit {
 
 
    ngOnInit() {
+
+
+
+
      this.events= [
        {name: "No Filter", value: "No Filter"}
      ]
@@ -88,7 +92,7 @@ export class RouteMapComponent implements OnInit {
              }
              this.loading = true;
                         //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                            this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                            this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
 
                               let responseBody;
                                  try {
@@ -97,7 +101,7 @@ export class RouteMapComponent implements OnInit {
                                    responseBody = {};
                                  }
 
-                                 if (responseBody.message === "No data history for id") { 
+                                 if (responseBody.message === "No data history for id") {
                                    this.buildmap([]);
                                  } else {
                                    this.buildmap(data.body.features);
@@ -135,7 +139,7 @@ export class RouteMapComponent implements OnInit {
          final_date: fromToSend
        }
                   //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                    this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                    this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                       let responseBody;
                          try {
                            responseBody = JSON.parse(data.body);
@@ -150,18 +154,10 @@ export class RouteMapComponent implements OnInit {
                            this.buildmap(data.body.features);
                          }
                    })
-
-              //    this.buildmap();
-
      }
 
      buildmap(features){
        if(features!=undefined){
-         /*
-         this.events= [
-           {name: "No Filter", value: "No Filter"}
-         ]
-         */
          this.georeferences = [
            {name: "No Filter", value: "No Filter"},
            {name: "Bensenville Intermodal Terminal", value: "e6468692-50cf-46a1-bac7-5c1baeb4749d"},
@@ -174,8 +170,6 @@ export class RouteMapComponent implements OnInit {
            {name: "Vaughan Intermodal Terminal", value: "744883a4-2e52-4f7a-95e5-4f76bed45f2d"},
            {name: "Vancouver Intermodal Terminal", value: "445f7608-2c14-41e8-be80-0c4ad6dadffb"},
            {name: "Winnipeg Intermodal Terminal", value: "156c6c75-fdb1-45d2-94c0-8c0791bd2da6"},
-           //{name: "Big Calgary Circle", value: "Big Calgary Circle"}
-
          ];
 
          this.historicalpoints = [];
@@ -192,50 +186,34 @@ export class RouteMapComponent implements OnInit {
            if(!found){
              if(!this.isEmpty(str2)){
                this.events.push({name: str2, value: features[i].properties.move_type});
-
              }
-
-             // this.georeferences.push({name: str2, value: features[i].properties.move_type});
            }
-
            let total_distance;
            let traveled_distance;
            let total_distance_km;
-
            if(features[i].properties.total_distance!='nan'){
              if(features[i].properties.total_distance!=null){
                total_distance = parseFloat(features[i].properties.total_distance) * 0.621371;
                total_distance_km = this.convertkm(total_distance);
-
              }
             }
            if(features[i].properties.move_type == 'move_stop' && reference_move_stop==undefined){
              reference_move_stop = total_distance;
-
            }
            if(features[i].properties.move_type == 'move_stop' && reference_move_stop!=undefined){
              if(total_distance!=null){
                traveled_distance =  (total_distance - reference_move_stop)* 0.621371;
                traveled_distance = this.convertkm(traveled_distance);
              }
-
-
            }
-
            let geofences_array = [];
            let georences_string = '';
            if(typeof features[i].properties.geofences == 'string'){
-             let featurestring = features[i].properties.geofences;
-            // featurestring = this.replaceAll(featurestring,"'", '"');
-            // featurestring = this.replaceAll(featurestring,"'", '"');
-          //   featurestring = this.replaceAll(featurestring," ", '');
+            let featurestring = features[i].properties.geofences;
             featurestring = this.replaceAll(featurestring,"'", '');
-
-             let arrayaux = [];
-
-
-             let sentencias = featurestring.split(/[{}]/);
-             const resultado = sentencias.filter(sentence => sentence.length>2);
+            let arrayaux = [];
+            let sentencias = featurestring.split(/[{}]/);
+            const resultado = sentencias.filter(sentence => sentence.length>2);
 
              for(var r = 0; r < resultado.length;r++){
                let objaux = {id: '', name: ''}
@@ -250,23 +228,9 @@ export class RouteMapComponent implements OnInit {
                        const found = geofences_array.find(element => element.name == arraysplitdospuntos[1].trim());
                        if(!found){
                          geofences_array.push(objaux);
-
-/*
-                         const foundinteres = this.georeferences.find(element => element.value == arraysplitdospuntos[1].trim());
-                        if(foundinteres){
-                          geofences_array.push(objaux);
-                         }
-
-                         */
-
                          }
                       }
                    }
-
-
-
-
-
                  }
                }
              }
@@ -313,24 +277,17 @@ export class RouteMapComponent implements OnInit {
                         'esri/symbols/TextSymbol'
                       ])
                         .then(([GeoJSONLayer,Sketch,Map,GraphicsLayer, MapView, Graphic,TextSymbol]) => {
-                              //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
                           const map: __esri.Map = new Map({
                             basemap: 'streets'
                           });
-
-
-
                           this.mapView = new MapView({
                             container: this.mapViewEl.nativeElement,
                             map: map,
                             center: [-114.8574, 54.6542],
                             zoom: 4,
                           });
-
-
                           const graphicsLayer = new GraphicsLayer();
                            map.add(graphicsLayer);
-
                            for(var i = 0; i < this.historicalpoints.length;i++){
                              let equalspoint = this.historicalpoints.filter(element => element.lon == this.historicalpoints[i].lon && element.lat == this.historicalpoints[i].lat);
                              let pointtext = '';
@@ -375,8 +332,7 @@ export class RouteMapComponent implements OnInit {
                               xoffset: 0,
                               yoffset: -4,
                               font: {  // autocast as esri/symbols/Font
-                                size: 8,
-                                family: "sans-serif"
+                                size: 8 
                               }
                             });
 
@@ -407,17 +363,11 @@ export class RouteMapComponent implements OnInit {
                                        if(found){
 
                                          that.mapView.popup.close();
-
-
-
                                          that.mapView.popup.open({
-                                             // Set the popup's title to the coordinates of the clicked location
                                              title: found.num,
                                              content: getContent(found),
-                                             location: results[0].mapPoint // Set the location of the popup to the clicked location
+                                             location: results[0].mapPoint
                                          });
-
-                                         // this.georeferences.push({name: str2, value: features[i].properties.move_type});
                                        }
                                      }
 
@@ -428,13 +378,6 @@ export class RouteMapComponent implements OnInit {
 
                           });
 
-                          /*
-
-                          date: this.formatdate(features[i].properties.recorded_on),
-                          move_type: this.formatstring(features[i].properties.move_type),
-                          total_distance:  ''+total_distance,
-                          traveled_distance: traveled_distance
-                          */
 
                           function getContent(found) {
                             let divcontent = document.createElement("div");
@@ -500,7 +443,6 @@ export class RouteMapComponent implements OnInit {
                               divcontent.appendChild(divtraveled_distance);
                             }
                             return divcontent;
-                           // that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
                           }
 
 
@@ -770,7 +712,7 @@ export class RouteMapComponent implements OnInit {
 
 
                     //this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                    this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                    this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                       //this.buildmap(data.body.features);
                       this.makefromjson(data.body,$event);
                   })

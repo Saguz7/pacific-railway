@@ -55,6 +55,7 @@ export class MapComponent implements OnInit {
 
   layer: any;
 
+
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
@@ -78,6 +79,45 @@ export class MapComponent implements OnInit {
     ocultarTabla:boolean;
 
     ngOnInit() {
+
+
+
+            return loadModules([
+              "esri/Map",
+              "esri/layers/FeatureLayer",
+              "esri/layers/GeoJSONLayer",
+              "esri/views/MapView",
+              "esri/widgets/Legend",
+              "esri/widgets/Expand",
+              "esri/widgets/Home",
+              "esri/popup/content/CustomContent",
+              "esri/layers/GraphicsLayer",
+              "esri/widgets/Sketch",
+              "esri/widgets/Sketch/SketchViewModel",
+              "esri/geometry/geometryEngineAsync",
+              "esri/geometry/support/webMercatorUtils"
+            ])
+            .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync,webMercatorUtils]) => {
+              const map: __esri.Map = new Map({
+                basemap: 'streets'
+              });
+              let that = this;
+
+              this.mapView = new MapView({
+                container: this.mapViewEl.nativeElement,
+                center: [-114.8574, 54.6542],
+                zoom: 4,
+                map: map,
+                constraints: {
+                  minZoom : 3,
+                },
+              });
+            })
+
+
+                      .catch(err => {
+                        console.error(err);
+                      });
 
 
 
@@ -173,7 +213,7 @@ export class MapComponent implements OnInit {
       this.loading = true;
 
   //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -209,7 +249,7 @@ export class MapComponent implements OnInit {
     getDatafromGeoJson(){
 
     //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -249,7 +289,7 @@ export class MapComponent implements OnInit {
         }
 
                   //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                     this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
 
 
@@ -285,7 +325,7 @@ export class MapComponent implements OnInit {
     return from(
       fetch(
         //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        'https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
           headers: {
             'Content-Type': 'application/json',
@@ -331,14 +371,11 @@ export class MapComponent implements OnInit {
           url: urljson,
           outFields: ["*"],
           popupTemplate: {
-          //  title: 'Chasis <a [routerLink]=["' +environment.url + '"ppsdetails/{id}"] title="{id}">{id}</a>',
             title: 'Chassis  {id} ',
             content: [
 							{
 								type: "custom",
 								creator: (graphic) => {
-									// could also check if button already created
-									// and just reuse it
                   let divcontent = document.createElement("div");
                   let btn = document.createElement("button");
                   btn.innerText = "Chassis Details";
@@ -370,21 +407,17 @@ export class MapComponent implements OnInit {
 
 
         function btnClick(reference) {
-          ///that.router.navigate([`chassis-details`,  reference.graphic.attributes.id ]);
-
           const url = that.router.createUrlTree([`chassis-details`, reference.graphic.attributes.id]).toString();
           window.open(url, '_blank');
 
 				}
 
         function btnClickRoute(reference) {
-          //that.router.navigate([`chassis-history`,  reference.graphic.attributes.id ]);
-          //
           const url = that.router.createUrlTree([`chassis-history`, reference.graphic.attributes.id]).toString();
           window.open(url, '_blank');
 				}
 
-
+/*
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
           center: [-114.8574, 54.6542],
@@ -394,6 +427,9 @@ export class MapComponent implements OnInit {
             minZoom : 3,
           },
         });
+        */
+        this.mapView.container = this.mapViewEl.nativeElement;
+        this.mapView.map = map;
         map.add(this.layer);
         this.mapView.popup.viewModel.includeDefaultActions = false;
          this.mapView.on("drag", function(evt) {
@@ -416,13 +452,7 @@ export class MapComponent implements OnInit {
                          }else{
                            that.getAllTable();
                          }
-
-
-
-                          //document.getElementById('vScale').innerHTML = '1:' + evt.toFixed(2);
                         });
-
-                      // this.mapView.whenLayerView(layer).then(lv => {
                        this.mapView.whenLayerView(this.layer).then(lv => {
                            const layerView = lv;
                            const customContentPromise = new CustomContent({
@@ -445,22 +475,11 @@ export class MapComponent implements OnInit {
                                        cellheader.appendChild(cellTextHeader);
                                        rowheaders.appendChild(cellheader);
                                      }
-
-                                     // add the row to the end of the table body
                                      tblHeader.appendChild(rowheaders);
-
-
                                     const tblBody = document.createElement("tbody");
-
-                                    // creating all cells
                                     for (const feature of result.features) {
-                                      // creates a table row
                                       const row = document.createElement("tr");
-
                                       for (let j = 0; j < headerslabel.length; j++) {
-                                        // Create a <td> element and a text node, make the text
-                                        // node the contents of the <td>, and put the <td> at
-                                        // the end of the table row
                                          let data = "";
                                          const cell = document.createElement("td");
 
@@ -473,57 +492,21 @@ export class MapComponent implements OnInit {
                                         if(headerslabel[j]=='url'){
                                           var createA = document.createElement('a');
                                           var createAText = document.createTextNode(`Chassis Details`);
-
                                           createA.setAttribute('href', this.href +  "/chassis-details/" + feature.attributes['id']);
                                           createA.appendChild(createAText);
                                           cell.appendChild(createA);
                                         }
                                          row.appendChild(cell);
                                       }
-
-                                      // add the row to the end of the table body
                                       tblBody.appendChild(row);
                                     }
-
-                                    // put the <tbody> in the <table>
                                     tbl.appendChild(tblHeader);
-
                                     tbl.appendChild(tblBody);
-                                    // appends <table> into <body>
                                     document.body.appendChild(tbl);
-                                   /*
-                                   const featuresUl = document.createElement("ul");
-                                   let featureLi;
-                                   for (const feature of result.features) {
-                                       featureLi = document.createElement("li");
-                                       featureLi.innerText = `Chasis ${feature.attributes.id}`;
-                                       featuresUl.appendChild(featureLi);
-                                   }
-                                   contentDiv.appendChild(featuresUl);
-                                   */
                                    contentDiv.appendChild(tbl);
 
                                    return contentDiv
                                });
-
-                               /*
-                                 const query = layerView.createQuery();
-                                 query.aggregateIds = [event.graphic.getObjectId()];
-                                 console.log(query);
-                                 return layerView.queryFeatures(query).then(result => {
-                                     console.log(result.features);
-                                     const contentDiv = document.createElement("div");
-                                     const featuresUl = document.createElement("ul");
-                                     let featureLi;
-                                     for (const feature of result.features) {
-                                         featureLi = document.createElement("li");
-                                         featureLi.innerText = `Chasis ${feature.attributes.id}`;
-                                         featuresUl.appendChild(featureLi);
-                                     }
-                                     contentDiv.appendChild(featuresUl);
-                                     return contentDiv
-                                 });
-                                 */
                              }
                          });
                            const clusterConfig = {
@@ -555,7 +538,6 @@ export class MapComponent implements OnInit {
                                            color: "#004a5d",
                                            font: {
                                                weight: "bold",
-                                               family: "Noto Sans",
                                                size: "12px"
                                            }
                                        },
@@ -689,33 +671,11 @@ export class MapComponent implements OnInit {
                                  });
                                }
                                if(result['graphic'].attributes['clusterId']!=undefined){
-/*
-                                 that.mapView.popup.close();
-                                 that.mapView.popup.open({
-                                   title: "Cluster summary",
-
-                                     // Set the popup's title to the coordinates of the clicked location
-                                      content: "This cluster represents " + result['graphic'].attributes['cluster_count']+" chasis.",
-                                     location: result.mapPoint // Set the location of the popup to the clicked location
-                                 });
-
-                                 */
-
                                }
                              }
                            }
 
                          });
-                         /*
-
-                         const response = await this.mapView.hitTest(event);
-                         if(response.results.length>0){
-                           const result = response.results[0];
-
-                           //console.log(result);
-                         //  console.log(result.type);
-                         }
-                         */
                        });
 
                        function getButton(reference) {
@@ -742,8 +702,7 @@ export class MapComponent implements OnInit {
                        divcontent.appendChild(btnroute);
 
                          return divcontent;
-                        // that.router.navigate([`ppsdetails`,  reference.graphic.attributes.id ]);
-                       }
+                        }
 
 
                        function btnClickMouvePointer(reference) {
@@ -1024,7 +983,7 @@ export class MapComponent implements OnInit {
   rebuildmap($event, coords){
 
     //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+    fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
