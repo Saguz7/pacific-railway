@@ -52,7 +52,7 @@ export class MapDivComponent implements OnInit {
   }
 
   getDatafromGeoJson(){
-    fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+    fetch("https://1jz8l0lbc6.execute-api.us-west-2.amazonaws.com/dev/get-locations")
     .then(res => res.json())
     .then((out) => {
       if(out.errorMessage==undefined){
