@@ -1,0 +1,137 @@
+.login-body {
+  background-size: auto;
+    background-size: cover;
+    height: auto;
+    min-height: 100vh;
+}
+
+.login-body .login-panel {
+    width: 600px;
+    margin: 0 auto;
+    background-color: #e6e4e4;
+    padding-top: 70px !important;
+    margin-top: 60px !important;
+}
+
+.formLabel{
+  color: #000;
+  font: sans-serif;
+  font-size: 25px;
+
+}
+
+.acessDenied{
+  color: red;
+  font-family: fuenteparatitulos;
+  font-size: 35px;
+}
+
+
+.infoDenied{
+  color: black;
+  font-family: fuenteparatitulos;
+  font-size: 20px;
+    text-align: justify;
+}
+
+form{
+  width: 100% !important;
+
+}
+
+p-password{
+  width: 100% !important;
+  background-color: #e6e4e4;
+}
+.imagen-banner {
+  width: 25%;
+}
+
+.titleproject{
+  font-size: 30px;
+  color: #000000 !important;
+    font-family: fuenteparatitulos;
+}
+
+.versionado {
+  margin-left: 10px;
+  text-transform: none;
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-family: fuenteparacuerpo;
+  color: #71797a !important;
+
+}
+.card {
+  border-radius: 20px;
+  background-color: #580707;
+  -webkit-box-shadow: 0px 0px 21px -7px rgba(0,0,0,0.74);
+  -moz-box-shadow: 0px 0px 21px -7px rgba(0,0,0,0.74);
+  box-shadow: 0px 0px 21px -7px rgba(0,0,0,0.74);
+}
+
+.input-wrapper{
+  width: 100% !important;
+}
+
+.border{
+  border-bottom: 8px solid #b91f1f;
+}
+
+ input {
+    width: 100%;
+}
+
+.p-inputgroup-addon{
+  background: #e6e4e4;
+color: #495057;
+border-top: none;
+border-left: none;
+border-bottom: none;
+}
+
+.p-inputgroup{
+  -webkit-box-shadow: 0 0 0px 1000px #e6e4e4 inset;
+
+}
+
+.p-nogutter {
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.layout-footer {
+  margin-top: 15px;
+ padding:1rem;
+ font-size:1rem;
+ background-color:var(--surface-a);
+ display:flex;
+ align-items:center;
+ justify-content:space-between
+}
+@media screen and (max-width: 780px) {
+  .login-body {
+    background-size: auto;
+      background-size: cover;
+      height: auto;
+      min-height: 100vh;
+      padding-top: 70px;
+      margin-top: -140px !important;
+      margin-left: -20% !important;
+  }
+
+  .login-body .login-panel {
+      width: 100%;
+      margin: 0 auto;
+      background-color: #ffffff;
+  }
+
+}
+
+.boton-log{
+  background-color: #580707;
+  border: none;
+  box-shadow: #495057;
+  box-shadow: 0px 0px 21px -7px rgba(0,0,0,0.74);
+}

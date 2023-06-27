@@ -25,9 +25,10 @@ export class NavigationComponent implements OnInit{
   }
 
   ngOnInit() {
-
-    this.loged= true;
-
+    const redirectedFromHostedUI = localStorage.getItem('amplify-redirected-from-hosted-ui');
+    if (redirectedFromHostedUI) {
+      this.loged= true;
+    }
     this.user = {
       name: 'name',
       lastname: 'lastname'
@@ -86,7 +87,9 @@ export class NavigationComponent implements OnInit{
      });
   }
 
-  logout(){}
+  logout(){
+      localStorage.removeItem('amplify-redirected-from-hosted-ui');
+  }
 
 
 

@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 
 //Components
 import { LoginComponent } from './auth/login/login.component';
+import { PasswordRenameComponent } from './auth/password-rename/password-rename.component';
+
+import { AccessDeniedComponent } from './auth/access-denied/access-denied.component';
+
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
@@ -59,6 +63,7 @@ import * as L from 'leaflet';
   declarations: [
     AppComponent,
     LoginComponent,
+    PasswordRenameComponent,
     NavigationComponent,
     MapComponent,
     RouteMapComponent,
@@ -73,7 +78,8 @@ import * as L from 'leaflet';
     NotificationComponent,
     PRSMComponent,
     TableRouteMapComponent,
-    FilterRouteMapComponent
+    FilterRouteMapComponent,
+    AccessDeniedComponent
 
   ],
   imports: [

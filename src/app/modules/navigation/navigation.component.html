@@ -1,4 +1,4 @@
-
+<!--
  <nav>
   <div class="nav row">
 
@@ -6,7 +6,28 @@
        <a href="" class="material-icons icon-user" >account_circle </a>
           Chassis Management
     </div>
+    <div class = "col l6">
+      <ul id="menu-responsive" class="sidenav" style="width: 300px;">
+        <li><a class="waves-effect" (click)="logout()"><i class="material-icons left">exit_to_app</i>Exit</a></li>
+      </ul>
+    </div>
 
+
+  </div>
+</nav>
+
+-->
+
+
+<nav>
+  <div class="nav-wrapper">
+    <a href="" class="material-icons icon-user brand-logo" >account_circle </a>
+       Chassis Management
+       <!--
+    <ul *ngIf="loged" id="nav-mobile" class="right hide-on-med-and-down"  >
+      <li><a class="waves-effect color-exit" (click)="logout()"><i class="material-icons left">exit_to_app</i>Exit</a></li>
+    </ul>
+    -->
   </div>
 </nav>
 <div class="linea"></div>

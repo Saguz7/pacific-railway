@@ -1,5 +1,8 @@
 <div class="container-principal">
   <div class="row card">
+    <ng-container *ngIf="loading">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </ng-container>
     <div class="col s12"><br><br>
       <div class="row center-align">
         <div class="row center-align">
