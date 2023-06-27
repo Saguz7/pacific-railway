@@ -12,7 +12,7 @@ export class AppComponent {
   title = 'pacific-railway';
 
   ngOnInit() {
-    console.log(environment.API_URL);
+     console.log(environment.API_URL_BASE);
     }
 
 }
