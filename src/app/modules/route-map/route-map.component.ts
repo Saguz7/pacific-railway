@@ -57,14 +57,12 @@ export class RouteMapComponent implements OnInit {
 
    ngOnInit() {
 
-
-
+     this.loading = true;
 
      this.events= [
        {name: "No Filter", value: "No Filter"}
      ]
      this.historicalpoints= [];
-
              this.href = this.router.url;
             this.currentURL = window.location.href.replace(this.href,'');
 
@@ -91,8 +89,8 @@ export class RouteMapComponent implements OnInit {
                final_date: fromToSend
              }
              this.loading = true;
-                        //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                            this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+             this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+
 
                               let responseBody;
                                  try {
@@ -332,7 +330,7 @@ export class RouteMapComponent implements OnInit {
                               xoffset: 0,
                               yoffset: -4,
                               font: {  // autocast as esri/symbols/Font
-                                size: 8 
+                                size: 8
                               }
                             });
 

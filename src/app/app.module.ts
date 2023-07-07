@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 
 //Components
 import { LoginComponent } from './auth/login/login.component';
+import { PasswordRenameComponent } from './auth/password-rename/password-rename.component';
+
+import { AccessDeniedComponent } from './auth/access-denied/access-denied.component';
+
 import { NavigationComponent } from './modules/navigation/navigation.component';
 
 import { MapComponent } from './modules/map/map.component';
@@ -55,10 +59,14 @@ import { HttpClientModule } from '@angular/common/http';
  import * as $ from "jquery";
 import * as L from 'leaflet';
 
+
+import { TokenResolverService } from './core/resolver/token-resolver.service';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    PasswordRenameComponent,
     NavigationComponent,
     MapComponent,
     RouteMapComponent,
@@ -73,7 +81,8 @@ import * as L from 'leaflet';
     NotificationComponent,
     PRSMComponent,
     TableRouteMapComponent,
-    FilterRouteMapComponent
+    FilterRouteMapComponent,
+    AccessDeniedComponent
 
   ],
   imports: [
@@ -99,7 +108,7 @@ import * as L from 'leaflet';
     InputSwitchModule,
     ToastModule
   ],
-  providers: [EsriMapService],
+  providers: [EsriMapService,TokenResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

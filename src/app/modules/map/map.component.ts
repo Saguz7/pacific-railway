@@ -11,7 +11,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2'
 import {MessageService} from 'primeng/api';
 import { Location } from '@angular/common';
-
+import { Auth } from 'aws-amplify';
 import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-map',
@@ -80,8 +80,6 @@ export class MapComponent implements OnInit {
 
     ngOnInit() {
 
-
-
             return loadModules([
               "esri/Map",
               "esri/layers/FeatureLayer",
@@ -133,6 +131,7 @@ export class MapComponent implements OnInit {
       this.filterspoints = [];
       this.href = this.router.url;
       this.currentURL = window.location.href.replace(this.href,'');
+
     }
 
     contador_regresivo() {

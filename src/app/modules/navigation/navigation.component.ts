@@ -16,6 +16,8 @@ export class NavigationComponent implements OnInit{
   items: MenuItem[];
   items2: MenuItem[];
 
+    tokenDetails: any;
+    token: any;
   constructor(
      private router?: Router,
 
@@ -25,39 +27,6 @@ export class NavigationComponent implements OnInit{
   }
 
   ngOnInit() {
-
-    this.loged= true;
-
-    this.user = {
-      name: 'name',
-      lastname: 'lastname'
-    }
-
-    /*
-      this.items = [
-            {label: 'Map',icon: 'pi pi-fw pi-home',command: (event: any) => {
-              this.router.navigateByUrl('/map');
-             }},
-
-
-        ];
-
-
-        this.items2 =  [
-            {
-            icon:'pi pi-fw pi-home',
-            items:[
-                {
-                    label:'Map',command: (event: any) => {
-                      this.router.navigateByUrl('/home');
-                    }
-                }
-            ]
-          }
-
-        ];
-
-        */
 
 
 
@@ -86,7 +55,9 @@ export class NavigationComponent implements OnInit{
      });
   }
 
-  logout(){}
+  logout(){
+      localStorage.removeItem('amplify-redirected-from-hosted-ui');
+  }
 
 
 

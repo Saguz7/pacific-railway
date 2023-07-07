@@ -73,6 +73,35 @@ export class PpsDetailsComponent implements OnInit {
 
   ngAfterViewInit() {
 
+    /*
+            return loadModules([
+              "esri/layers/GeoJSONLayer",
+              "esri/widgets/Sketch",
+              'esri/Map',
+              "esri/layers/GraphicsLayer",
+              'esri/views/MapView',
+              'esri/Graphic'
+            ])
+              .then(([GeoJSONLayer,Sketch,Map,GraphicsLayer, MapView, Graphic]) => {
+                    //    esriConfig.apiKey = "50b,094799d25e425a0d8cab088adbe49960f20e1669d0f65f4366968aeee9bef";
+                const map: __esri.Map = new Map({
+                  basemap: 'streets'
+                });
+
+
+
+                this.mapView = new MapView({
+                  container: this.mapViewEl.nativeElement,
+                  map: map,
+                  center: [-114.8574, 54.6542],
+                  zoom: 13,
+                });
+
+              })
+              .catch(err => {
+                console.error(err);
+              });
+                */
     this.loading = true;
     this.getDatafromGeoJson();
 
