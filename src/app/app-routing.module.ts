@@ -14,12 +14,25 @@ import { AccessDeniedComponent } from './auth/access-denied/access-denied.compon
 
  import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import {AuthGuard} from "./auth/guards/check-auth.guard";
+import { TokenResolverService } from './core/resolver/token-resolver.service';
 
 const routes: Routes = [
- { path: 'current-chassis-location', component: MapComponent, canActivate: [ AuthGuard ] },
- { path: 'chassis-details/:chasis', component: PpsDetailsComponent, canActivate: [ AuthGuard ] },
-{ path: 'chassis-history/:chasis', component: RouteMapComponent, canActivate: [ AuthGuard ] },
-{ path: 'access-denied', component: AccessDeniedComponent, pathMatch: 'full' },
+  {
+    path: 'current-chassis-location',
+    component: MapComponent ,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'chassis-details/:chasis',
+    component: PpsDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'chassis-history/:chasis',
+    component: RouteMapComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'access-denied', component: AccessDeniedComponent, pathMatch: 'full' },
 
   { path: '**', redirectTo: '/current-chassis-location'}
 ];

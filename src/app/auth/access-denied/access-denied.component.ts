@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams  } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 //import { SessionStorageService } from '../../core/services/sessionstorage.service';
 declare var M: any;
 import { AuthService } from '../services/auth.service';
 import AWS from 'aws-sdk';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
+
 @Component({
   selector: 'app-access-denied',
   templateUrl: './access-denied.component.html',
@@ -20,13 +23,14 @@ export class AccessDeniedComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private http: HttpClient,
-
+    private route: ActivatedRoute,
   //  private sessionStorageService: SessionStorageService,
    private router?: Router,
    ) {
   }
 
   ngOnInit(): void {
+
   }
 
   gotoLogin(){

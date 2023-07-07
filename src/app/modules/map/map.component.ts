@@ -79,18 +79,6 @@ export class MapComponent implements OnInit {
     ocultarTabla:boolean;
 
     ngOnInit() {
-/*
-      Auth.currentSession()
-        .then(data => {
-          const accessToken = data.getAccessToken().getJwtToken();
-          console.log('Token de acceso:', accessToken);
-          // Realizar acciones adicionales según el token de acceso obtenido
-        })
-        .catch(err => {
-          console.log('Error al obtener el token de acceso:', err);
-        });
-
-        */
 
             return loadModules([
               "esri/Map",
@@ -143,6 +131,7 @@ export class MapComponent implements OnInit {
       this.filterspoints = [];
       this.href = this.router.url;
       this.currentURL = window.location.href.replace(this.href,'');
+
     }
 
     contador_regresivo() {

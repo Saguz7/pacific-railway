@@ -44,7 +44,7 @@ class MapDivComponent {
         this.cdref.detectChanges();
     }
     getDatafromGeoJson() {
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+        fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-locations")
             .then(res => res.json())
             .then((out) => {
             if (out.errorMessage == undefined) {
@@ -291,6 +291,62 @@ module.exports = __webpack_require__(/*! D:\train\version_estable\pacific-railwa
 
 /***/ }),
 
+/***/ "9vGm":
+/*!******************************************************!*\
+  !*** ./src/app/core/services/aws-cognito.service.ts ***!
+  \******************************************************/
+/*! exports provided: AwsCognitoService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AwsCognitoService", function() { return AwsCognitoService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+
+
+
+
+
+class AwsCognitoService {
+    constructor(http) {
+        this.http = http;
+    }
+    getTokenDetailsFromCognito(callbackCode) {
+        const details = {
+            grant_type: 'authorization_code',
+            code: callbackCode,
+            scope: 'openid+email',
+            redirect_uri: src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].redirectURL
+        };
+        const formBody = Object.keys(details)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`)
+            .join('&');
+        return this.http.post(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].cognitoTokenURL, formBody, {
+            responseType: 'json',
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: 'Basic ' + btoa(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].sso_api_username}:${src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].sso_api_pwd}`)
+            })
+        });
+    }
+    logoutUserFromCognito() {
+        return this.http.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].logout);
+    }
+}
+AwsCognitoService.ɵfac = function AwsCognitoService_Factory(t) { return new (t || AwsCognitoService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
+AwsCognitoService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AwsCognitoService, factory: AwsCognitoService.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AwsCognitoService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }]; }, null); })();
+
+
+/***/ }),
+
 /***/ "AytR":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -306,11 +362,18 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 const environment = {
     production: false,
-    API_URL_BASE: 'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/',
+    API_URL_BASE: 'https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/',
     region: 'YOUR_REGION_ID',
     userPoolId: 'YOUR_USER_POOL_ID',
     clientId: 'YOUR_CLIENT_ID',
-    API_URL: 'dev'
+    sso_api_username: 'us-west-2_YKTiEMjtU',
+    sso_api_pwd: 's7ch645u8voh00dridmn8kn19',
+    loginURL: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=s7ch645u8voh00dridmn8kn19&response_type=token&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdev.d1klk34joigd80.amplifyapp.com%2Fcurrent-chassis-location',
+    redirectURL: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+    cognitoTokenURL: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/token',
+    logout: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/logout?' +
+        'client_id=s7ch645u8voh00dridmn8kn19&' +
+        'logout_uri=https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location'
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -551,39 +614,6 @@ class NavigationComponent {
         this.mostramenu = false;
     }
     ngOnInit() {
-        const redirectedFromHostedUI = localStorage.getItem('amplify-redirected-from-hosted-ui');
-        if (redirectedFromHostedUI) {
-            this.loged = true;
-        }
-        this.user = {
-            name: 'name',
-            lastname: 'lastname'
-        };
-        /*
-          this.items = [
-                {label: 'Map',icon: 'pi pi-fw pi-home',command: (event: any) => {
-                  this.router.navigateByUrl('/map');
-                 }},
-    
-    
-            ];
-    
-    
-            this.items2 =  [
-                {
-                icon:'pi pi-fw pi-home',
-                items:[
-                    {
-                        label:'Map',command: (event: any) => {
-                          this.router.navigateByUrl('/home');
-                        }
-                    }
-                ]
-              }
-    
-            ];
-    
-            */
         setTimeout(() => {
             $(".dropdown-trigger").dropdown('');
             $(document).ready(function () {
@@ -1196,8 +1226,14 @@ AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjec
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var aws_amplify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! aws-amplify */ "AL3R");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jwt-decode */ "EjJx");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
 
 
 
@@ -1206,30 +1242,103 @@ class AuthGuard {
         this.router = router;
     }
     canActivate() {
-        const redirectedFromHostedUI = localStorage.getItem('amplify-redirected-from-hosted-ui');
-        if (redirectedFromHostedUI) {
-            return true;
-        }
-        else {
-            this.router.navigate([`access-denied`]);
-            return false;
-            /*
-             const externalUrl = 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=78fqe248a2ghet7oi0v94hbtnp&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdev.d1klk34joigd80.amplifyapp.com%2Fcurrent-chassis-location';
-             window.location.href = externalUrl;
-            return false;
-      
-            */
-        }
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            const session = yield aws_amplify__WEBPACK_IMPORTED_MODULE_2__["Auth"].currentSession();
+            console.log(session);
+            if (session) {
+                const accessToken = session.getAccessToken().getJwtToken();
+                const idToken = session.getIdToken().getJwtToken();
+                const refreshToken = session.getRefreshToken().getToken();
+                const decodedToken = Object(jwt_decode__WEBPACK_IMPORTED_MODULE_3__["default"])(accessToken);
+                const userPoolId = 'us-west-2_YKTiEMjtU';
+                const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
+                const iss = decodedToken.iss;
+                const parts = iss.split('/');
+                const lastPart = parts.pop();
+                if (lastPart == userPoolId && decodedToken.client_id == userPoolWebClientId) {
+                    return true;
+                }
+                else {
+                    this.router.navigate(['access-denied']);
+                    return false;
+                }
+            }
+            else {
+                this.router.navigate(['access-denied']);
+                return false;
+            }
+        });
     }
 }
-AuthGuard.ɵfac = function AuthGuard_Factory(t) { return new (t || AuthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"])); };
-AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AuthGuard, factory: AuthGuard.ɵfac, providedIn: 'root' });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthGuard, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+AuthGuard.ɵfac = function AuthGuard_Factory(t) { return new (t || AuthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])); };
+AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: AuthGuard, factory: AuthGuard.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AuthGuard, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"],
         args: [{
                 providedIn: 'root'
             }]
-    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"] }]; }, null); })();
+    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "Nl3S":
+/*!*********************************************************!*\
+  !*** ./src/app/core/resolver/token-resolver.service.ts ***!
+  \*********************************************************/
+/*! exports provided: TokenResolverService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenResolverService", function() { return TokenResolverService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/aws-cognito.service */ "9vGm");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+
+
+
+
+class TokenResolverService {
+    constructor(location, awsCognitoService, router) {
+        this.location = location;
+        this.awsCognitoService = awsCognitoService;
+        this.router = router;
+    }
+    resolve() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (!code) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(null);
+        }
+        return this.getTokenDetailsFromCognito(code).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(() => {
+            this.location.replaceState(window.location.pathname);
+        }));
+    }
+    getTokenDetailsFromCognito(code) {
+        return this.awsCognitoService.getTokenDetailsFromCognito(code).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["switchMap"])((response) => {
+            console.log('Response: ', response);
+            localStorage.setItem('token', response.access_token);
+            if (response) {
+                this.router.navigate(['dashboard']);
+            }
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(response);
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["catchError"])((error) => {
+            return error;
+        }));
+    }
+}
+TokenResolverService.ɵfac = function TokenResolverService_Factory(t) { return new (t || TokenResolverService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__["AwsCognitoService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); };
+TokenResolverService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: TokenResolverService, factory: TokenResolverService.ɵfac });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](TokenResolverService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"]
+    }], function () { return [{ type: _angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"] }, { type: _services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__["AwsCognitoService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }]; }, null); })();
 
 
 /***/ }),
@@ -1244,34 +1353,78 @@ AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjecta
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/navigation/navigation.component */ "G3c1");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jwt-decode */ "EjJx");
+/* harmony import */ var aws_amplify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! aws-amplify */ "AL3R");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/navigation/navigation.component */ "G3c1");
+
+
+
+
 
 
 
 
 class AppComponent {
-    constructor() {
+    constructor(http, route, 
+    //  private sessionStorageService: SessionStorageService,
+    router) {
+        this.http = http;
+        this.route = route;
+        this.router = router;
         this.title = 'pacific-railway';
     }
     ngOnInit() {
-        //console.log(environment.API_URL);
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                const session = yield aws_amplify__WEBPACK_IMPORTED_MODULE_3__["Auth"].currentSession();
+                if (session) {
+                    const accessToken = session.getAccessToken().getJwtToken();
+                    const idToken = session.getIdToken().getJwtToken();
+                    const refreshToken = session.getRefreshToken().getToken();
+                    const decodedToken = Object(jwt_decode__WEBPACK_IMPORTED_MODULE_2__["default"])(accessToken);
+                    const userPoolId = 'us-west-2_YKTiEMjtU';
+                    const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
+                    const iss = decodedToken.iss;
+                    const parts = iss.split('/');
+                    const lastPart = parts.pop();
+                    console.log(accessToken);
+                    console.log(lastPart);
+                    console.log(userPoolId);
+                    console.log(decodedToken.client_id);
+                    console.log(userPoolWebClientId);
+                    if (lastPart == userPoolId &&
+                        decodedToken.client_id == userPoolWebClientId) {
+                        console.log('Access.');
+                    }
+                    else {
+                        console.log('Denied.');
+                    }
+                }
+            }
+            catch (error) {
+                this.router.navigate(['access-denied']); // Redirigir a la página de inicio de sesión
+                console.error('Error al obtener los datos de sesión:', error);
+            }
+        });
     }
 }
-AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(); };
-AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 2, vars: 0, template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](0, "app-navigation");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](1, "router-outlet");
-    } }, directives: [_modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_1__["NavigationComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterOutlet"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */"] });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AppComponent, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
+AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); };
+AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 2, vars: 0, template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "app-navigation");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "router-outlet");
+    } }, directives: [_modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_6__["NavigationComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterOutlet"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AppComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
                 selector: 'app-root',
                 templateUrl: './app.component.html',
                 styleUrls: ['./app.component.css']
             }]
-    }], null, null); })();
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }]; }, null); })();
 
 
 /***/ }),
@@ -1714,18 +1867,6 @@ class MapComponent {
         this.filterspoints = [];
     }
     ngOnInit() {
-        /*
-              Auth.currentSession()
-                .then(data => {
-                  const accessToken = data.getAccessToken().getJwtToken();
-                  console.log('Token de acceso:', accessToken);
-                  // Realizar acciones adicionales según el token de acceso obtenido
-                })
-                .catch(err => {
-                  console.log('Error al obtener el token de acceso:', err);
-                });
-        
-                */
         return Object(esri_loader__WEBPACK_IMPORTED_MODULE_3__["loadModules"])([
             "esri/Map",
             "esri/layers/FeatureLayer",
@@ -1833,7 +1974,7 @@ class MapComponent {
     refreshdata() {
         this.loading = true;
         //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             // this.getHistorico(out.features);
@@ -1860,7 +2001,7 @@ class MapComponent {
     }
     getDatafromGeoJson() {
         //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             // this.getHistorico(out.features);
@@ -1891,7 +2032,7 @@ class MapComponent {
                 id: features[indice]['id'],
             };
             //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-            this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+            this.http.post('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
                 let results = JSON.parse(data.body);
             });
         }
@@ -1917,7 +2058,7 @@ class MapComponent {
     getData() {
         return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["from"])(fetch(
         //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        'https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -2445,7 +2586,7 @@ class MapComponent {
     }
     rebuildmap($event, coords) {
         //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             this.makefromjson(out, $event, coords);
@@ -2850,7 +2991,7 @@ class RouteMapComponent {
             final_date: fromToSend
         };
         //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
             let responseBody;
             try {
                 responseBody = JSON.parse(data.body);
@@ -2885,7 +3026,7 @@ class RouteMapComponent {
             final_date: fromToSend
         };
         //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
             let responseBody;
             try {
                 responseBody = JSON.parse(data.body);
@@ -3353,7 +3494,7 @@ class RouteMapComponent {
             obj_send['final_date'] = this.convertDatetoString(this.dateto) + 'T' + timetostring;
         }
         //this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
             //this.buildmap(data.body.features);
             this.makefromjson(data.body, $event);
         });
@@ -3921,6 +4062,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./core/services/esri-map/esri-map.service */ "E1Mj");
 /* harmony import */ var primeng_inputswitch__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/inputswitch */ "rLzU");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./core/resolver/token-resolver.service */ "Nl3S");
 
 
 
@@ -3964,10 +4106,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 class AppModule {
 }
 AppModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineNgModule"]({ type: AppModule, bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]] });
-AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector"]({ factory: function AppModule_Factory(t) { return new (t || AppModule)(); }, providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"]], imports: [[
+AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector"]({ factory: function AppModule_Factory(t) { return new (t || AppModule)(); }, providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"], _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__["TokenResolverService"]], imports: [[
             _angular_forms__WEBPACK_IMPORTED_MODULE_22__["FormsModule"],
             primeng_password__WEBPACK_IMPORTED_MODULE_24__["PasswordModule"],
             primeng_button__WEBPACK_IMPORTED_MODULE_25__["ButtonModule"],
@@ -4076,7 +4219,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector
                     primeng_inputswitch__WEBPACK_IMPORTED_MODULE_39__["InputSwitchModule"],
                     primeng_toast__WEBPACK_IMPORTED_MODULE_37__["ToastModule"]
                 ],
-                providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"]],
+                providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"], _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__["TokenResolverService"]],
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
             }]
     }], null, null); })();
@@ -4461,12 +4604,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AccessDeniedComponent {
-    constructor(formBuilder, authService, http, 
+    constructor(formBuilder, authService, http, route, 
     //  private sessionStorageService: SessionStorageService,
     router) {
         this.formBuilder = formBuilder;
         this.authService = authService;
         this.http = http;
+        this.route = route;
         this.router = router;
         this.loading = false;
     }
@@ -4477,7 +4621,7 @@ class AccessDeniedComponent {
         window.location.href = externalUrl;
     }
 }
-AccessDeniedComponent.ɵfac = function AccessDeniedComponent_Factory(t) { return new (t || AccessDeniedComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])); };
+AccessDeniedComponent.ɵfac = function AccessDeniedComponent_Factory(t) { return new (t || AccessDeniedComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])); };
 AccessDeniedComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AccessDeniedComponent, selectors: [["app-access-denied"]], decls: 33, vars: 0, consts: [[1, "login-body"], [1, "login-panel", "p-fluid", "card"], [1, "p-grid", "p-nogutter"], [1, "p-col-12", "border"], [1, "p-grid", "p-text-center"], [1, "p-col-10", "p-offset-1"], ["src", "../assets/logo.png", 1, "imagen-banner"], [1, "p-col-12"], [1, "titleproject"], [1, "versionado"], [1, "p-grid"], [1, "p-col-6", "p-offset-3"], [1, "p-col-8", "p-offset-2", "p-text-center"], [1, "acessDenied"], [1, "p-col-8", "p-offset-2"], [1, "infoDenied"], ["href", "javascript:void(0);", 1, "feedback", 3, "click"]], template: function AccessDeniedComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementContainerStart"](0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 0);
@@ -4544,7 +4688,7 @@ AccessDeniedComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵde
                 templateUrl: './access-denied.component.html',
                 styleUrls: ['./access-denied.component.css'],
             }]
-    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: _services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }]; }, null); })();
+    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: _services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }]; }, null); })();
 
 
 /***/ }),
@@ -4791,27 +4935,6 @@ TableRouteMapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵd
         }], SendCenter: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"]
         }] }); })();
-
-
-/***/ }),
-
-/***/ "ixnO":
-/*!****************************!*\
-  !*** ./src/aws-exports.ts ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const awsconfig = {
-    Auth: {
-        region: 'us-west-2',
-        userPoolId: 'us-west-2_YKTiEMjtU',
-        userPoolWebClientId: 's7ch645u8voh00dridmn8kn19'
-    }
-};
-/* harmony default export */ __webpack_exports__["default"] = (awsconfig);
 
 
 /***/ }),
@@ -5637,7 +5760,7 @@ class PpsDetailsComponent {
     }
     getDatafromGeoJson() {
         //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             if (out.errorMessage == undefined) {
@@ -5670,7 +5793,7 @@ class PpsDetailsComponent {
     getInfoChasis() {
         let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
         //   this.http.post<any>(environment.API_URL_BASE +'get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', { body: { data: { id: chasis } } }).subscribe(data => {
+        this.http.post('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-chassis', { body: { data: { id: chasis } } }).subscribe(data => {
             let array = JSON.parse(data.body);
             if (array.length > 0) {
                 this.properties = array[0];
@@ -6230,9 +6353,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const routes = [
-    { path: 'current-chassis-location', component: _modules_map_map_component__WEBPACK_IMPORTED_MODULE_3__["MapComponent"], canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
-    { path: 'chassis-details/:chasis', component: _modules_train_pps_details_pps_details_component__WEBPACK_IMPORTED_MODULE_5__["PpsDetailsComponent"], canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
-    { path: 'chassis-history/:chasis', component: _modules_route_map_route_map_component__WEBPACK_IMPORTED_MODULE_4__["RouteMapComponent"], canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
+    {
+        path: 'current-chassis-location',
+        component: _modules_map_map_component__WEBPACK_IMPORTED_MODULE_3__["MapComponent"],
+        canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]]
+    },
+    {
+        path: 'chassis-details/:chasis',
+        component: _modules_train_pps_details_pps_details_component__WEBPACK_IMPORTED_MODULE_5__["PpsDetailsComponent"],
+        canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]]
+    },
+    {
+        path: 'chassis-history/:chasis',
+        component: _modules_route_map_route_map_component__WEBPACK_IMPORTED_MODULE_4__["RouteMapComponent"],
+        canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]]
+    },
     { path: 'access-denied', component: _auth_access_denied_access_denied_component__WEBPACK_IMPORTED_MODULE_2__["AccessDeniedComponent"], pathMatch: 'full' },
     { path: '**', redirectTo: '/current-chassis-location' }
 ];
@@ -6707,43 +6842,33 @@ MapCustomService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var aws_amplify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! aws-amplify */ "AL3R");
-/* harmony import */ var _aws_exports__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./aws-exports */ "ixnO");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./environments/environment */ "AytR");
-/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app/app.module */ "ZAI4");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "jhN1");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./environments/environment */ "AytR");
+/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app/app.module */ "ZAI4");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "jhN1");
 
 
 
 
 
-
-
-aws_amplify__WEBPACK_IMPORTED_MODULE_1__["Amplify"].configure(_aws_exports__WEBPACK_IMPORTED_MODULE_2__["default"]);
-const oauth = {
-    // Domain name
-    domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
-    // Authorized scopes
-    scope: ['email'],
-    // Callback URL
-    redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-    // Sign out URL
-    redirectSignOut: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=78fqe248a2ghet7oi0v94hbtnp&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdev.d1klk34joigd80.amplifyapp.com%2Fcurrent-chassis-location',
-    // 'code' for Authorization code grant,
-    // 'token' for Implicit grant
-    responseType: 'code',
-    // optional, for Cognito hosted ui specified options
-    options: {
-        // Indicates if the data collection is enabled to support Cognito advanced security features. By default, this flag is set to true.
-        AdvancedSecurityDataCollectionFlag: false,
-    },
+let config = {
+    Auth: {
+        region: 'us-west-2',
+        userPoolId: 'us-west-2_YKTiEMjtU',
+        userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
+        oauth: {
+            domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
+            scope: ['email', 'openid', 'phone'],
+            redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+            redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+            responseType: 'code'
+        }
+    }
 };
-aws_amplify__WEBPACK_IMPORTED_MODULE_1__["Auth"].configure({
-    oauth,
-});
-if (_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].production) {
+aws_amplify__WEBPACK_IMPORTED_MODULE_1__["Amplify"].configure(config);
+if (_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].production) {
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["enableProdMode"])();
 }
-_angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["platformBrowser"]().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_4__["AppModule"])
+_angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["platformBrowser"]().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_3__["AppModule"])
     .catch(err => console.error(err));
 
 

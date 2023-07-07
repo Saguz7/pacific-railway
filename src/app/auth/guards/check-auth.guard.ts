@@ -1,27 +1,35 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Auth } from 'aws-amplify';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
-
-  canActivate(): boolean {
-    const redirectedFromHostedUI = localStorage.getItem('amplify-redirected-from-hosted-ui');
-
-    if (redirectedFromHostedUI) {
-       return true;
+  async canActivate(): Promise<boolean> {
+    const session = await Auth.currentSession();
+    console.log(session);
+    if (session) {
+      const accessToken = session.getAccessToken().getJwtToken();
+      const idToken = session.getIdToken().getJwtToken();
+      const refreshToken = session.getRefreshToken().getToken();
+      const decodedToken: any = jwt_decode(accessToken);
+      const userPoolId = 'us-west-2_YKTiEMjtU';
+      const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
+      const iss = decodedToken.iss;
+      const parts = iss.split('/');
+      const lastPart = parts.pop();
+      if (lastPart == userPoolId && decodedToken.client_id == userPoolWebClientId) {
+        return true;
+      } else {
+        this.router.navigate(['access-denied']);
+        return false;
+      }
     } else {
-       this.router.navigate([`access-denied`]);
-       return false;
-
-      /*
-       const externalUrl = 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=78fqe248a2ghet7oi0v94hbtnp&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdev.d1klk34joigd80.amplifyapp.com%2Fcurrent-chassis-location';
-       window.location.href = externalUrl;
+      this.router.navigate(['access-denied']);
       return false;
-
-      */
     }
   }
 }

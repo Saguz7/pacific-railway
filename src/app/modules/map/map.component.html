@@ -1,3 +1,4 @@
+
 <div class="container-principal">
   <p-toast></p-toast>
 
@@ -5,10 +6,6 @@
     <div class="col s12 center-align">
             <h6>Current Chassis Location</h6>
     </div>
-    <!--
-    <div class="p-col-10 p-offset-1"><br><br>
-    </div><br><br>
-    -->
     <div *ngIf="!ocultarFiltro">
     <app-filter-map [Events]="events" [Georeferences]="georeferences" (SendFilters)="getFilters($event)" (Sendchecked)="getChecked($event)" [Time]="timestring"></app-filter-map>
     </div>
@@ -74,13 +71,5 @@
 </div>
 
     </div>
-
-
-
-
-
-
 </div>
-  <!--
-  <app-chasis [Train]="train"></app-chasis>
-  -->
+ 
