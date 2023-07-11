@@ -9,7 +9,7 @@ const awsConfig = {
         redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
         redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
         responseType: 'code',
-        identityProvider: 'saml-provider',
+        identityProvider: 'CognitoF5',
         samlSignOut: true,
         attributesMapping: {
           email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
