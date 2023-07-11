@@ -1,52 +1,39 @@
 
-
 import { Injectable } from '@angular/core';
-import { CognitoUserPool, CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
-import * as AWS from 'aws-sdk';
+import { CognitoUserPool, CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
+import * as jwtDecode from 'jwt-decode';
 
-const poolData = {
-  UserPoolId: 's7ch645u8voh00dridmn8kn19',
-  ClientId: 'us-west-2_YKTiEMjtU'
-};
-
-@Injectable()
+@Injectable({
+ providedIn: 'root'
+})
 export class AuthService {
-  federateSignIn(provider: string): Promise<any> {
-    const userPool = new CognitoUserPool(poolData);
-    const cognitoUser = userPool.getCurrentUser();
+ private userPool: CognitoUserPool;
 
-    return new Promise((resolve, reject) => {
-      if (cognitoUser) {
-        cognitoUser.getSession((err, session) => {
-          if (err) {
-            reject(err);
-          } else {
-            const authenticationProvider = `cognito-idp.${poolData.UserPoolId.split('_')[0]}.amazonaws.com/${poolData.UserPoolId}`;
-            const token = session.getIdToken().getJwtToken();
-            const logins = {
-              [authenticationProvider]: token
-            };
+ constructor() {
+   const poolData = {
+     UserPoolId: 'us-west-2_YKTiEMjtU',
+     ClientId: 's7ch645u8voh00dridmn8kn19'
+   };
+   this.userPool = new CognitoUserPool(poolData);
+ }
 
-            const params = {
-              IdentityPoolId: 's7ch645u8voh00dridmn8kn19',
-              Logins: logins
-            };
+ authenticate(): Promise<CognitoUserSession> {
+   return new Promise((resolve, reject) => {
+     const cognitoUser = this.userPool.getCurrentUser();
+     if (cognitoUser) {
+       cognitoUser.getSession((err: Error, session: CognitoUserSession) => {
+         if (err) {
+           reject(err);
+         } else if (!session.isValid()) {
+           reject(new Error('Invalid session'));
+         } else {
+           resolve(session);
+         }
+       });
+     } else {
+       reject(new Error('No user found'));
+     }
+   });
+ }
 
-            const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
-            cognitoIdentityServiceProvider.getCredentialsForIdentity(params, (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                AWS.config.credentials = data.Credentials;
-                resolve(AWS.config.credentials);
-              }
-            });
-          }
-        });
-      } else {
-        reject('No se encontró un usuario de Cognito');
-      }
-    });
-  }
 }

@@ -13,6 +13,9 @@ import {MessageService} from 'primeng/api';
 import { Location } from '@angular/common';
 import { Auth } from 'aws-amplify';
 import { saveAs } from 'file-saver';
+
+
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -80,6 +83,9 @@ export class MapComponent implements OnInit {
 
     ngOnInit() {
 
+
+      /*
+
             return loadModules([
               "esri/Map",
               "esri/layers/FeatureLayer",
@@ -132,7 +138,10 @@ export class MapComponent implements OnInit {
       this.href = this.router.url;
       this.currentURL = window.location.href.replace(this.href,'');
 
+      */
+
     }
+
 
     contador_regresivo() {
 
@@ -212,7 +221,7 @@ export class MapComponent implements OnInit {
       this.loading = true;
 
   //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -240,15 +249,15 @@ export class MapComponent implements OnInit {
 
 
     ngAfterViewInit() {
-      this.loading = true;
-      this.getDatafromGeoJson();
+      //this.loading = true;
+      //this.getDatafromGeoJson();
       this.cdRef.detectChanges();
     }
 
     getDatafromGeoJson(){
 
     //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-      fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+      fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
       .then(res => res.json())
       .then((out) => {
         // this.getHistorico(out.features);
@@ -288,7 +297,7 @@ export class MapComponent implements OnInit {
         }
 
                   //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-                     this.http.post<any>('https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
+                     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                        let results = JSON.parse(data.body);
 
 
@@ -324,7 +333,7 @@ export class MapComponent implements OnInit {
     return from(
       fetch(
         //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
           headers: {
             'Content-Type': 'application/json',
@@ -982,7 +991,7 @@ export class MapComponent implements OnInit {
   rebuildmap($event, coords){
 
     //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-    fetch("https://49xa6kx3g6.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
         .then(res => res.json())
         .then((out) => {
           this.makefromjson(out,$event,coords);
@@ -1202,5 +1211,7 @@ export class MapComponent implements OnInit {
   getChecked($event){
     this.reload = $event;
    }
+
+ 
 
 }
