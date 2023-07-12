@@ -20,7 +20,7 @@ const routes: Routes = [
   {
     path: 'current-chassis-location',
     component: MapComponent ,
-  //  canActivate: [AuthGuard]
+     canActivate: [AuthGuard]
   },
   {
     path: 'chassis-details/:chasis',

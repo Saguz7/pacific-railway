@@ -291,43 +291,6 @@ module.exports = __webpack_require__(/*! D:\train\version_estable\pacific-railwa
 
 /***/ }),
 
-/***/ "7c2b":
-/*!*****************************************!*\
-  !*** ./src/app/aws-exports-profile3.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const awsConfig = {
-  Auth: {
-    region: 'us-west-2',
-    userPoolId: 'us-west-2_YKTiEMjtU',
-    userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
-    oauth: {
-      domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
-      scope: ['email', 'openid'],
-        redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        responseType: 'token',
-        identityProvider: 'CognitoF5',
-        samlSignOut: true,
-        attributesMapping: {
-          email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
-        }
-
-    }
-  }
-};
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (awsConfig);
-
-
-/***/ }),
-
 /***/ "9vGm":
 /*!******************************************************!*\
   !*** ./src/app/core/services/aws-cognito.service.ts ***!
@@ -420,35 +383,6 @@ const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
-
-
-/***/ }),
-
-/***/ "Cwke":
-/*!*****************************************!*\
-  !*** ./src/app/aws-exports-profile1.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const awsConfig = {
-    Auth: {
-      region: 'us-west-2',
-      userPoolId: 'us-west-2_YKTiEMjtU',
-      userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
-      oauth: {
-        domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
-        scope: ['email', 'openid', 'phone'],
-        redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',        
-        responseType: 'code'
-      }
-    }
-  };
-
-/* harmony default export */ __webpack_exports__["default"] = (awsConfig);
 
 
 /***/ }),
@@ -1309,27 +1243,34 @@ class AuthGuard {
     }
     canActivate() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            const session = yield aws_amplify__WEBPACK_IMPORTED_MODULE_2__["Auth"].currentSession();
-            console.log(session);
-            if (session) {
-                const accessToken = session.getAccessToken().getJwtToken();
-                const idToken = session.getIdToken().getJwtToken();
-                const refreshToken = session.getRefreshToken().getToken();
-                const decodedToken = Object(jwt_decode__WEBPACK_IMPORTED_MODULE_3__["default"])(accessToken);
-                const userPoolId = 'us-west-2_YKTiEMjtU';
-                const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
-                const iss = decodedToken.iss;
-                const parts = iss.split('/');
-                const lastPart = parts.pop();
-                if (lastPart == userPoolId && decodedToken.client_id == userPoolWebClientId) {
-                    return true;
+            try {
+                const user = yield aws_amplify__WEBPACK_IMPORTED_MODULE_2__["Auth"].currentAuthenticatedUser();
+                const session = user.getSignInUserSession();
+                if (session) {
+                    const accessToken = session.getAccessToken().getJwtToken();
+                    const idToken = session.getIdToken().getJwtToken();
+                    const refreshToken = session.getRefreshToken().getToken();
+                    const decodedToken = Object(jwt_decode__WEBPACK_IMPORTED_MODULE_3__["default"])(accessToken);
+                    const userPoolId = 'us-west-2_YKTiEMjtU';
+                    const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
+                    const iss = decodedToken.iss;
+                    const parts = iss.split('/');
+                    const lastPart = parts.pop();
+                    if (lastPart == userPoolId && decodedToken.client_id == userPoolWebClientId) {
+                        return true;
+                    }
+                    else {
+                        this.router.navigate(['access-denied']);
+                        return false;
+                    }
                 }
                 else {
                     this.router.navigate(['access-denied']);
                     return false;
                 }
             }
-            else {
+            catch (error) {
+                console.error('Error:', error);
                 this.router.navigate(['access-denied']);
                 return false;
             }
@@ -1506,24 +1447,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var aws_amplify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! aws-amplify */ "AL3R");
-/* harmony import */ var _aws_exports_profile1__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./aws-exports-profile1 */ "Cwke");
-/* harmony import */ var _aws_exports_profile2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./aws-exports-profile2 */ "bFEt");
-/* harmony import */ var _aws_exports_profile3__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./aws-exports-profile3 */ "7c2b");
-/* harmony import */ var _aws_exports_profile4__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aws-exports-profile4 */ "Xb+C");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./auth.service */ "ccyI");
-/* harmony import */ var _core_services_cognito_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./core/services/cognito.service */ "SLGV");
-/* harmony import */ var _modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/navigation/navigation.component */ "G3c1");
-/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! primeng/button */ "jIHw");
-
-
-
-
-
-
-
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth.service */ "ccyI");
+/* harmony import */ var _core_services_cognito_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./core/services/cognito.service */ "SLGV");
+/* harmony import */ var _modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/navigation/navigation.component */ "G3c1");
 
 
 
@@ -1542,138 +1470,17 @@ class AppComponent {
         this.router = router;
         this.cognitoService = cognitoService;
         this.title = 'pacific-railway';
-        /*
-        this.authService.authenticate().then(session => {
-           alert(session.getIdToken().getJwtToken());
-            }).catch(err => {
-              console.error(err);
-            });
-   
-            */
     }
     ngOnInit() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            /*
-            try {
-                   const session = await Auth.currentSession();
-                   if(session){
-                     const accessToken = session.getAccessToken().getJwtToken();
-                     const idToken = session.getIdToken().getJwtToken();
-                     const refreshToken = session.getRefreshToken().getToken();
-                     const decodedToken: any = jwt_decode(accessToken);
-                     const userPoolId = 'us-west-2_YKTiEMjtU';
-                     const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
-                     const iss = decodedToken.iss;
-                     const parts = iss.split('/');
-                     const lastPart = parts.pop();
-      
-                     console.log(accessToken);
-                     console.log(lastPart);
-                     console.log(userPoolId);
-                     console.log(decodedToken.client_id);
-                     console.log(userPoolWebClientId);
-      
-      
-                     if (
-                       lastPart ==  userPoolId &&
-                       decodedToken.client_id == userPoolWebClientId
-                     ) {
-                       console.log('Access.');
-                     } else {
-                       console.log('Denied.');
-                     }
-                   }
-      
-                 } catch (error) {
-                   this.router.navigate(['access-denied']); // Redirigir a la página de inicio de sesión
-      
-                   console.error('Error al obtener los datos de sesión:', error);
-                 }
-            */
-        });
-    }
-    optionOne() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.selectedProfile = 'profile1';
-            this.updateAmplifyConfig();
-        });
-    }
-    optionTwo() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.selectedProfile = 'profile2';
-            this.updateAmplifyConfig();
-        });
-    }
-    optionThree() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.selectedProfile = 'profile3';
-            this.updateAmplifyConfig();
-        });
-    }
-    optionFour() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.selectedProfile = 'profile4';
-            this.updateAmplifyConfig();
-        });
-    }
-    updateAmplifyConfig() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            let selectedConfig;
-            if (this.selectedProfile == 'profile1') {
-                selectedConfig = _aws_exports_profile1__WEBPACK_IMPORTED_MODULE_3__["default"];
-            }
-            if (this.selectedProfile == 'profile2') {
-                selectedConfig = _aws_exports_profile2__WEBPACK_IMPORTED_MODULE_4__["default"];
-            }
-            if (this.selectedProfile == 'profile3') {
-                selectedConfig = _aws_exports_profile3__WEBPACK_IMPORTED_MODULE_5__["default"];
-            }
-            if (this.selectedProfile == 'profile4') {
-                selectedConfig = _aws_exports_profile4__WEBPACK_IMPORTED_MODULE_6__["default"];
-            }
-            console.log(selectedConfig);
-            aws_amplify__WEBPACK_IMPORTED_MODULE_2__["Amplify"].configure(selectedConfig);
-            try {
-                yield aws_amplify__WEBPACK_IMPORTED_MODULE_2__["Auth"].federatedSignIn();
-                console.log('Sucess');
-            }
-            catch (error) {
-                console.error('Error', error);
-            }
         });
     }
 }
-AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_8__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_8__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_core_services_cognito_service__WEBPACK_IMPORTED_MODULE_10__["CognitoService"])); };
-AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 13, vars: 0, consts: [[1, "container-principal"], [1, "row", "card"], [1, "col", "s12", "center-align"], [1, "col", "s5"], ["pButton", "", "pRipple", "", "type", "button", "label", "One", 1, "p-button-success", 3, "click"], ["pButton", "", "pRipple", "", "type", "button", "label", "Two", 1, "p-button-success", 3, "click"], ["pButton", "", "pRipple", "", "type", "button", "label", "Three", 1, "p-button-success", 3, "click"], ["pButton", "", "pRipple", "", "type", "button", "label", "Four", 1, "p-button-success", 3, "click"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
+AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_core_services_cognito_service__WEBPACK_IMPORTED_MODULE_5__["CognitoService"])); };
+AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 2, vars: 0, template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "app-navigation");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_5_listener() { return ctx.optionOne(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "button", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_7_listener() { return ctx.optionTwo(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_9_listener() { return ctx.optionThree(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](10, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "button", 7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_11_listener() { return ctx.optionFour(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](12, "router-outlet");
-    } }, directives: [_modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_11__["NavigationComponent"], primeng_button__WEBPACK_IMPORTED_MODULE_12__["ButtonDirective"], _angular_router__WEBPACK_IMPORTED_MODULE_8__["RouterOutlet"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "router-outlet");
+    } }, directives: [_modules_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_6__["NavigationComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterOutlet"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AppComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
@@ -1681,7 +1488,7 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
                 templateUrl: './app.component.html',
                 styleUrls: ['./app.component.css']
             }]
-    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_8__["ActivatedRoute"] }, { type: _auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_8__["Router"] }, { type: _core_services_cognito_service__WEBPACK_IMPORTED_MODULE_10__["CognitoService"] }]; }, null); })();
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"] }, { type: _auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }, { type: _core_services_cognito_service__WEBPACK_IMPORTED_MODULE_5__["CognitoService"] }]; }, null); })();
 
 
 /***/ }),
@@ -1991,6 +1798,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
 /* harmony import */ var _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../core/services/map-state/map-state.service */ "xLLE");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var primeng_toast__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! primeng/toast */ "Gxio");
+/* harmony import */ var primeng_divider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/divider */ "lUkA");
+/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! primeng/button */ "jIHw");
+/* harmony import */ var _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./filter-map/filter-map.component */ "Uq8t");
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+/* harmony import */ var _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./table-map/table-map.component */ "mk+t");
+
+
+
+
+
+
 
 
 
@@ -2005,6 +1824,86 @@ __webpack_require__.r(__webpack_exports__);
 
 const _c0 = ["viewContainerRef"];
 const _c1 = ["mapViewNode"];
+function MapComponent_div_6_Template(rf, ctx) { if (rf & 1) {
+    const _r9 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "app-filter-map", 23);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("SendFilters", function MapComponent_div_6_Template_app_filter_map_SendFilters_1_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r9); const ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r8.getFilters($event); })("Sendchecked", function MapComponent_div_6_Template_app_filter_map_Sendchecked_1_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r9); const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r10.getChecked($event); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("Events", ctx_r0.events)("Georeferences", ctx_r0.georeferences)("Time", ctx_r0.timestring);
+} }
+const _c2 = function () { return { "height": "6px" }; };
+function MapComponent_ng_container_7_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](0);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-progressBar", 24);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+} if (rf & 2) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction0"](2, _c2));
+} }
+function MapComponent_button_9_Template(rf, ctx) { if (rf & 1) {
+    const _r12 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 25);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function MapComponent_button_9_Template_button_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r12); const ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r11.mostrar(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, " expand_more ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function MapComponent_button_10_Template(rf, ctx) { if (rf & 1) {
+    const _r14 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 25);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function MapComponent_button_10_Template_button_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r14); const ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r13.ocultar(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, " expand_less ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function MapComponent_button_28_Template(rf, ctx) { if (rf & 1) {
+    const _r16 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 25);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function MapComponent_button_28_Template_button_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r16); const ctx_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r15.mostrarTabla(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, " expand_less ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function MapComponent_button_29_Template(rf, ctx) { if (rf & 1) {
+    const _r18 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 25);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function MapComponent_button_29_Template_button_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r18); const ctx_r17 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r17.ocultarTab(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, " expand_more ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function MapComponent_div_31_ng_container_2_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](0);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-progressBar", 24);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+} if (rf & 2) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction0"](2, _c2));
+} }
+function MapComponent_div_31_Template(rf, ctx) { if (rf & 1) {
+    const _r21 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "app-table-map", 27);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("SendCenter", function MapComponent_div_31_Template_app_table_map_SendCenter_1_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r21); const ctx_r20 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r20.getCenter($event); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](2, MapComponent_div_31_ng_container_2_Template, 2, 3, "ng-container", 3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("Data", ctx_r7.data);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx_r7.loading);
+} }
 class MapComponent {
     constructor(messageService, router, cdRef, location, CFR, cdref, msService, http
     //private geojsonService?: GEOJsonService,
@@ -2032,61 +1931,47 @@ class MapComponent {
         this.filterspoints = [];
     }
     ngOnInit() {
-        /*
-  
-              return loadModules([
-                "esri/Map",
-                "esri/layers/FeatureLayer",
-                "esri/layers/GeoJSONLayer",
-                "esri/views/MapView",
-                "esri/widgets/Legend",
-                "esri/widgets/Expand",
-                "esri/widgets/Home",
-                "esri/popup/content/CustomContent",
-                "esri/layers/GraphicsLayer",
-                "esri/widgets/Sketch",
-                "esri/widgets/Sketch/SketchViewModel",
-                "esri/geometry/geometryEngineAsync",
-                "esri/geometry/support/webMercatorUtils"
-              ])
-              .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent,GraphicsLayer,Sketch,SketchViewModel,geometryEngineAsync,webMercatorUtils]) => {
-                const map: __esri.Map = new Map({
-                  basemap: 'streets'
-                });
-                let that = this;
-  
-                this.mapView = new MapView({
-                  container: this.mapViewEl.nativeElement,
-                  center: [-114.8574, 54.6542],
-                  zoom: 4,
-                  map: map,
-                  constraints: {
-                    minZoom : 3,
-                  },
-                });
-              })
-  
-  
-                        .catch(err => {
-                          console.error(err);
-                        });
-  
-  
-  
-  
+        return Object(esri_loader__WEBPACK_IMPORTED_MODULE_3__["loadModules"])([
+            "esri/Map",
+            "esri/layers/FeatureLayer",
+            "esri/layers/GeoJSONLayer",
+            "esri/views/MapView",
+            "esri/widgets/Legend",
+            "esri/widgets/Expand",
+            "esri/widgets/Home",
+            "esri/popup/content/CustomContent",
+            "esri/layers/GraphicsLayer",
+            "esri/widgets/Sketch",
+            "esri/widgets/Sketch/SketchViewModel",
+            "esri/geometry/geometryEngineAsync",
+            "esri/geometry/support/webMercatorUtils"
+        ])
+            .then(([Map, FeatureLayer, GeoJSONLayer, MapView, Legend, Expand, Home, CustomContent, GraphicsLayer, Sketch, SketchViewModel, geometryEngineAsync, webMercatorUtils]) => {
+            const map = new Map({
+                basemap: 'streets'
+            });
+            let that = this;
+            this.mapView = new MapView({
+                container: this.mapViewEl.nativeElement,
+                center: [-114.8574, 54.6542],
+                zoom: 4,
+                map: map,
+                constraints: {
+                    minZoom: 3,
+                },
+            });
+        })
+            .catch(err => {
+            console.error(err);
+        });
         this.contador_regresivo();
-  
-  
         this.events = [];
         this.counterror = 0;
-  
         this.data = [];
         this.dataGeneral = [];
         this.filterspoints = [];
         this.href = this.router.url;
-        this.currentURL = window.location.href.replace(this.href,'');
-  
-        */
+        this.currentURL = window.location.href.replace(this.href, '');
     }
     contador_regresivo() {
         let actual = new Date();
@@ -2174,8 +2059,8 @@ class MapComponent {
         }).catch(err => console.error(err));
     }
     ngAfterViewInit() {
-        //this.loading = true;
-        //this.getDatafromGeoJson();
+        this.loading = true;
+        this.getDatafromGeoJson();
         this.cdRef.detectChanges();
     }
     getDatafromGeoJson() {
@@ -2932,7 +2817,74 @@ MapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
         let _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.VCR = _t.first);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.mapViewEl = _t.first);
-    } }, outputs: { ocultarFiltro: "ocultarFiltro" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵProvidersFeature"]([primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"]])], decls: 0, vars: 0, template: function MapComponent_Template(rf, ctx) { }, styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 500px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:780px;\r\n  width:1200px;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.esri-button[_ngcontent-%COMP%] {\r\n  color: black !important;;\r\n  }\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\nbutton[_ngcontent-%COMP%]{\r\n  background: rgba(236, 234, 234, 0.712);\r\n  border: none;\r\n  border-radius: 12px;\r\n\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFlBQVk7O0VBRVosa0JBQWtCOzs7QUFHcEI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsdUJBQXVCO0VBQ3ZCOztBQUdGO0VBQ0U7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7RUFDaEI7QUFDRjs7QUFFQTtFQUNFLHNDQUFzQztFQUN0QyxZQUFZO0VBQ1osbUJBQW1COztBQUVyQiIsImZpbGUiOiJtYXAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIkBpbXBvcnQgJ2h0dHBzOi8vanMuYXJjZ2lzLmNvbS80LjEwL2VzcmkvY3NzL21haW4uY3NzJztcclxuXHJcbi5lc3JpLXZpZXcge1xyXG4gIGhlaWdodDogNTAwcHg7XHJcbn1cclxuXHJcblxyXG4uY29udGFpbmVye1xyXG4gLyogIG1hcmdpbi10b3A6IDIlOyAqL1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1wcmluY2lwYWx7XHJcbiAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDoxMDAlO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcbn1cclxuXHJcbi5jb250YWluZXItbWFwe1xyXG4gIGhlaWdodDo3ODBweDtcclxuICB3aWR0aDoxMjAwcHg7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcbi5waS1zZWFyY2h7XHJcbiAgbWFyZ2luLWxlZnQ6IC00MHB4ICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5cclxuLm1hcHtcclxuXHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuXHJcbn1cclxuLnN1bW1hcnl7XHJcbiAgICBwb3NpdGlvbjogc3RpY2t5O1xyXG4gICAgbWFyZ2luLXRvcDogMDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJsYWNrO1xyXG4gICAgaGVpZ2h0OiAxNXZoO1xyXG4gICAgYm90dG9tOjA7XHJcblxyXG5cclxuXHJcbn1cclxuXHJcblxyXG4ubWFwYm94Z2wtcG9wdXAtY29udGVudCB7XHJcbiAgICBjb2xvcjogYmxhY2sgIWltcG9ydGFudDtcclxufVxyXG5cclxuLm1hcGJveGdsLWN0cmwtZ3JvdXB7XHJcbiAgICBjb2xvcjogYmxhY2s7XHJcbn1cclxuXHJcbi5wLXRhYm1lbnVpdGVtIHtcclxuICB3aWR0aDogMzMuMzMlICFpbXBvcnRhbnQ7XHJcblxyXG59XHJcblxyXG4udGl0bGVHZW5lcmFse1xyXG4gIGZvbnQtc2l6ZTogMjRweDtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtZmFtaWx5OiBmdWVudGVwYXJhdGl0dWxvcztcclxuXHJcbn1cclxuXHJcbi5lc3JpLWJ1dHRvbiB7XHJcbiAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7O1xyXG4gIH1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBiYWNrZ3JvdW5kOiByZ2JhKDIzNiwgMjM0LCAyMzQsIDAuNzEyKTtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgYm9yZGVyLXJhZGl1czogMTJweDtcclxuXHJcbn1cclxuIl19 */"] });
+    } }, outputs: { ocultarFiltro: "ocultarFiltro" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵProvidersFeature"]([primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"]])], decls: 34, vars: 7, consts: [[1, "container-principal"], [1, "row", "card"], [1, "col", "s12", "center-align"], [4, "ngIf"], ["align", "center", "type", "dashed"], [3, "click", 4, "ngIf"], [1, "p-col-12"], ["id", "esri-view"], ["mapViewNode", ""], ["id", "viewDiv"], ["id", "select-by-rectangle", "title", "Select features by rectangle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-checkbox-unchecked"], ["id", "select-by-circle", "title", "Select features by circle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-radio-unchecked"], ["id", "clear-selection", "title", "Clear selection", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-erase"], ["id", "infoDiv", 1, "esri-widget"], ["id", "cluster", 1, "esri-button"], [1, "container"], ["id", "tableDiv"], [1, "row"], [1, "col", "s12"], ["pButton", "", "pRipple", "", "type", "button", "label", "CSV", 1, "p-button-success", 3, "click"], [3, "Events", "Georeferences", "Time", "SendFilters", "Sendchecked"], ["mode", "indeterminate"], [3, "click"], [1, "material-icons"], [3, "Data", "SendCenter"]], template: function MapComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-toast");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "h6");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](5, "Current Chassis Location");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](6, MapComponent_div_6_Template, 2, 3, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](7, MapComponent_ng_container_7_Template, 2, 3, "ng-container", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "p-divider", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](9, MapComponent_button_9_Template, 3, 0, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](10, MapComponent_button_10_Template, 3, 0, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "div", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](12, "div", 7, 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](14, "div", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](15, "div", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](16, "span", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](17, "div", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](18, "span", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](19, "div", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](20, "span", 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](21, "div", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](22, "button", 17);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](23, "Disable Clustering");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](24, "div", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](25, "div", 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](26, "div", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](27, "p-divider", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](28, MapComponent_button_28_Template, 3, 0, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](29, MapComponent_button_29_Template, 3, 0, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](30, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](31, MapComponent_div_31_Template, 3, 2, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](32, "div", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](33, "button", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function MapComponent_Template_button_click_33_listener() { return ctx.downloadFile(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    } if (rf & 2) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarFiltro);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.loading);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.ocultarFiltro);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarFiltro);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.ocultarTabla);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarTabla);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarTabla);
+    } }, directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_9__["Toast"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgIf"], primeng_divider__WEBPACK_IMPORTED_MODULE_10__["Divider"], primeng_button__WEBPACK_IMPORTED_MODULE_11__["ButtonDirective"], _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_12__["FilterMapComponent"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_13__["ProgressBar"], _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_14__["TableMapComponent"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 500px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:780px;\r\n  width:1200px;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.esri-button[_ngcontent-%COMP%] {\r\n  color: black !important;;\r\n  }\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\nbutton[_ngcontent-%COMP%]{\r\n  background: rgba(236, 234, 234, 0.712);\r\n  border: none;\r\n  border-radius: 12px;\r\n\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFlBQVk7O0VBRVosa0JBQWtCOzs7QUFHcEI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsdUJBQXVCO0VBQ3ZCOztBQUdGO0VBQ0U7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7RUFDaEI7QUFDRjs7QUFFQTtFQUNFLHNDQUFzQztFQUN0QyxZQUFZO0VBQ1osbUJBQW1COztBQUVyQiIsImZpbGUiOiJtYXAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIkBpbXBvcnQgJ2h0dHBzOi8vanMuYXJjZ2lzLmNvbS80LjEwL2VzcmkvY3NzL21haW4uY3NzJztcclxuXHJcbi5lc3JpLXZpZXcge1xyXG4gIGhlaWdodDogNTAwcHg7XHJcbn1cclxuXHJcblxyXG4uY29udGFpbmVye1xyXG4gLyogIG1hcmdpbi10b3A6IDIlOyAqL1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1wcmluY2lwYWx7XHJcbiAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDoxMDAlO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcbn1cclxuXHJcbi5jb250YWluZXItbWFwe1xyXG4gIGhlaWdodDo3ODBweDtcclxuICB3aWR0aDoxMjAwcHg7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcbi5waS1zZWFyY2h7XHJcbiAgbWFyZ2luLWxlZnQ6IC00MHB4ICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5cclxuLm1hcHtcclxuXHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuXHJcbn1cclxuLnN1bW1hcnl7XHJcbiAgICBwb3NpdGlvbjogc3RpY2t5O1xyXG4gICAgbWFyZ2luLXRvcDogMDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJsYWNrO1xyXG4gICAgaGVpZ2h0OiAxNXZoO1xyXG4gICAgYm90dG9tOjA7XHJcblxyXG5cclxuXHJcbn1cclxuXHJcblxyXG4ubWFwYm94Z2wtcG9wdXAtY29udGVudCB7XHJcbiAgICBjb2xvcjogYmxhY2sgIWltcG9ydGFudDtcclxufVxyXG5cclxuLm1hcGJveGdsLWN0cmwtZ3JvdXB7XHJcbiAgICBjb2xvcjogYmxhY2s7XHJcbn1cclxuXHJcbi5wLXRhYm1lbnVpdGVtIHtcclxuICB3aWR0aDogMzMuMzMlICFpbXBvcnRhbnQ7XHJcblxyXG59XHJcblxyXG4udGl0bGVHZW5lcmFse1xyXG4gIGZvbnQtc2l6ZTogMjRweDtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtZmFtaWx5OiBmdWVudGVwYXJhdGl0dWxvcztcclxuXHJcbn1cclxuXHJcbi5lc3JpLWJ1dHRvbiB7XHJcbiAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7O1xyXG4gIH1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBiYWNrZ3JvdW5kOiByZ2JhKDIzNiwgMjM0LCAyMzQsIDAuNzEyKTtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgYm9yZGVyLXJhZGl1czogMTJweDtcclxuXHJcbn1cclxuIl19 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MapComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
@@ -4123,40 +4075,6 @@ PRSMComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComp
 
 /***/ }),
 
-/***/ "Xb+C":
-/*!*****************************************!*\
-  !*** ./src/app/aws-exports-profile4.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const awsConfig = {
-    Auth: {
-      region: 'us-west-2',
-      userPoolId: 'us-west-2_YKTiEMjtU',
-      userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
-      oauth: {
-        domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
-        scope: ['email', 'openid'],
-        redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        responseType: 'code',
-        identityProvider: 'CognitoF5',
-        samlSignOut: true,
-        attributesMapping: {
-          email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
-        }
-      }
-    }
-  };
-
-/* harmony default export */ __webpack_exports__["default"] = (awsConfig);
-
-
-/***/ }),
-
 /***/ "ZAI4":
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
@@ -4369,35 +4287,6 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
             }]
     }], null, null); })();
-
-
-/***/ }),
-
-/***/ "bFEt":
-/*!*****************************************!*\
-  !*** ./src/app/aws-exports-profile2.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const awsConfig = {
-    Auth: {
-      region: 'us-west-2',
-      userPoolId: 'us-west-2_YKTiEMjtU',
-      userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
-      oauth: {
-        domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
-        scope: ['email', 'openid', 'phone'],
-        redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-        responseType: 'token'
-      }
-    }
-  };
-
-/* harmony default export */ __webpack_exports__["default"] = (awsConfig);
 
 
 /***/ }),
@@ -4854,7 +4743,7 @@ class AccessDeniedComponent {
     }
 }
 AccessDeniedComponent.ɵfac = function AccessDeniedComponent_Factory(t) { return new (t || AccessDeniedComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])); };
-AccessDeniedComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AccessDeniedComponent, selectors: [["app-access-denied"]], decls: 33, vars: 0, consts: [[1, "login-body"], [1, "login-panel", "p-fluid", "card"], [1, "p-grid", "p-nogutter"], [1, "p-col-12", "border"], [1, "p-grid", "p-text-center"], [1, "p-col-10", "p-offset-1"], ["src", "../assets/logo.png", 1, "imagen-banner"], [1, "p-col-12"], [1, "titleproject"], [1, "versionado"], [1, "p-grid"], [1, "p-col-6", "p-offset-3"], [1, "p-col-8", "p-offset-2", "p-text-center"], [1, "acessDenied"], [1, "p-col-8", "p-offset-2"], [1, "infoDenied"], ["href", "javascript:void(0);", 1, "feedback", 3, "click"]], template: function AccessDeniedComponent_Template(rf, ctx) { if (rf & 1) {
+AccessDeniedComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AccessDeniedComponent, selectors: [["app-access-denied"]], decls: 29, vars: 0, consts: [[1, "login-body"], [1, "login-panel", "p-fluid", "card"], [1, "p-grid", "p-nogutter"], [1, "p-col-12", "border"], [1, "p-grid", "p-text-center"], [1, "p-col-10", "p-offset-1"], ["src", "../assets/logo.png", 1, "imagen-banner"], [1, "p-col-12"], [1, "titleproject"], [1, "versionado"], [1, "p-grid"], [1, "p-col-6", "p-offset-3"], [1, "p-col-8", "p-offset-2", "p-text-center"], [1, "acessDenied"], [1, "p-col-8", "p-offset-2"], [1, "infoDenied"]], template: function AccessDeniedComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementContainerStart"](0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "div", 1);
@@ -4891,19 +4780,12 @@ AccessDeniedComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵde
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](23, "div", 14);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](24, "span", 15);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](25, " You do not have the necessary permissions to view the application. Please log in using the following ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](26, "a", 16);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AccessDeniedComponent_Template_a_click_26_listener() { return ctx.gotoLogin(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](27, "link");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](28, "span");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](29, ".");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](25, " You do not have the necessary permissions to view the application. ");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](30, "div", 10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](31, "div", 11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](32, "br");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](26, "div", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](27, "div", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](28, "br");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -6588,6 +6470,7 @@ const routes = [
     {
         path: 'current-chassis-location',
         component: _modules_map_map_component__WEBPACK_IMPORTED_MODULE_3__["MapComponent"],
+        canActivate: [_auth_guards_check_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]]
     },
     {
         path: 'chassis-details/:chasis',
@@ -7089,7 +6972,7 @@ let config = {
         oauth: {
             domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
             scope: ['email', 'openid'],
-            redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+            redirectSignIn: window.location.href,
             redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
             responseType: 'token',
             identityProvider: 'CognitoF5',

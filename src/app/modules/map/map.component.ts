@@ -84,8 +84,6 @@ export class MapComponent implements OnInit {
     ngOnInit() {
 
 
-      /*
-
             return loadModules([
               "esri/Map",
               "esri/layers/FeatureLayer",
@@ -138,7 +136,6 @@ export class MapComponent implements OnInit {
       this.href = this.router.url;
       this.currentURL = window.location.href.replace(this.href,'');
 
-      */
 
     }
 
@@ -249,8 +246,8 @@ export class MapComponent implements OnInit {
 
 
     ngAfterViewInit() {
-      //this.loading = true;
-      //this.getDatafromGeoJson();
+      this.loading = true;
+      this.getDatafromGeoJson();
       this.cdRef.detectChanges();
     }
 
@@ -1212,6 +1209,6 @@ export class MapComponent implements OnInit {
     this.reload = $event;
    }
 
- 
+
 
 }
