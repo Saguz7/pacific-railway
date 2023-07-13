@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 import AWS from 'aws-sdk';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-access-denied',
@@ -30,6 +31,7 @@ export class AccessDeniedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(environment.API_URL_BASE);
 
   }
 
