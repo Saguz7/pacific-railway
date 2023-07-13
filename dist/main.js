@@ -14,7 +14,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "qCKp");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! esri-loader */ "r6rm");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(esri_loader__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../core/services/map/map-custom.service */ "z9WN");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../environments/environment */ "AytR");
+/* harmony import */ var _core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../core/services/map/map-custom.service */ "z9WN");
+
 
 
 
@@ -44,7 +46,8 @@ class MapDivComponent {
         this.cdref.detectChanges();
     }
     getDatafromGeoJson() {
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+        fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].API_URL_BASE + "get-locations")
+            //  fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-locations")
             .then(res => res.json())
             .then((out) => {
             if (out.errorMessage == undefined) {
@@ -209,7 +212,7 @@ class MapDivComponent {
     ngOnInit() {
     }
 }
-MapDivComponent.ɵfac = function MapDivComponent_Factory(t) { return new (t || MapDivComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_3__["MapCustomService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"])); };
+MapDivComponent.ɵfac = function MapDivComponent_Factory(t) { return new (t || MapDivComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_4__["MapCustomService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"])); };
 MapDivComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: MapDivComponent, selectors: [["app-mapdiv"]], viewQuery: function MapDivComponent_Query(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c0, true, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"]);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c1, true);
@@ -235,7 +238,7 @@ MapDivComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
                 templateUrl: './mapdiv.component.html',
                 styleUrls: ['./mapdiv.component.css']
             }]
-    }], function () { return [{ type: _core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_3__["MapCustomService"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }]; }, { VCR: [{
+    }], function () { return [{ type: _core_services_map_map_custom_service__WEBPACK_IMPORTED_MODULE_4__["MapCustomService"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }]; }, { VCR: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"],
             args: ['viewContainerRef', { read: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"], static: false }]
         }], mapViewEl: [{
@@ -291,62 +294,6 @@ module.exports = __webpack_require__(/*! D:\train\version_estable\pacific-railwa
 
 /***/ }),
 
-/***/ "9vGm":
-/*!******************************************************!*\
-  !*** ./src/app/core/services/aws-cognito.service.ts ***!
-  \******************************************************/
-/*! exports provided: AwsCognitoService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AwsCognitoService", function() { return AwsCognitoService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/environments/environment */ "AytR");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
-
-
-
-
-class AwsCognitoService {
-    constructor(http) {
-        this.http = http;
-    }
-    getTokenDetailsFromCognito(callbackCode) {
-        const details = {
-            grant_type: 'authorization_code',
-            code: callbackCode,
-            scope: 'openid+email',
-            redirect_uri: src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].redirectURL
-        };
-        const formBody = Object.keys(details)
-            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`)
-            .join('&');
-        return this.http.post(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].cognitoTokenURL, formBody, {
-            responseType: 'json',
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Basic ' + btoa(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].sso_api_username}:${src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].sso_api_pwd}`)
-            })
-        });
-    }
-    logoutUserFromCognito() {
-        return this.http.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].logout);
-    }
-}
-AwsCognitoService.ɵfac = function AwsCognitoService_Factory(t) { return new (t || AwsCognitoService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
-AwsCognitoService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AwsCognitoService, factory: AwsCognitoService.ɵfac, providedIn: 'root' });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AwsCognitoService, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
-        args: [{
-                providedIn: 'root'
-            }]
-    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }]; }, null); })();
-
-
-/***/ }),
-
 /***/ "AytR":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -357,32 +304,16 @@ AwsCognitoService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefin
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
 const environment = {
     production: false,
     API_URL_BASE: 'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/',
-    region: 'YOUR_REGION_ID',
-    userPoolId: 'YOUR_USER_POOL_ID',
-    clientId: 'YOUR_CLIENT_ID',
-    sso_api_username: 'us-west-2_YKTiEMjtU',
-    sso_api_pwd: 's7ch645u8voh00dridmn8kn19',
-    loginURL: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=s7ch645u8voh00dridmn8kn19&response_type=token&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdev.d1klk34joigd80.amplifyapp.com%2Fcurrent-chassis-location',
-    redirectURL: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-    cognitoTokenURL: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/token',
-    logout: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/logout?' +
-        'client_id=s7ch645u8voh00dridmn8kn19&' +
-        'logout_uri=https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location'
+    REGION_POOL: 'us-west-2',
+    USER_POOL_ID: 'us-west-2_YKTiEMjtU',
+    APP_POOL_ID: 's7ch645u8voh00dridmn8kn19',
+    DOMAIN_SIGN: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
+    REDIRECT_SIGNIN: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+    REDIRECT_SIGNOUT: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
 };
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
 
 
 /***/ }),
@@ -1289,67 +1220,6 @@ AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjecta
 
 /***/ }),
 
-/***/ "Nl3S":
-/*!*********************************************************!*\
-  !*** ./src/app/core/resolver/token-resolver.service.ts ***!
-  \*********************************************************/
-/*! exports provided: TokenResolverService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenResolverService", function() { return TokenResolverService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "qCKp");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var _services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/aws-cognito.service */ "9vGm");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
-
-
-
-
-
-
-
-class TokenResolverService {
-    constructor(location, awsCognitoService, router) {
-        this.location = location;
-        this.awsCognitoService = awsCognitoService;
-        this.router = router;
-    }
-    resolve() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        if (!code) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(null);
-        }
-        return this.getTokenDetailsFromCognito(code).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(() => {
-            this.location.replaceState(window.location.pathname);
-        }));
-    }
-    getTokenDetailsFromCognito(code) {
-        return this.awsCognitoService.getTokenDetailsFromCognito(code).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["switchMap"])((response) => {
-            console.log('Response: ', response);
-            localStorage.setItem('token', response.access_token);
-            if (response) {
-                this.router.navigate(['dashboard']);
-            }
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(response);
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["catchError"])((error) => {
-            return error;
-        }));
-    }
-}
-TokenResolverService.ɵfac = function TokenResolverService_Factory(t) { return new (t || TokenResolverService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__["AwsCognitoService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); };
-TokenResolverService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: TokenResolverService, factory: TokenResolverService.ɵfac });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](TokenResolverService, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"]
-    }], function () { return [{ type: _angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"] }, { type: _services_aws_cognito_service__WEBPACK_IMPORTED_MODULE_4__["AwsCognitoService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }]; }, null); })();
-
-
-/***/ }),
-
 /***/ "SLGV":
 /*!**************************************************!*\
   !*** ./src/app/core/services/cognito.service.ts ***!
@@ -1793,17 +1663,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "qCKp");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! esri-loader */ "r6rm");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(esri_loader__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var primeng_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! primeng/api */ "7zfz");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../core/services/map-state/map-state.service */ "xLLE");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var primeng_toast__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! primeng/toast */ "Gxio");
-/* harmony import */ var primeng_divider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/divider */ "lUkA");
-/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! primeng/button */ "jIHw");
-/* harmony import */ var _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./filter-map/filter-map.component */ "Uq8t");
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
-/* harmony import */ var _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./table-map/table-map.component */ "mk+t");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../environments/environment */ "AytR");
+/* harmony import */ var primeng_api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! primeng/api */ "7zfz");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../core/services/map-state/map-state.service */ "xLLE");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var primeng_toast__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/toast */ "Gxio");
+/* harmony import */ var primeng_divider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! primeng/divider */ "lUkA");
+/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! primeng/button */ "jIHw");
+/* harmony import */ var _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./filter-map/filter-map.component */ "Uq8t");
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+/* harmony import */ var _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./table-map/table-map.component */ "mk+t");
+
 
 
 
@@ -2037,8 +1909,8 @@ class MapComponent {
     }
     refreshdata() {
         this.loading = true;
-        //    fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API_URL_BASE + "get-cpr-geojson")
+            //  fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             // this.getHistorico(out.features);
@@ -2064,8 +1936,8 @@ class MapComponent {
         this.cdRef.detectChanges();
     }
     getDatafromGeoJson() {
-        //  fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API_URL_BASE + "get-cpr-geojson")
+            //  fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             // this.getHistorico(out.features);
@@ -2095,8 +1967,8 @@ class MapComponent {
             let obj_send = {
                 id: features[indice]['id'],
             };
-            //   this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-            this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+            this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API_URL_BASE + 'chassis-history', { body: { data: obj_send } }).subscribe(data => {
+                //     this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
                 let results = JSON.parse(data.body);
             });
         }
@@ -2120,9 +1992,8 @@ class MapComponent {
         return year + "-" + month + "-" + day;
     }
     getData() {
-        return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["from"])(fetch(
-        //environment.API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
-        'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["from"])(fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API_URL_BASE + 'get-cpr-geojson', // the url you are trying to access
+        //  'https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson', // the url you are trying to access
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -2649,8 +2520,8 @@ class MapComponent {
         }, 100);
     }
     rebuildmap($event, coords) {
-        //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API_URL_BASE + "get-cpr-geojson")
+            //  fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             this.makefromjson(out, $event, coords);
@@ -2809,7 +2680,7 @@ class MapComponent {
         this.reload = $event;
     }
 }
-MapComponent.ɵfac = function MapComponent_Factory(t) { return new (t || MapComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_7__["MapStateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_8__["HttpClient"])); };
+MapComponent.ɵfac = function MapComponent_Factory(t) { return new (t || MapComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_5__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common__WEBPACK_IMPORTED_MODULE_7__["Location"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_8__["MapStateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_9__["HttpClient"])); };
 MapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: MapComponent, selectors: [["app-map"]], viewQuery: function MapComponent_Query(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c0, true, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"]);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c1, true);
@@ -2817,7 +2688,7 @@ MapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
         let _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.VCR = _t.first);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.mapViewEl = _t.first);
-    } }, outputs: { ocultarFiltro: "ocultarFiltro" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵProvidersFeature"]([primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"]])], decls: 34, vars: 7, consts: [[1, "container-principal"], [1, "row", "card"], [1, "col", "s12", "center-align"], [4, "ngIf"], ["align", "center", "type", "dashed"], [3, "click", 4, "ngIf"], [1, "p-col-12"], ["id", "esri-view"], ["mapViewNode", ""], ["id", "viewDiv"], ["id", "select-by-rectangle", "title", "Select features by rectangle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-checkbox-unchecked"], ["id", "select-by-circle", "title", "Select features by circle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-radio-unchecked"], ["id", "clear-selection", "title", "Clear selection", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-erase"], ["id", "infoDiv", 1, "esri-widget"], ["id", "cluster", 1, "esri-button"], [1, "container"], ["id", "tableDiv"], [1, "row"], [1, "col", "s12"], ["pButton", "", "pRipple", "", "type", "button", "label", "CSV", 1, "p-button-success", 3, "click"], [3, "Events", "Georeferences", "Time", "SendFilters", "Sendchecked"], ["mode", "indeterminate"], [3, "click"], [1, "material-icons"], [3, "Data", "SendCenter"]], template: function MapComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, outputs: { ocultarFiltro: "ocultarFiltro" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵProvidersFeature"]([primeng_api__WEBPACK_IMPORTED_MODULE_5__["MessageService"]])], decls: 34, vars: 7, consts: [[1, "container-principal"], [1, "row", "card"], [1, "col", "s12", "center-align"], [4, "ngIf"], ["align", "center", "type", "dashed"], [3, "click", 4, "ngIf"], [1, "p-col-12"], ["id", "esri-view"], ["mapViewNode", ""], ["id", "viewDiv"], ["id", "select-by-rectangle", "title", "Select features by rectangle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-checkbox-unchecked"], ["id", "select-by-circle", "title", "Select features by circle", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-radio-unchecked"], ["id", "clear-selection", "title", "Clear selection", 1, "esri-widget", "esri-widget--button", "esri-widget", "esri-interactive"], [1, "esri-icon-erase"], ["id", "infoDiv", 1, "esri-widget"], ["id", "cluster", 1, "esri-button"], [1, "container"], ["id", "tableDiv"], [1, "row"], [1, "col", "s12"], ["pButton", "", "pRipple", "", "type", "button", "label", "CSV", 1, "p-button-success", 3, "click"], [3, "Events", "Georeferences", "Time", "SendFilters", "Sendchecked"], ["mode", "indeterminate"], [3, "click"], [1, "material-icons"], [3, "Data", "SendCenter"]], template: function MapComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-toast");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 1);
@@ -2884,16 +2755,16 @@ MapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarTabla);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", !ctx.ocultarTabla);
-    } }, directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_9__["Toast"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgIf"], primeng_divider__WEBPACK_IMPORTED_MODULE_10__["Divider"], primeng_button__WEBPACK_IMPORTED_MODULE_11__["ButtonDirective"], _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_12__["FilterMapComponent"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_13__["ProgressBar"], _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_14__["TableMapComponent"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 500px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:780px;\r\n  width:1200px;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.esri-button[_ngcontent-%COMP%] {\r\n  color: black !important;;\r\n  }\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\nbutton[_ngcontent-%COMP%]{\r\n  background: rgba(236, 234, 234, 0.712);\r\n  border: none;\r\n  border-radius: 12px;\r\n\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFlBQVk7O0VBRVosa0JBQWtCOzs7QUFHcEI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsdUJBQXVCO0VBQ3ZCOztBQUdGO0VBQ0U7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7RUFDaEI7QUFDRjs7QUFFQTtFQUNFLHNDQUFzQztFQUN0QyxZQUFZO0VBQ1osbUJBQW1COztBQUVyQiIsImZpbGUiOiJtYXAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIkBpbXBvcnQgJ2h0dHBzOi8vanMuYXJjZ2lzLmNvbS80LjEwL2VzcmkvY3NzL21haW4uY3NzJztcclxuXHJcbi5lc3JpLXZpZXcge1xyXG4gIGhlaWdodDogNTAwcHg7XHJcbn1cclxuXHJcblxyXG4uY29udGFpbmVye1xyXG4gLyogIG1hcmdpbi10b3A6IDIlOyAqL1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1wcmluY2lwYWx7XHJcbiAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDoxMDAlO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcbn1cclxuXHJcbi5jb250YWluZXItbWFwe1xyXG4gIGhlaWdodDo3ODBweDtcclxuICB3aWR0aDoxMjAwcHg7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcbi5waS1zZWFyY2h7XHJcbiAgbWFyZ2luLWxlZnQ6IC00MHB4ICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5cclxuLm1hcHtcclxuXHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuXHJcbn1cclxuLnN1bW1hcnl7XHJcbiAgICBwb3NpdGlvbjogc3RpY2t5O1xyXG4gICAgbWFyZ2luLXRvcDogMDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJsYWNrO1xyXG4gICAgaGVpZ2h0OiAxNXZoO1xyXG4gICAgYm90dG9tOjA7XHJcblxyXG5cclxuXHJcbn1cclxuXHJcblxyXG4ubWFwYm94Z2wtcG9wdXAtY29udGVudCB7XHJcbiAgICBjb2xvcjogYmxhY2sgIWltcG9ydGFudDtcclxufVxyXG5cclxuLm1hcGJveGdsLWN0cmwtZ3JvdXB7XHJcbiAgICBjb2xvcjogYmxhY2s7XHJcbn1cclxuXHJcbi5wLXRhYm1lbnVpdGVtIHtcclxuICB3aWR0aDogMzMuMzMlICFpbXBvcnRhbnQ7XHJcblxyXG59XHJcblxyXG4udGl0bGVHZW5lcmFse1xyXG4gIGZvbnQtc2l6ZTogMjRweDtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtZmFtaWx5OiBmdWVudGVwYXJhdGl0dWxvcztcclxuXHJcbn1cclxuXHJcbi5lc3JpLWJ1dHRvbiB7XHJcbiAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7O1xyXG4gIH1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBiYWNrZ3JvdW5kOiByZ2JhKDIzNiwgMjM0LCAyMzQsIDAuNzEyKTtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgYm9yZGVyLXJhZGl1czogMTJweDtcclxuXHJcbn1cclxuIl19 */"] });
+    } }, directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_10__["Toast"], _angular_common__WEBPACK_IMPORTED_MODULE_7__["NgIf"], primeng_divider__WEBPACK_IMPORTED_MODULE_11__["Divider"], primeng_button__WEBPACK_IMPORTED_MODULE_12__["ButtonDirective"], _filter_map_filter_map_component__WEBPACK_IMPORTED_MODULE_13__["FilterMapComponent"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_14__["ProgressBar"], _table_map_table_map_component__WEBPACK_IMPORTED_MODULE_15__["TableMapComponent"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 500px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:780px;\r\n  width:1200px;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.esri-button[_ngcontent-%COMP%] {\r\n  color: black !important;;\r\n  }\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\nbutton[_ngcontent-%COMP%]{\r\n  background: rgba(236, 234, 234, 0.712);\r\n  border: none;\r\n  border-radius: 12px;\r\n\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFlBQVk7O0VBRVosa0JBQWtCOzs7QUFHcEI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsdUJBQXVCO0VBQ3ZCOztBQUdGO0VBQ0U7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7RUFDaEI7QUFDRjs7QUFFQTtFQUNFLHNDQUFzQztFQUN0QyxZQUFZO0VBQ1osbUJBQW1COztBQUVyQiIsImZpbGUiOiJtYXAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIkBpbXBvcnQgJ2h0dHBzOi8vanMuYXJjZ2lzLmNvbS80LjEwL2VzcmkvY3NzL21haW4uY3NzJztcclxuXHJcbi5lc3JpLXZpZXcge1xyXG4gIGhlaWdodDogNTAwcHg7XHJcbn1cclxuXHJcblxyXG4uY29udGFpbmVye1xyXG4gLyogIG1hcmdpbi10b3A6IDIlOyAqL1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1wcmluY2lwYWx7XHJcbiAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDoxMDAlO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcbn1cclxuXHJcbi5jb250YWluZXItbWFwe1xyXG4gIGhlaWdodDo3ODBweDtcclxuICB3aWR0aDoxMjAwcHg7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcbi5waS1zZWFyY2h7XHJcbiAgbWFyZ2luLWxlZnQ6IC00MHB4ICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5cclxuLm1hcHtcclxuXHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuXHJcbn1cclxuLnN1bW1hcnl7XHJcbiAgICBwb3NpdGlvbjogc3RpY2t5O1xyXG4gICAgbWFyZ2luLXRvcDogMDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJsYWNrO1xyXG4gICAgaGVpZ2h0OiAxNXZoO1xyXG4gICAgYm90dG9tOjA7XHJcblxyXG5cclxuXHJcbn1cclxuXHJcblxyXG4ubWFwYm94Z2wtcG9wdXAtY29udGVudCB7XHJcbiAgICBjb2xvcjogYmxhY2sgIWltcG9ydGFudDtcclxufVxyXG5cclxuLm1hcGJveGdsLWN0cmwtZ3JvdXB7XHJcbiAgICBjb2xvcjogYmxhY2s7XHJcbn1cclxuXHJcbi5wLXRhYm1lbnVpdGVtIHtcclxuICB3aWR0aDogMzMuMzMlICFpbXBvcnRhbnQ7XHJcblxyXG59XHJcblxyXG4udGl0bGVHZW5lcmFse1xyXG4gIGZvbnQtc2l6ZTogMjRweDtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtZmFtaWx5OiBmdWVudGVwYXJhdGl0dWxvcztcclxuXHJcbn1cclxuXHJcbi5lc3JpLWJ1dHRvbiB7XHJcbiAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7O1xyXG4gIH1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBiYWNrZ3JvdW5kOiByZ2JhKDIzNiwgMjM0LCAyMzQsIDAuNzEyKTtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgYm9yZGVyLXJhZGl1czogMTJweDtcclxuXHJcbn1cclxuIl19 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MapComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
                 selector: 'app-map',
                 templateUrl: './map.component.html',
                 styleUrls: ['./map.component.css'],
-                providers: [primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"]]
+                providers: [primeng_api__WEBPACK_IMPORTED_MODULE_5__["MessageService"]]
             }]
-    }], function () { return [{ type: primeng_api__WEBPACK_IMPORTED_MODULE_4__["MessageService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }, { type: _angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }, { type: _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_7__["MapStateService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_8__["HttpClient"] }]; }, { VCR: [{
+    }], function () { return [{ type: primeng_api__WEBPACK_IMPORTED_MODULE_5__["MessageService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }, { type: _angular_common__WEBPACK_IMPORTED_MODULE_7__["Location"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }, { type: _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_8__["MapStateService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_9__["HttpClient"] }]; }, { VCR: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"],
             args: ['viewContainerRef', { read: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"], static: false }]
         }], mapViewEl: [{
@@ -2918,21 +2789,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteMapComponent", function() { return RouteMapComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "qCKp");
-/* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! esri-loader */ "r6rm");
-/* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(esri_loader__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sweetalert2 */ "PSD3");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../core/services/map-state/map-state.service */ "xLLE");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! primeng/button */ "jIHw");
-/* harmony import */ var primeng_panel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! primeng/panel */ "7CaW");
-/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/calendar */ "eO1q");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _filter_routemap_filter_routemap_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./filter-routemap/filter-routemap.component */ "y08f");
-/* harmony import */ var _table_route_map_table_route_map_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./table-route-map/table-route-map.component */ "iACI");
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../environments/environment */ "AytR");
+/* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! esri-loader */ "r6rm");
+/* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(esri_loader__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "PSD3");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../core/services/map-state/map-state.service */ "xLLE");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! primeng/button */ "jIHw");
+/* harmony import */ var primeng_panel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/panel */ "7CaW");
+/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! primeng/calendar */ "eO1q");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var _filter_routemap_filter_routemap_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./filter-routemap/filter-routemap.component */ "y08f");
+/* harmony import */ var _table_route_map_table_route_map_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./table-route-map/table-route-map.component */ "iACI");
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+
 
 
 
@@ -3055,7 +2928,8 @@ class RouteMapComponent {
             final_date: fromToSend
         };
         this.loading = true;
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].API_URL_BASE + 'chassis-history', { body: { data: obj_send } }).subscribe(data => {
+            // this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
             let responseBody;
             try {
                 responseBody = JSON.parse(data.body);
@@ -3089,8 +2963,8 @@ class RouteMapComponent {
             initial_date: dateToSend,
             final_date: fromToSend
         };
-        //  this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].API_URL_BASE + 'chassis-history', { body: { data: obj_send } }).subscribe(data => {
+            //  this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
             let responseBody;
             try {
                 responseBody = JSON.parse(data.body);
@@ -3099,7 +2973,7 @@ class RouteMapComponent {
                 responseBody = {};
             }
             if (responseBody.message === "No data history for id") {
-                sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire('No results found');
+                sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire('No results found');
                 this.buildmap([]);
             }
             else {
@@ -3205,7 +3079,7 @@ class RouteMapComponent {
                 });
             }
             this.loading = false;
-            return Object(esri_loader__WEBPACK_IMPORTED_MODULE_2__["loadModules"])([
+            return Object(esri_loader__WEBPACK_IMPORTED_MODULE_3__["loadModules"])([
                 "esri/layers/GeoJSONLayer",
                 "esri/widgets/Sketch",
                 'esri/Map',
@@ -3557,8 +3431,8 @@ class RouteMapComponent {
             obj_send['initial_date'] = this.convertDatetoString(this.datefrom) + 'T' + timefromstring;
             obj_send['final_date'] = this.convertDatetoString(this.dateto) + 'T' + timetostring;
         }
-        //this.http.post<any>(environment.API_URL_BASE + 'chassis-history', {body:{data:obj_send}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', { body: { data: obj_send } }).subscribe(data => {
+        this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].API_URL_BASE + 'chassis-history', { body: { data: obj_send } }).subscribe(data => {
+            //  this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/chassis-history', {body:{data:obj_send}}).subscribe(data => {
             //this.buildmap(data.body.features);
             this.makefromjson(data.body, $event);
         });
@@ -3618,7 +3492,7 @@ class RouteMapComponent {
         this.router.navigate([`chassis-details`, chasis]);
     }
 }
-RouteMapComponent.ɵfac = function RouteMapComponent_Factory(t) { return new (t || RouteMapComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_5__["MapStateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"])); };
+RouteMapComponent.ɵfac = function RouteMapComponent_Factory(t) { return new (t || RouteMapComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_6__["MapStateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"])); };
 RouteMapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: RouteMapComponent, selectors: [["app-route-map"]], viewQuery: function RouteMapComponent_Query(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c0, true, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"]);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c1, true);
@@ -3777,7 +3651,7 @@ RouteMapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.historicalpoints != undefined);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.historicalpoints != undefined);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_7__["NgIf"], primeng_button__WEBPACK_IMPORTED_MODULE_8__["Button"], primeng_panel__WEBPACK_IMPORTED_MODULE_9__["Panel"], primeng_calendar__WEBPACK_IMPORTED_MODULE_10__["Calendar"], _angular_forms__WEBPACK_IMPORTED_MODULE_11__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_11__["NgModel"], _filter_routemap_filter_routemap_component__WEBPACK_IMPORTED_MODULE_12__["FilterRouteMapComponent"], _table_route_map_table_route_map_component__WEBPACK_IMPORTED_MODULE_13__["TableRouteMapComponent"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_14__["ProgressBar"], primeng_button__WEBPACK_IMPORTED_MODULE_8__["ButtonDirective"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 300px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:560px;\r\n  width:100%;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.value_popup[_ngcontent-%COMP%]{\r\n  color: #000 !important;\r\n\r\n}\r\n\r\n.title_popup[_ngcontent-%COMP%]{\r\n  color: #000 !important;\r\n  font-weight: bold;\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.options-labels[_ngcontent-%COMP%]{\r\n  font-size: 14px;\r\n  color: #000 !important;\r\n}\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\n[_nghost-%COMP%]     .p-calendar{\r\n  border: 1px solid rgb(0, 0, 0);\r\n  border-radius: 10px;\r\n}\r\n\r\n[_nghost-%COMP%]     .p-calendar\r\n  .p-datepicker table td.p-datepicker-today>span, [_nghost-%COMP%]     .p-calendar .p-datepicker\r\n  table td.p-datepicker-today>span:hover {\r\n  background-color: rgb(128, 0, 0);\r\n  color: white;\r\n  font-weight: bold;\r\n}\r\n\r\n[_nghost-%COMP%]     .p-button-danger{\r\n  background: grey;\r\n  background-color: grey;\r\n  border: none;\r\n\r\n}\r\n\r\n.p-button-danger[_ngcontent-%COMP%]:hover{\r\n  background: rgb(209, 8, 8) !important;\r\n  background-color: rgb(202, 10, 10) !important;\r\n  border: none;\r\n\r\n}\r\n\r\n#infoDiv[_ngcontent-%COMP%] {\r\n  padding: 10px;\r\n  width: 275px;\r\n}\r\n\r\n#sliderValue[_ngcontent-%COMP%]{\r\n  font-weight: bolder;\r\n}\r\n\r\n#legendDiv[_ngcontent-%COMP%]{\r\n  width: 260px;\r\n}\r\n\r\n#description[_ngcontent-%COMP%]{\r\n  padding: 10px 0 10px 0;\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJvdXRlLW1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFVBQVU7O0VBRVYsa0JBQWtCOzs7QUFHcEI7O0FBRUE7RUFDRSxzQkFBc0I7O0FBRXhCOztBQUVBO0VBQ0Usc0JBQXNCO0VBQ3RCLGlCQUFpQjs7QUFFbkI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtBQUN4Qjs7QUFHQTtFQUNFO0lBQ0UsY0FBYztJQUNkLGVBQWU7SUFDZixjQUFjO0VBQ2hCO0FBQ0Y7O0FBRUE7RUFDRSw4QkFBOEI7RUFDOUIsbUJBQW1CO0FBQ3JCOztBQUVBOzs7O0VBSUUsZ0NBQWdDO0VBQ2hDLFlBQVk7RUFDWixpQkFBaUI7QUFDbkI7O0FBRUE7RUFDRSxnQkFBZ0I7RUFDaEIsc0JBQXNCO0VBQ3RCLFlBQVk7O0FBRWQ7O0FBRUE7RUFDRSxxQ0FBcUM7RUFDckMsNkNBQTZDO0VBQzdDLFlBQVk7O0FBRWQ7O0FBRUE7RUFDRSxhQUFhO0VBQ2IsWUFBWTtBQUNkOztBQUNBO0VBQ0UsbUJBQW1CO0FBQ3JCOztBQUNBO0VBQ0UsWUFBWTtBQUNkOztBQUNBO0VBQ0Usc0JBQXNCO0FBQ3hCIiwiZmlsZSI6InJvdXRlLW1hcC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCAnaHR0cHM6Ly9qcy5hcmNnaXMuY29tLzQuMTAvZXNyaS9jc3MvbWFpbi5jc3MnO1xyXG5cclxuLmVzcmktdmlldyB7XHJcbiAgaGVpZ2h0OiAzMDBweDtcclxufVxyXG5cclxuXHJcbi5jb250YWluZXJ7XHJcbiAvKiAgbWFyZ2luLXRvcDogMiU7ICovXHJcblxyXG59XHJcblxyXG4uY29udGFpbmVyLXByaW5jaXBhbHtcclxuICBtYXgtd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OjEwMCU7XHJcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1tYXB7XHJcbiAgaGVpZ2h0OjU2MHB4O1xyXG4gIHdpZHRoOjEwMCU7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcblxyXG4udmFsdWVfcG9wdXB7XHJcbiAgY29sb3I6ICMwMDAgIWltcG9ydGFudDtcclxuXHJcbn1cclxuXHJcbi50aXRsZV9wb3B1cHtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG5cclxufVxyXG4ucGktc2VhcmNoe1xyXG4gIG1hcmdpbi1sZWZ0OiAtNDBweCAhaW1wb3J0YW50O1xyXG59XHJcblxyXG5cclxuXHJcbi5tYXB7XHJcblxyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcblxyXG59XHJcbi5zdW1tYXJ5e1xyXG4gICAgcG9zaXRpb246IHN0aWNreTtcclxuICAgIG1hcmdpbi10b3A6IDA7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBibGFjaztcclxuICAgIGhlaWdodDogMTV2aDtcclxuICAgIGJvdHRvbTowO1xyXG5cclxuXHJcblxyXG59XHJcblxyXG5cclxuLm1hcGJveGdsLXBvcHVwLWNvbnRlbnQge1xyXG4gICAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbi5tYXBib3hnbC1jdHJsLWdyb3Vwe1xyXG4gICAgY29sb3I6IGJsYWNrO1xyXG59XHJcblxyXG4ucC10YWJtZW51aXRlbSB7XHJcbiAgd2lkdGg6IDMzLjMzJSAhaW1wb3J0YW50O1xyXG5cclxufVxyXG5cclxuLnRpdGxlR2VuZXJhbHtcclxuICBmb250LXNpemU6IDI0cHg7XHJcbiAgY29sb3I6ICMwMDAgIWltcG9ydGFudDtcclxuICBmb250LWZhbWlseTogZnVlbnRlcGFyYXRpdHVsb3M7XHJcblxyXG59XHJcblxyXG4ub3B0aW9ucy1sYWJlbHN7XHJcbiAgZm9udC1zaXplOiAxNHB4O1xyXG4gIGNvbG9yOiAjMDAwICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbjpob3N0IDo6bmctZGVlcCAucC1jYWxlbmRhcntcclxuICBib3JkZXI6IDFweCBzb2xpZCByZ2IoMCwgMCwgMCk7XHJcbiAgYm9yZGVyLXJhZGl1czogMTBweDtcclxufVxyXG5cclxuOmhvc3QgOjpuZy1kZWVwIC5wLWNhbGVuZGFyXHJcbiAgLnAtZGF0ZXBpY2tlciB0YWJsZSB0ZC5wLWRhdGVwaWNrZXItdG9kYXk+c3BhbixcclxuOmhvc3QgOjpuZy1kZWVwIC5wLWNhbGVuZGFyIC5wLWRhdGVwaWNrZXJcclxuICB0YWJsZSB0ZC5wLWRhdGVwaWNrZXItdG9kYXk+c3Bhbjpob3ZlciB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDEyOCwgMCwgMCk7XHJcbiAgY29sb3I6IHdoaXRlO1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG46aG9zdCA6Om5nLWRlZXAgLnAtYnV0dG9uLWRhbmdlcntcclxuICBiYWNrZ3JvdW5kOiBncmV5O1xyXG4gIGJhY2tncm91bmQtY29sb3I6IGdyZXk7XHJcbiAgYm9yZGVyOiBub25lO1xyXG5cclxufVxyXG5cclxuLnAtYnV0dG9uLWRhbmdlcjpob3ZlcntcclxuICBiYWNrZ3JvdW5kOiByZ2IoMjA5LCA4LCA4KSAhaW1wb3J0YW50O1xyXG4gIGJhY2tncm91bmQtY29sb3I6IHJnYigyMDIsIDEwLCAxMCkgIWltcG9ydGFudDtcclxuICBib3JkZXI6IG5vbmU7XHJcblxyXG59XHJcblxyXG4jaW5mb0RpdiB7XHJcbiAgcGFkZGluZzogMTBweDtcclxuICB3aWR0aDogMjc1cHg7XHJcbn1cclxuI3NsaWRlclZhbHVle1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkZXI7XHJcbn1cclxuI2xlZ2VuZERpdntcclxuICB3aWR0aDogMjYwcHg7XHJcbn1cclxuI2Rlc2NyaXB0aW9ue1xyXG4gIHBhZGRpbmc6IDEwcHggMCAxMHB4IDA7XHJcbn1cclxuIl19 */"] });
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_8__["NgIf"], primeng_button__WEBPACK_IMPORTED_MODULE_9__["Button"], primeng_panel__WEBPACK_IMPORTED_MODULE_10__["Panel"], primeng_calendar__WEBPACK_IMPORTED_MODULE_11__["Calendar"], _angular_forms__WEBPACK_IMPORTED_MODULE_12__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_12__["NgModel"], _filter_routemap_filter_routemap_component__WEBPACK_IMPORTED_MODULE_13__["FilterRouteMapComponent"], _table_route_map_table_route_map_component__WEBPACK_IMPORTED_MODULE_14__["TableRouteMapComponent"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_15__["ProgressBar"], primeng_button__WEBPACK_IMPORTED_MODULE_9__["ButtonDirective"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n  height: 300px;\r\n}\r\n\r\n.container[_ngcontent-%COMP%]{\r\n \r\n\r\n}\r\n\r\n.container-principal[_ngcontent-%COMP%]{\r\n  max-width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n\r\n}\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n  height:560px;\r\n  width:100%;\r\n\r\n  position: relative;\r\n\r\n\r\n}\r\n\r\n.value_popup[_ngcontent-%COMP%]{\r\n  color: #000 !important;\r\n\r\n}\r\n\r\n.title_popup[_ngcontent-%COMP%]{\r\n  color: #000 !important;\r\n  font-weight: bold;\r\n\r\n}\r\n\r\n.pi-search[_ngcontent-%COMP%]{\r\n  margin-left: -40px !important;\r\n}\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n}\r\n\r\n.summary[_ngcontent-%COMP%]{\r\n    position: sticky;\r\n    margin-top: 0;\r\n    background-color: black;\r\n    height: 15vh;\r\n    bottom:0;\r\n\r\n\r\n\r\n}\r\n\r\n.mapboxgl-popup-content[_ngcontent-%COMP%] {\r\n    color: black !important;\r\n}\r\n\r\n.mapboxgl-ctrl-group[_ngcontent-%COMP%]{\r\n    color: black;\r\n}\r\n\r\n.p-tabmenuitem[_ngcontent-%COMP%] {\r\n  width: 33.33% !important;\r\n\r\n}\r\n\r\n.titleGeneral[_ngcontent-%COMP%]{\r\n  font-size: 24px;\r\n  color: #000 !important;\r\n  font-family: fuenteparatitulos;\r\n\r\n}\r\n\r\n.options-labels[_ngcontent-%COMP%]{\r\n  font-size: 14px;\r\n  color: #000 !important;\r\n}\r\n\r\n@media screen and (max-width: 780px) {\r\n  .container-principal[_ngcontent-%COMP%]{\r\n    margin-top: 2%;\r\n    margin-left: 5%;\r\n    max-width: 90%;\r\n  }\r\n}\r\n\r\n[_nghost-%COMP%]     .p-calendar{\r\n  border: 1px solid rgb(0, 0, 0);\r\n  border-radius: 10px;\r\n}\r\n\r\n[_nghost-%COMP%]     .p-calendar\r\n  .p-datepicker table td.p-datepicker-today>span, [_nghost-%COMP%]     .p-calendar .p-datepicker\r\n  table td.p-datepicker-today>span:hover {\r\n  background-color: rgb(128, 0, 0);\r\n  color: white;\r\n  font-weight: bold;\r\n}\r\n\r\n[_nghost-%COMP%]     .p-button-danger{\r\n  background: grey;\r\n  background-color: grey;\r\n  border: none;\r\n\r\n}\r\n\r\n.p-button-danger[_ngcontent-%COMP%]:hover{\r\n  background: rgb(209, 8, 8) !important;\r\n  background-color: rgb(202, 10, 10) !important;\r\n  border: none;\r\n\r\n}\r\n\r\n#infoDiv[_ngcontent-%COMP%] {\r\n  padding: 10px;\r\n  width: 275px;\r\n}\r\n\r\n#sliderValue[_ngcontent-%COMP%]{\r\n  font-weight: bolder;\r\n}\r\n\r\n#legendDiv[_ngcontent-%COMP%]{\r\n  width: 260px;\r\n}\r\n\r\n#description[_ngcontent-%COMP%]{\r\n  padding: 10px 0 10px 0;\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJvdXRlLW1hcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNEQUFzRDs7QUFFdEQ7RUFDRSxhQUFhO0FBQ2Y7O0FBR0E7Q0FDQyxxQkFBcUI7O0FBRXRCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLFdBQVc7RUFDWCxrQkFBa0I7O0FBRXBCOztBQUVBO0VBQ0UsWUFBWTtFQUNaLFVBQVU7O0VBRVYsa0JBQWtCOzs7QUFHcEI7O0FBRUE7RUFDRSxzQkFBc0I7O0FBRXhCOztBQUVBO0VBQ0Usc0JBQXNCO0VBQ3RCLGlCQUFpQjs7QUFFbkI7O0FBQ0E7RUFDRSw2QkFBNkI7QUFDL0I7O0FBSUE7O0lBRUksV0FBVztJQUNYLFlBQVk7O0FBRWhCOztBQUNBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFFBQVE7Ozs7QUFJWjs7QUFHQTtJQUNJLHVCQUF1QjtBQUMzQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7RUFDRSx3QkFBd0I7O0FBRTFCOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtFQUN0Qiw4QkFBOEI7O0FBRWhDOztBQUVBO0VBQ0UsZUFBZTtFQUNmLHNCQUFzQjtBQUN4Qjs7QUFHQTtFQUNFO0lBQ0UsY0FBYztJQUNkLGVBQWU7SUFDZixjQUFjO0VBQ2hCO0FBQ0Y7O0FBRUE7RUFDRSw4QkFBOEI7RUFDOUIsbUJBQW1CO0FBQ3JCOztBQUVBOzs7O0VBSUUsZ0NBQWdDO0VBQ2hDLFlBQVk7RUFDWixpQkFBaUI7QUFDbkI7O0FBRUE7RUFDRSxnQkFBZ0I7RUFDaEIsc0JBQXNCO0VBQ3RCLFlBQVk7O0FBRWQ7O0FBRUE7RUFDRSxxQ0FBcUM7RUFDckMsNkNBQTZDO0VBQzdDLFlBQVk7O0FBRWQ7O0FBRUE7RUFDRSxhQUFhO0VBQ2IsWUFBWTtBQUNkOztBQUNBO0VBQ0UsbUJBQW1CO0FBQ3JCOztBQUNBO0VBQ0UsWUFBWTtBQUNkOztBQUNBO0VBQ0Usc0JBQXNCO0FBQ3hCIiwiZmlsZSI6InJvdXRlLW1hcC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCAnaHR0cHM6Ly9qcy5hcmNnaXMuY29tLzQuMTAvZXNyaS9jc3MvbWFpbi5jc3MnO1xyXG5cclxuLmVzcmktdmlldyB7XHJcbiAgaGVpZ2h0OiAzMDBweDtcclxufVxyXG5cclxuXHJcbi5jb250YWluZXJ7XHJcbiAvKiAgbWFyZ2luLXRvcDogMiU7ICovXHJcblxyXG59XHJcblxyXG4uY29udGFpbmVyLXByaW5jaXBhbHtcclxuICBtYXgtd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OjEwMCU7XHJcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG5cclxufVxyXG5cclxuLmNvbnRhaW5lci1tYXB7XHJcbiAgaGVpZ2h0OjU2MHB4O1xyXG4gIHdpZHRoOjEwMCU7XHJcblxyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG59XHJcblxyXG4udmFsdWVfcG9wdXB7XHJcbiAgY29sb3I6ICMwMDAgIWltcG9ydGFudDtcclxuXHJcbn1cclxuXHJcbi50aXRsZV9wb3B1cHtcclxuICBjb2xvcjogIzAwMCAhaW1wb3J0YW50O1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG5cclxufVxyXG4ucGktc2VhcmNoe1xyXG4gIG1hcmdpbi1sZWZ0OiAtNDBweCAhaW1wb3J0YW50O1xyXG59XHJcblxyXG5cclxuXHJcbi5tYXB7XHJcblxyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcblxyXG59XHJcbi5zdW1tYXJ5e1xyXG4gICAgcG9zaXRpb246IHN0aWNreTtcclxuICAgIG1hcmdpbi10b3A6IDA7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBibGFjaztcclxuICAgIGhlaWdodDogMTV2aDtcclxuICAgIGJvdHRvbTowO1xyXG5cclxuXHJcblxyXG59XHJcblxyXG5cclxuLm1hcGJveGdsLXBvcHVwLWNvbnRlbnQge1xyXG4gICAgY29sb3I6IGJsYWNrICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbi5tYXBib3hnbC1jdHJsLWdyb3Vwe1xyXG4gICAgY29sb3I6IGJsYWNrO1xyXG59XHJcblxyXG4ucC10YWJtZW51aXRlbSB7XHJcbiAgd2lkdGg6IDMzLjMzJSAhaW1wb3J0YW50O1xyXG5cclxufVxyXG5cclxuLnRpdGxlR2VuZXJhbHtcclxuICBmb250LXNpemU6IDI0cHg7XHJcbiAgY29sb3I6ICMwMDAgIWltcG9ydGFudDtcclxuICBmb250LWZhbWlseTogZnVlbnRlcGFyYXRpdHVsb3M7XHJcblxyXG59XHJcblxyXG4ub3B0aW9ucy1sYWJlbHN7XHJcbiAgZm9udC1zaXplOiAxNHB4O1xyXG4gIGNvbG9yOiAjMDAwICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcblxyXG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA3ODBweCkge1xyXG4gIC5jb250YWluZXItcHJpbmNpcGFse1xyXG4gICAgbWFyZ2luLXRvcDogMiU7XHJcbiAgICBtYXJnaW4tbGVmdDogNSU7XHJcbiAgICBtYXgtd2lkdGg6IDkwJTtcclxuICB9XHJcbn1cclxuXHJcbjpob3N0IDo6bmctZGVlcCAucC1jYWxlbmRhcntcclxuICBib3JkZXI6IDFweCBzb2xpZCByZ2IoMCwgMCwgMCk7XHJcbiAgYm9yZGVyLXJhZGl1czogMTBweDtcclxufVxyXG5cclxuOmhvc3QgOjpuZy1kZWVwIC5wLWNhbGVuZGFyXHJcbiAgLnAtZGF0ZXBpY2tlciB0YWJsZSB0ZC5wLWRhdGVwaWNrZXItdG9kYXk+c3BhbixcclxuOmhvc3QgOjpuZy1kZWVwIC5wLWNhbGVuZGFyIC5wLWRhdGVwaWNrZXJcclxuICB0YWJsZSB0ZC5wLWRhdGVwaWNrZXItdG9kYXk+c3Bhbjpob3ZlciB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDEyOCwgMCwgMCk7XHJcbiAgY29sb3I6IHdoaXRlO1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG46aG9zdCA6Om5nLWRlZXAgLnAtYnV0dG9uLWRhbmdlcntcclxuICBiYWNrZ3JvdW5kOiBncmV5O1xyXG4gIGJhY2tncm91bmQtY29sb3I6IGdyZXk7XHJcbiAgYm9yZGVyOiBub25lO1xyXG5cclxufVxyXG5cclxuLnAtYnV0dG9uLWRhbmdlcjpob3ZlcntcclxuICBiYWNrZ3JvdW5kOiByZ2IoMjA5LCA4LCA4KSAhaW1wb3J0YW50O1xyXG4gIGJhY2tncm91bmQtY29sb3I6IHJnYigyMDIsIDEwLCAxMCkgIWltcG9ydGFudDtcclxuICBib3JkZXI6IG5vbmU7XHJcblxyXG59XHJcblxyXG4jaW5mb0RpdiB7XHJcbiAgcGFkZGluZzogMTBweDtcclxuICB3aWR0aDogMjc1cHg7XHJcbn1cclxuI3NsaWRlclZhbHVle1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkZXI7XHJcbn1cclxuI2xlZ2VuZERpdntcclxuICB3aWR0aDogMjYwcHg7XHJcbn1cclxuI2Rlc2NyaXB0aW9ue1xyXG4gIHBhZGRpbmc6IDEwcHggMCAxMHB4IDA7XHJcbn1cclxuIl19 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](RouteMapComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -3785,7 +3659,7 @@ RouteMapComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
                 templateUrl: './route-map.component.html',
                 styleUrls: ['./route-map.component.css']
             }]
-    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }, { type: _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_5__["MapStateService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"] }]; }, { VCR: [{
+    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }, { type: _core_services_map_state_map_state_service__WEBPACK_IMPORTED_MODULE_6__["MapStateService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"] }]; }, { VCR: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"],
             args: ['viewContainerRef', { read: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"], static: false }]
         }], mapViewEl: [{
@@ -4126,7 +4000,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./core/services/esri-map/esri-map.service */ "E1Mj");
 /* harmony import */ var primeng_inputswitch__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/inputswitch */ "rLzU");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./core/resolver/token-resolver.service */ "Nl3S");
 
 
 
@@ -4170,11 +4043,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+//import { TokenResolverService } from './core/resolver/token-resolver.service';
 class AppModule {
 }
 AppModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineNgModule"]({ type: AppModule, bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]] });
-AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector"]({ factory: function AppModule_Factory(t) { return new (t || AppModule)(); }, providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"], _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__["TokenResolverService"]], imports: [[
+AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector"]({ factory: function AppModule_Factory(t) { return new (t || AppModule)(); }, providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"]], imports: [[
             _angular_forms__WEBPACK_IMPORTED_MODULE_22__["FormsModule"],
             primeng_password__WEBPACK_IMPORTED_MODULE_24__["PasswordModule"],
             primeng_button__WEBPACK_IMPORTED_MODULE_25__["ButtonModule"],
@@ -4283,7 +4156,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector
                     primeng_inputswitch__WEBPACK_IMPORTED_MODULE_39__["InputSwitchModule"],
                     primeng_toast__WEBPACK_IMPORTED_MODULE_37__["ToastModule"]
                 ],
-                providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"], _core_resolver_token_resolver_service__WEBPACK_IMPORTED_MODULE_41__["TokenResolverService"]],
+                providers: [_core_services_esri_map_esri_map_service__WEBPACK_IMPORTED_MODULE_38__["EsriMapService"]],
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
             }]
     }], null, null); })();
@@ -5635,16 +5508,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "qCKp");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! esri-loader */ "r6rm");
 /* harmony import */ var esri_loader__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(esri_loader__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! pdfmake/build/pdfmake */ "5JmO");
-/* harmony import */ var pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pdfmake/build/vfs_fonts */ "TruH");
-/* harmony import */ var pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../core/services/pdfmake/pdf.service */ "JIba");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! primeng/button */ "jIHw");
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../environments/environment */ "AytR");
+/* harmony import */ var pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pdfmake/build/pdfmake */ "5JmO");
+/* harmony import */ var pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pdfmake/build/vfs_fonts */ "TruH");
+/* harmony import */ var pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../core/services/pdfmake/pdf.service */ "JIba");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var primeng_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primeng/button */ "jIHw");
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! primeng/progressbar */ "+DzE");
+
 
 
 
@@ -5800,7 +5675,7 @@ function PpsDetailsComponent_ng_container_51_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", geofence_r12.name, " ");
 } }
-pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_3___default.a.vfs = pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_4___default.a.pdfMake.vfs;
+pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_4___default.a.vfs = pdfmake_build_vfs_fonts__WEBPACK_IMPORTED_MODULE_5___default.a.pdfMake.vfs;
 class PpsDetailsComponent {
     constructor(router, cdRef, activatedRoute, http, pdfService) {
         this.router = router;
@@ -5873,8 +5748,8 @@ class PpsDetailsComponent {
         this.cdRef.detectChanges();
     }
     getDatafromGeoJson() {
-        //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-        fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+        fetch(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].API_URL_BASE + "get-cpr-geojson")
+            //fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
             .then(res => res.json())
             .then((out) => {
             if (out.errorMessage == undefined) {
@@ -5906,8 +5781,8 @@ class PpsDetailsComponent {
     }
     getInfoChasis() {
         let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
-        //   this.http.post<any>(environment.API_URL_BASE +'get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
-        this.http.post('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', { body: { data: { id: chasis } } }).subscribe(data => {
+        this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].API_URL_BASE + 'get-chassis', { body: { data: { id: chasis } } }).subscribe(data => {
+            // this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
             let array = JSON.parse(data.body);
             if (array.length > 0) {
                 this.properties = array[0];
@@ -6043,7 +5918,7 @@ class PpsDetailsComponent {
                         that.pdfService.getPPSDetailsAtributtes(that.date, that.event, that.properties, that.geofences_array),
                     ]
                 };
-                pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_3___default.a.createPdf(docDefinition).download(that.chasis + '.pdf');
+                pdfmake_build_pdfmake__WEBPACK_IMPORTED_MODULE_4___default.a.createPdf(docDefinition).download(that.chasis + '.pdf');
             }, 500);
         });
     }
@@ -6069,7 +5944,7 @@ class PpsDetailsComponent {
         this.router.navigate(['chassis-history', chasis]);
     }
 }
-PpsDetailsComponent.ɵfac = function PpsDetailsComponent_Factory(t) { return new (t || PpsDetailsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_7__["PDFService"])); };
+PpsDetailsComponent.ɵfac = function PpsDetailsComponent_Factory(t) { return new (t || PpsDetailsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_8__["PDFService"])); };
 PpsDetailsComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: PpsDetailsComponent, selectors: [["app-pps-details"]], viewQuery: function PpsDetailsComponent_Query(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c0, true);
     } if (rf & 2) {
@@ -6191,7 +6066,7 @@ PpsDetailsComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefi
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.date && ctx.event);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.geofences_array);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_8__["NgIf"], primeng_button__WEBPACK_IMPORTED_MODULE_9__["Button"], _angular_common__WEBPACK_IMPORTED_MODULE_8__["NgForOf"], primeng_button__WEBPACK_IMPORTED_MODULE_9__["ButtonDirective"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_10__["ProgressBar"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.title[_ngcontent-%COMP%]{\r\n font-weight: bold;\r\n color: black;\r\n\r\n}\r\n\r\n.card-content[_ngcontent-%COMP%]{\r\n   height: 200px;\r\n }\r\n\r\nhr[_ngcontent-%COMP%]{\r\n   color: red;\r\n }\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n   height:190px;\r\n }\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n   height:380px;\r\n   width:100%;\r\n\r\n   position: relative;\r\n\r\n\r\n }\r\n\r\n.card-general[_ngcontent-%COMP%]{\r\n   height:480px !important;\r\n\r\n }\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n     width: 100%;\r\n     height: 300%;\r\n\r\n }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBwcy1kZXRhaWxzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsc0RBQXNEOztBQUV0RDtDQUNDLGlCQUFpQjtDQUNqQixZQUFZOztBQUViOztBQUVBO0dBQ0csYUFBYTtDQUNmOztBQUVBO0dBQ0UsVUFBVTtDQUNaOztBQUVBO0dBQ0UsWUFBWTtDQUNkOztBQUVBO0dBQ0UsWUFBWTtHQUNaLFVBQVU7O0dBRVYsa0JBQWtCOzs7Q0FHcEI7O0FBRUE7R0FDRSx1QkFBdUI7O0NBRXpCOztBQUVBOztLQUVJLFdBQVc7S0FDWCxZQUFZOztDQUVoQiIsImZpbGUiOiJwcHMtZGV0YWlscy5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCAnaHR0cHM6Ly9qcy5hcmNnaXMuY29tLzQuMTAvZXNyaS9jc3MvbWFpbi5jc3MnO1xyXG5cclxuLnRpdGxle1xyXG4gZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiBjb2xvcjogYmxhY2s7XHJcblxyXG59XHJcblxyXG4uY2FyZC1jb250ZW50e1xyXG4gICBoZWlnaHQ6IDIwMHB4O1xyXG4gfVxyXG5cclxuIGhye1xyXG4gICBjb2xvcjogcmVkO1xyXG4gfVxyXG5cclxuIC5lc3JpLXZpZXcge1xyXG4gICBoZWlnaHQ6MTkwcHg7XHJcbiB9XHJcblxyXG4gLmNvbnRhaW5lci1tYXB7XHJcbiAgIGhlaWdodDozODBweDtcclxuICAgd2lkdGg6MTAwJTtcclxuXHJcbiAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG4gfVxyXG5cclxuIC5jYXJkLWdlbmVyYWx7XHJcbiAgIGhlaWdodDo0ODBweCAhaW1wb3J0YW50O1xyXG5cclxuIH1cclxuXHJcbiAubWFwe1xyXG5cclxuICAgICB3aWR0aDogMTAwJTtcclxuICAgICBoZWlnaHQ6IDMwMCU7XHJcblxyXG4gfVxyXG4iXX0= */"] });
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_9__["NgIf"], primeng_button__WEBPACK_IMPORTED_MODULE_10__["Button"], _angular_common__WEBPACK_IMPORTED_MODULE_9__["NgForOf"], primeng_button__WEBPACK_IMPORTED_MODULE_10__["ButtonDirective"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_11__["ProgressBar"]], styles: ["@import 'https://js.arcgis.com/4.10/esri/css/main.css';\r\n\r\n.title[_ngcontent-%COMP%]{\r\n font-weight: bold;\r\n color: black;\r\n\r\n}\r\n\r\n.card-content[_ngcontent-%COMP%]{\r\n   height: 200px;\r\n }\r\n\r\nhr[_ngcontent-%COMP%]{\r\n   color: red;\r\n }\r\n\r\n.esri-view[_ngcontent-%COMP%] {\r\n   height:190px;\r\n }\r\n\r\n.container-map[_ngcontent-%COMP%]{\r\n   height:380px;\r\n   width:100%;\r\n\r\n   position: relative;\r\n\r\n\r\n }\r\n\r\n.card-general[_ngcontent-%COMP%]{\r\n   height:480px !important;\r\n\r\n }\r\n\r\n.map[_ngcontent-%COMP%]{\r\n\r\n     width: 100%;\r\n     height: 300%;\r\n\r\n }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBwcy1kZXRhaWxzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsc0RBQXNEOztBQUV0RDtDQUNDLGlCQUFpQjtDQUNqQixZQUFZOztBQUViOztBQUVBO0dBQ0csYUFBYTtDQUNmOztBQUVBO0dBQ0UsVUFBVTtDQUNaOztBQUVBO0dBQ0UsWUFBWTtDQUNkOztBQUVBO0dBQ0UsWUFBWTtHQUNaLFVBQVU7O0dBRVYsa0JBQWtCOzs7Q0FHcEI7O0FBRUE7R0FDRSx1QkFBdUI7O0NBRXpCOztBQUVBOztLQUVJLFdBQVc7S0FDWCxZQUFZOztDQUVoQiIsImZpbGUiOiJwcHMtZGV0YWlscy5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCAnaHR0cHM6Ly9qcy5hcmNnaXMuY29tLzQuMTAvZXNyaS9jc3MvbWFpbi5jc3MnO1xyXG5cclxuLnRpdGxle1xyXG4gZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiBjb2xvcjogYmxhY2s7XHJcblxyXG59XHJcblxyXG4uY2FyZC1jb250ZW50e1xyXG4gICBoZWlnaHQ6IDIwMHB4O1xyXG4gfVxyXG5cclxuIGhye1xyXG4gICBjb2xvcjogcmVkO1xyXG4gfVxyXG5cclxuIC5lc3JpLXZpZXcge1xyXG4gICBoZWlnaHQ6MTkwcHg7XHJcbiB9XHJcblxyXG4gLmNvbnRhaW5lci1tYXB7XHJcbiAgIGhlaWdodDozODBweDtcclxuICAgd2lkdGg6MTAwJTtcclxuXHJcbiAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHJcblxyXG4gfVxyXG5cclxuIC5jYXJkLWdlbmVyYWx7XHJcbiAgIGhlaWdodDo0ODBweCAhaW1wb3J0YW50O1xyXG5cclxuIH1cclxuXHJcbiAubWFwe1xyXG5cclxuICAgICB3aWR0aDogMTAwJTtcclxuICAgICBoZWlnaHQ6IDMwMCU7XHJcblxyXG4gfVxyXG4iXX0= */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](PpsDetailsComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -6199,7 +6074,7 @@ PpsDetailsComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefi
                 templateUrl: './pps-details.component.html',
                 styleUrls: ['./pps-details.component.css']
             }]
-    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"] }, { type: _core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_7__["PDFService"] }]; }, { mapViewEl: [{
+    }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"] }, { type: _core_services_pdfmake_pdf_service__WEBPACK_IMPORTED_MODULE_8__["PDFService"] }]; }, { mapViewEl: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"],
             args: ['mapViewNode']
         }] }); })();
@@ -6466,6 +6341,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//import { TokenResolverService } from './core/resolver/token-resolver.service';
 const routes = [
     {
         path: 'current-chassis-location',
@@ -6966,14 +6842,14 @@ __webpack_require__.r(__webpack_exports__);
 
 let config = {
     Auth: {
-        region: 'us-west-2',
-        userPoolId: 'us-west-2_YKTiEMjtU',
-        userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
+        region: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].REGION_POOL,
+        userPoolId: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].USER_POOL_ID,
+        userPoolWebClientId: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].APP_POOL_ID,
         oauth: {
-            domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
+            domain: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].DOMAIN_SIGN,
             scope: ['email', 'openid'],
-            redirectSignIn: window.location.href,
-            redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+            redirectSignIn: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].REDIRECT_SIGNIN,
+            redirectSignOut: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].REDIRECT_SIGNOUT,
             responseType: 'token',
             identityProvider: 'CognitoF5',
             samlSignOut: true,

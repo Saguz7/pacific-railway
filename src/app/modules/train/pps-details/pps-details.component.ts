@@ -121,8 +121,8 @@ export class PpsDetailsComponent implements OnInit {
    getDatafromGeoJson(){
 
 
-                //fetch(environment.API_URL_BASE + "get-cpr-geojson")
-                fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
+                fetch(environment.API_URL_BASE + "get-cpr-geojson")
+                //fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-cpr-geojson")
                     .then(res => res.json())
                     .then((out) => {
                       if(out.errorMessage==undefined){
@@ -165,8 +165,8 @@ export class PpsDetailsComponent implements OnInit {
   getInfoChasis(){
     let chasis = this.activatedRoute.snapshot.paramMap.get("chasis");
 
-      //   this.http.post<any>(environment.API_URL_BASE +'get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
-         this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
+         this.http.post<any>(environment.API_URL_BASE +'get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
+        // this.http.post<any>('https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-chassis', {body:{data:{id: chasis}}}).subscribe(data => {
            let array = JSON.parse(data.body);
            if(array.length>0){
              this.properties = array[0];

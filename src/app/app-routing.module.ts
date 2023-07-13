@@ -14,7 +14,7 @@ import { AccessDeniedComponent } from './auth/access-denied/access-denied.compon
 
  import { MapDivComponent } from './modules/map/mapdiv/mapdiv.component';
 import {AuthGuard} from "./auth/guards/check-auth.guard";
-import { TokenResolverService } from './core/resolver/token-resolver.service';
+//import { TokenResolverService } from './core/resolver/token-resolver.service';
 
 const routes: Routes = [
   {

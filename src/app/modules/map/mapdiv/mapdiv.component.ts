@@ -2,6 +2,7 @@ import { ComponentRef, ComponentFactoryResolver, ChangeDetectorRef, HostListener
 import { Subscription } from 'rxjs';
 import {MapCustomService} from '../../../core/services/map/map-custom.service'
 import { loadModules } from 'esri-loader';
+import { environment } from '../../../../environments/environment';
 
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -52,7 +53,9 @@ export class MapDivComponent implements OnInit {
   }
 
   getDatafromGeoJson(){
-    fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-locations")
+    fetch(environment.API_URL_BASE + "get-locations")
+
+  //  fetch("https://zt1nm5f67j.execute-api.us-west-2.amazonaws.com/dev/get-locations")
     .then(res => res.json())
     .then((out) => {
       if(out.errorMessage==undefined){

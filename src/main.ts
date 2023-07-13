@@ -7,14 +7,14 @@ import { environment } from './environments/environment';
 
 let config = {
   Auth: {
-    region: 'us-west-2',
-    userPoolId: 'us-west-2_YKTiEMjtU',
-    userPoolWebClientId: 's7ch645u8voh00dridmn8kn19',
+    region: environment.REGION_POOL,
+    userPoolId: environment.USER_POOL_ID,
+    userPoolWebClientId: environment.APP_POOL_ID,
     oauth: {
-      domain: 'cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com',
+      domain: environment.DOMAIN_SIGN,
       scope: ['email', 'openid'],
-      redirectSignIn: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
-      redirectSignOut: 'https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location',
+      redirectSignIn: environment.REDIRECT_SIGNIN,
+      redirectSignOut: environment.REDIRECT_SIGNOUT,
       responseType: 'token',
       identityProvider: 'CognitoF5',
       samlSignOut: true,
@@ -26,6 +26,8 @@ let config = {
 }
 
 Amplify.configure(config);
+
+
 
 if (environment.production) {
   enableProdMode();
