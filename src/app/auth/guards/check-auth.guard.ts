@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { Auth } from 'aws-amplify';
 import jwt_decode from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class AuthGuard implements CanActivate {
         const idToken = session.getIdToken().getJwtToken();
         const refreshToken = session.getRefreshToken().getToken();
         const decodedToken: any = jwt_decode(accessToken);
-        const userPoolId = 'us-west-2_YKTiEMjtU';
-        const userPoolWebClientId = 's7ch645u8voh00dridmn8kn19';
+        const userPoolId = environment.USER_POOL_ID;
+        const userPoolWebClientId = environment.APP_POOL_ID;
         const iss = decodedToken.iss;
         const parts = iss.split('/');
         const lastPart = parts.pop();
