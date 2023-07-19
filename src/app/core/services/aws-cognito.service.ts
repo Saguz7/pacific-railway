@@ -16,23 +16,23 @@ export class AwsCognitoService {
       grant_type: 'authorization_code',
       code: callbackCode,
       scope: 'openid+email',
-      redirect_uri: environment.redirectURL
+      redirect_uri: 'https://cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com/oauth2/token'
     };
     const formBody = Object.keys(details)
                            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`)
                            .join('&');
 
-    return this.http.post<any>(environment.cognitoTokenURL,
+    return this.http.post<any>('s7ch645u8voh00dridmn8kn19',
       formBody, {
         responseType: 'json',
         headers: new HttpHeaders({
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: 'Basic ' + btoa(`${environment.sso_api_username}:${environment.sso_api_pwd}`)
+          Authorization: 'Basic ' + btoa(``)
           })
         });
   }
 
   public logoutUserFromCognito(): Observable<any> {
-    return this.http.get<any>(environment.logout);
+    return this.http.get<any>('');
   }
 }

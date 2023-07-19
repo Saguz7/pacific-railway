@@ -5,6 +5,7 @@ import { Amplify } from 'aws-amplify'
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
+
 let config = {
   Auth: {
     region: environment.REGION_POOL,
@@ -16,7 +17,7 @@ let config = {
       redirectSignIn: environment.REDIRECT_SIGNIN,
       redirectSignOut: environment.REDIRECT_SIGNOUT,
       responseType: 'token',
-      identityProvider: 'CognitoF5',
+      identityProvider: environment.IDENTITY_PROVIDER,
       samlSignOut: true,
       attributesMapping: {
         email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
@@ -25,9 +26,10 @@ let config = {
   }
 }
 
+
+console.log(config);
+
 Amplify.configure(config);
-
-
 
 if (environment.production) {
   enableProdMode();

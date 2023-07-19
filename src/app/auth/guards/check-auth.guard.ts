@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
       const session = user.getSignInUserSession();
       if (session) {
         const accessToken = session.getAccessToken().getJwtToken();
-        const idToken = session.getIdToken().getJwtToken();
+         const idToken = session.getIdToken().getJwtToken();
         const refreshToken = session.getRefreshToken().getToken();
         const decodedToken: any = jwt_decode(accessToken);
         const userPoolId = environment.USER_POOL_ID;

@@ -60,7 +60,7 @@ import { HttpClientModule } from '@angular/common/http';
 import * as L from 'leaflet';
 
 
-//import { TokenResolverService } from './core/resolver/token-resolver.service';
+import { TokenResolverService } from './core/resolver/token-resolver.service';
 
 @NgModule({
   declarations: [
@@ -108,7 +108,7 @@ import * as L from 'leaflet';
     InputSwitchModule,
     ToastModule
   ],
-  providers: [EsriMapService],
+  providers: [EsriMapService,TokenResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
