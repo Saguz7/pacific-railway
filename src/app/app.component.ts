@@ -9,7 +9,7 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { Amplify } from 'aws-amplify'
 
-import { CognitoService } from './core/services/cognito.service'; 
+import { CognitoService } from './core/services/cognito.service';
 import { AuthService } from './auth.service';
 
 import { CognitoUserPool, CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
@@ -34,7 +34,7 @@ export class AppComponent {
        }
 
     async ngOnInit() {
-      console.log('v 1.0.1');
+      console.log('v 1.0.2');
 
 
 
