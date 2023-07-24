@@ -15,6 +15,18 @@ import { Amplify } from 'aws-amplify'
 
 import { environment } from '../../../environments/environment';
 
+export interface AmplifyConfig {
+  production: boolean;
+  API_URL_BASE: string;
+  REGION_POOL: string;
+  USER_POOL_ID: string;
+  APP_POOL_ID: string;
+  DOMAIN_SIGN: string;
+  REDIRECT_SIGNIN: string;
+  REDIRECT_SIGNOUT: string;
+  IDENTITY_PROVIDER: string;
+}
+
 
 @Component({
   selector: 'app-access-denied',
@@ -36,7 +48,15 @@ export class AccessDeniedComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(environment.API_URL_BASE); 
+
+    const amplifyConfig = Amplify.configure() as AmplifyConfig;
+      const apiUrl = amplifyConfig.API_URL_BASE;
+      const userPoolId = amplifyConfig.USER_POOL_ID;
+      console.log(apiUrl);
+      console.log(userPoolId);
+
+
+    console.log(environment.API_URL_BASE);
       if (!environment.API_URL_BASE) {
         console.log(environment.API_URL_BASE);
 
