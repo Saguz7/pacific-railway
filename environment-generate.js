@@ -1,8 +1,8 @@
 function generateEnvironmentContent() {
   return `export const environment = {
     production: ${process.env.API_URL_BASE || true},
-    API_URL_BASE: "${process.env.API_URL_BASE || "https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/"},
-    REGION_POOL: "${process.env.REGION_POOL|| "us-west-2"}",
+    API_URL_BASE: "${process.env.API_URL_BASE || "https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/"}",
+    REGION_POOL: "${process.env.REGION_POOL || "us-west-2"}",
     APP_POOL_ID: "${process.env.APP_POOL_ID || "us-west-2_YKTiEMjtU"}",
     DOMAIN_SIGN: "${process.env.DOMAIN_SIGN || "cpkc-chassis-management-dev.auth.us-west-2.amazoncognito.com"}",
     REDIRECT_SIGNIN: "${process.env.REDIRECT_SIGNIN || "https://dev.d1klk34joigd80.amplifyapp.com/current-chassis-location"}",

@@ -3,13 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "generate-env": "node environment-generate.js",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "start:docker": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --watch=false",
-    "generate-env": "node environment-generate.js", 
+    "e2e": "ng e2e" 
   },
   "private": true,
   "dependencies": {
