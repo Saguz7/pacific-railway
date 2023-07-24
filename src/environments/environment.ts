@@ -1,6 +1,6 @@
 
 export const environment = {
-  production: true,
+  production: false,
   API_URL_BASE: process.env.API_URL_BASE,
   REGION_POOL: process.env.REGION_POOL,
   USER_POOL_ID: process.env.USER_POOL_ID,

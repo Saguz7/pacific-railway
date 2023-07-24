@@ -6,6 +6,14 @@ frontend:
         - npm i --force
     build:
       commands:
+        - API_URL_BASE=${API_URL_BASE}
+        - REGION_POOL=${REGION_POOL}
+        - USER_POOL_ID=${USER_POOL_ID}
+        - APP_POOL_ID=${APP_POOL_ID}
+        - DOMAIN_SIGN=${DOMAIN_SIGN}
+        - REDIRECT_SIGNIN=${REDIRECT_SIGNIN}
+        - REDIRECT_SIGNOUT=${REDIRECT_SIGNOUT}
+        - IDENTITY_PROVIDER=${IDENTITY_PROVIDER}
         - npm run build --prod
   artifacts:
     baseDirectory: dist
@@ -13,4 +21,4 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/* 
+      - node_modules/**/*

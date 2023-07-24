@@ -36,12 +36,7 @@ export class AccessDeniedComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(environment.API_URL_BASE);
-    const apiUrlBase = Amplify.configure.API_URL_BASE;
-        const regionPool = Amplify.configure.REGION_POOL;
-        console.log(apiUrlBase);
-        console.log(regionPool);
-
+    console.log(environment.API_URL_BASE); 
       if (!environment.API_URL_BASE) {
         console.log(environment.API_URL_BASE);
 
