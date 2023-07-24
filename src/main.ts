@@ -4,19 +4,19 @@ import { Auth } from 'aws-amplify';
 import { Amplify } from 'aws-amplify'
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
- 
+
 let config = {
   Auth: {
-    region: environment.REGION_POOL,
-    userPoolId: environment.USER_POOL_ID,
-    userPoolWebClientId: environment.APP_POOL_ID,
+    region: process.env.REGION_POOL,
+    userPoolId: process.env.USER_POOL_ID,
+    userPoolWebClientId: process.env.APP_POOL_ID,
     oauth: {
-      domain: environment.DOMAIN_SIGN,
+      domain: process.env.DOMAIN_SIGN,
       scope: ['email', 'openid'],
-      redirectSignIn: environment.REDIRECT_SIGNIN,
-      redirectSignOut: environment.REDIRECT_SIGNOUT,
+      redirectSignIn: process.env.REDIRECT_SIGNIN,
+      redirectSignOut: process.env.REDIRECT_SIGNOUT,
       responseType: 'token',
-      identityProvider: environment.IDENTITY_PROVIDER,
+      identityProvider: process.env.IDENTITY_PROVIDER,
       samlSignOut: true,
       attributesMapping: {
         email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'

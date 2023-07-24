@@ -49,11 +49,23 @@ export class AccessDeniedComponent implements OnInit {
 
   async ngOnInit() {
 
-    const amplifyConfig = Amplify.configure();
-    console.log('-------------------------');
-    console.log(amplifyConfig);
-    console.log('-------------------------');
+    const apiUrl = process.env.API_URL_BASE;
+    const regionPool = process.env.REGION_POOL;
+    const userPoolId = process.env.USER_POOL_ID;
+    const appPoolId = process.env.APP_POOL_ID;
+    const domainSign = process.env.DOMAIN_SIGN;
+    const redirectSignin = process.env.REDIRECT_SIGNIN;
+    const redirectSignout = process.env.REDIRECT_SIGNOUT;
+    const identityProvider = process.env.IDENTITY_PROVIDER;
 
+    console.log('API URL:', apiUrl);
+    console.log('API URL:', regionPool);
+    console.log('API URL:', userPoolId);
+    console.log('API URL:', appPoolId);
+    console.log('API URL:', domainSign);
+    console.log('API URL:', redirectSignin);
+    console.log('API URL:', redirectSignout);
+    console.log('API URL:', identityProvider);
 
     console.log(environment.API_URL_BASE);
       if (!environment.API_URL_BASE) {
