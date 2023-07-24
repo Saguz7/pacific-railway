@@ -14,20 +14,7 @@ import jwt_decode from 'jwt-decode';
 import { Amplify } from 'aws-amplify'
 import process from 'process';
 import { environment } from '../../../environments/environment';
-
-export interface AmplifyConfig {
-  production: boolean;
-  API_URL_BASE: string;
-  REGION_POOL: string;
-  USER_POOL_ID: string;
-  APP_POOL_ID: string;
-  DOMAIN_SIGN: string;
-  REDIRECT_SIGNIN: string;
-  REDIRECT_SIGNOUT: string;
-  IDENTITY_PROVIDER: string;
-}
-
-
+ 
 @Component({
   selector: 'app-access-denied',
   templateUrl: './access-denied.component.html',
