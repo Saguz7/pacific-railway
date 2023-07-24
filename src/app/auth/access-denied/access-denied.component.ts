@@ -12,7 +12,7 @@ import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import { Auth } from 'aws-amplify';
 import jwt_decode from 'jwt-decode';
 import { Amplify } from 'aws-amplify'
-
+import process from 'process';
 import { environment } from '../../../environments/environment';
 
 export interface AmplifyConfig {
