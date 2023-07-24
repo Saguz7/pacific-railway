@@ -39,27 +39,43 @@ export class AccessDeniedComponent implements OnInit {
     console.log(environment.API_URL_BASE);
 
       if (!environment.API_URL_BASE) {
+        console.log(environment.API_URL_BASE);
+
          console.log("environment.API_URL_BASE void");
        }
        if (!environment.REGION_POOL) {
+         console.log(environment.REGION_POOL);
+
          console.log("environment.REGION_POOL void");
        }
        if (!environment.USER_POOL_ID) {
+         console.log(environment.USER_POOL_ID);
+
          console.log("environment.USER_POOL_ID void");
        }
        if (!environment.APP_POOL_ID) {
+         console.log(environment.APP_POOL_ID);
+
          console.log("environment.APP_POOL_ID void");
        }
        if (!environment.DOMAIN_SIGN) {
+         console.log(environment.DOMAIN_SIGN);
+
          console.log("environment.DOMAIN_SIGN void");
        }
        if (!environment.REDIRECT_SIGNIN) {
+         console.log(environment.REDIRECT_SIGNIN);
+
          console.log("environment.REDIRECT_SIGNIN void");
        }
        if (!environment.REDIRECT_SIGNOUT) {
+         console.log(environment.REDIRECT_SIGNOUT);
+
          console.log("environment.REDIRECT_SIGNOUT void");
        }
        if (!environment.IDENTITY_PROVIDER) {
+         console.log(environment.IDENTITY_PROVIDER);
+
          console.log("environment.IDENTITY_PROVIDER void");
        } else {
 
