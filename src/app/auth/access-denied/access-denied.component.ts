@@ -34,29 +34,7 @@ export class AccessDeniedComponent implements OnInit {
    ) {
   }
 
-  async ngOnInit() {
-
-    this.obtenerVariablesDeEntorno();
-
-    const apiUrl = process.env.API_URL_BASE;
-    const regionPool = process.env.REGION_POOL;
-    const userPoolId = process.env.USER_POOL_ID;
-    const appPoolId = process.env.APP_POOL_ID;
-    const domainSign = process.env.DOMAIN_SIGN;
-    const redirectSignin = process.env.REDIRECT_SIGNIN;
-    const redirectSignout = process.env.REDIRECT_SIGNOUT;
-    const identityProvider = process.env.IDENTITY_PROVIDER;
-
-    console.log('API URL:', apiUrl);
-    console.log('API URL:', regionPool);
-    console.log('API URL:', userPoolId);
-    console.log('API URL:', appPoolId);
-    console.log('API URL:', domainSign);
-    console.log('API URL:', redirectSignin);
-    console.log('API URL:', redirectSignout);
-    console.log('API URL:', identityProvider);
-
-    console.log(environment.API_URL_BASE);
+  async ngOnInit() { 
       if (!environment.API_URL_BASE) {
         console.log(environment.API_URL_BASE);
 
@@ -112,16 +90,6 @@ export class AccessDeniedComponent implements OnInit {
        }
 
   }
-
-  async obtenerVariablesDeEntorno() {
-  try {
-        const envVars = await API.get('env', '/env', {});
-    // Aquí puedes acceder a las variables de entorno definidas en la consola de Amplify.
-    console.log(envVars);
-  } catch (error) {
-    console.error('Error al obtener las variables de entorno:', error);
-  }
-}
 
 
 

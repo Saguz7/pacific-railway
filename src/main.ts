@@ -4,21 +4,19 @@ import { Auth } from 'aws-amplify';
 import { Amplify } from 'aws-amplify';
 import { AppModule } from './app/app.module';
 
-// Elimina la importación y referencia a environment
-
-// Configura AWS Amplify con las variables de entorno de AWS directamente
+import { environment } from './environments/environment';
 Amplify.configure({
   Auth: {
-    region: process.env.REGION_POOL,
-    userPoolId: process.env.USER_POOL_ID,
-    userPoolWebClientId: process.env.APP_POOL_ID,
+    region: environment.REGION_POOL,
+    userPoolId: environment.USER_POOL_ID,
+    userPoolWebClientId: environment.APP_POOL_ID,
     oauth: {
-      domain: process.env.DOMAIN_SIGN,
+      domain: environment.DOMAIN_SIGN,
       scope: ['email', 'openid'],
-      redirectSignIn: process.env.REDIRECT_SIGNIN,
-      redirectSignOut: process.env.REDIRECT_SIGNOUT,
+      redirectSignIn: environment.REDIRECT_SIGNIN,
+      redirectSignOut: environment.REDIRECT_SIGNOUT,
       responseType: 'token',
-      identityProvider: process.env.IDENTITY_PROVIDER,
+      identityProvider: environment.IDENTITY_PROVIDER,
       samlSignOut: true,
       attributesMapping: {
         email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
@@ -26,6 +24,7 @@ Amplify.configure({
     },
   },
 });
+
 
 if (process.env.production) {
   enableProdMode();
