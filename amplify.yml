@@ -7,17 +7,17 @@ frontend:
     build:
       commands:
         - npm run build --prod
-        - echo "API_URL_BASE=$API_URL_BASE" >> .env
-        - echo "REGION_POOL=$REGION_POOL" >> .env
-        - echo "USER_POOL_ID=$USER_POOL_ID" >> .env
-        - echo "APP_POOL_ID=$APP_POOL_ID" >> .env
-        - echo "DOMAIN_SIGN=$DOMAIN_SIGN" >> .env
-        - echo "REDIRECT_SIGNIN=$REDIRECT_SIGNIN" >> .env
-        - echo "IDENTITY_PROVIDER=$IDENTITY_PROVIDER" >> .env
+        - API_URL_BASE=$API_URL_BASE
+        - REGION_POOL=$REGION_POOL
+        - USER_POOL_ID=$USER_POOL_ID
+        - APP_POOL_ID=$APP_POOL_ID
+        - DOMAIN_SIGN=$DOMAIN_SIGN
+        - REDIRECT_SIGNIN=$REDIRECT_SIGNIN
+        - IDENTITY_PROVIDER=$IDENTITY_PROVIDER 
   artifacts:
     baseDirectory: dist
     files:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/* 
+      - node_modules/**/*
