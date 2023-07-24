@@ -62,6 +62,8 @@ export class AccessDeniedComponent implements OnInit {
        if (!environment.IDENTITY_PROVIDER) {
          console.log("environment.IDENTITY_PROVIDER void");
        } else {
+
+         /*
          try {
            await Auth.federatedSignIn();
            console.log('Sucess');
@@ -70,6 +72,8 @@ export class AccessDeniedComponent implements OnInit {
          } catch (error) {
           console.error('Error', error);
          }
+
+         */
        }
 
   }
