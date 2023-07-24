@@ -1,4 +1,4 @@
- 
+
 export const environment = {
   production: true,
   API_URL_BASE: process.env.API_URL_BASE,
@@ -10,5 +10,3 @@ export const environment = {
   REDIRECT_SIGNOUT: process.env.REDIRECT_SIGNOUT,
   IDENTITY_PROVIDER: process.env.IDENTITY_PROVIDER
 };
-
-export { environment };
