@@ -34,7 +34,7 @@ export class AppComponent {
        }
 
     async ngOnInit() {
-      console.log('v 1.0.2');
+      console.log('v 1.0.3');
 
 
 
