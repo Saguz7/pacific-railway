@@ -42,7 +42,7 @@ export class AccessDeniedComponent implements OnInit {
     console.log(environment.DOMAIN_SIGN);
     console.log(environment.REDIRECT_SIGNIN);
     console.log(environment.REDIRECT_SIGNOUT);
-    console.log(environment.IDENTITY_PROVIDER); 
+    console.log(environment.IDENTITY_PROVIDER);
 
       if (!environment.API_URL_BASE) {
         console.log(environment.API_URL_BASE);
@@ -85,7 +85,6 @@ export class AccessDeniedComponent implements OnInit {
          console.log("environment.IDENTITY_PROVIDER void");
        } else {
 
-         /*
          try {
            await Auth.federatedSignIn();
            console.log('Sucess');
@@ -95,7 +94,6 @@ export class AccessDeniedComponent implements OnInit {
           console.error('Error', error);
          }
 
-         */
        }
 
   }
