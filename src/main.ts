@@ -3,8 +3,10 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Auth } from 'aws-amplify';
 import { Amplify } from 'aws-amplify';
 import { AppModule } from './app/app.module';
-
 import { environment } from './environments/environment';
+Amplify.configure({});
+
+/*
 Amplify.configure({
   Auth: {
     region: environment.REGION_POOL,
@@ -24,6 +26,8 @@ Amplify.configure({
     },
   },
 });
+
+*/
 
 
 if (process.env.production) {
