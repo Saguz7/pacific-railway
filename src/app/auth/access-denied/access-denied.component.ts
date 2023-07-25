@@ -34,7 +34,16 @@ export class AccessDeniedComponent implements OnInit {
    ) {
   }
 
-  async ngOnInit() { 
+  async ngOnInit() {
+    console.log(environment.API_URL_BASE);
+    console.log(environment.REGION_POOL);
+    console.log(environment.USER_POOL_ID);
+    console.log(environment.APP_POOL_ID);
+    console.log(environment.DOMAIN_SIGN);
+    console.log(environment.REDIRECT_SIGNIN);
+    console.log(environment.REDIRECT_SIGNOUT);
+    console.log(environment.IDENTITY_PROVIDER); 
+
       if (!environment.API_URL_BASE) {
         console.log(environment.API_URL_BASE);
 
