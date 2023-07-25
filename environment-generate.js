@@ -1,6 +1,6 @@
 function generateEnvironmentContent() {
   return `export const environment = {
-    production: ${process.env.API_URL_BASE || true},
+    production: ${true},
     API_URL_BASE: "${process.env.API_URL_BASE || "https://vuycilier4.execute-api.us-west-2.amazonaws.com/dev/"}",
     REGION_POOL: "${process.env.REGION_POOL || "us-west-2"}",
     APP_POOL_ID: "${process.env.APP_POOL_ID || "us-west-2_YKTiEMjtU"}",
@@ -10,6 +10,7 @@ function generateEnvironmentContent() {
     IDENTITY_PROVIDER: "${process.env.IDENTITY_PROVIDER || "CognitoF5"}"
   };`
 }
+
 
 (function generateEnvironment() {
   const fs = require('fs');
